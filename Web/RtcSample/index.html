@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AliWebRTC Demo</title>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="./index.css" />
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <!-- 请从官网下载最新sdk，添加到同层目录，打开下方注释 -->
+    <!-- <script src="./aliyun-webrtc-sdk.js"></script> -->
+    <script src="./sha256.js"></script>
+    <script src="./utils.js"></script>
+</head>
+
+<body>
+    <div class="login">
+        <div class="main">
+            <div class="main-title">
+                <span>音视频通信</span>
+            </div>
+            <div class="main-input">
+                <input type="text" placeholder="请输入房间号">
+            </div>
+            <div class="main-button">
+                <button>进入房间</button>
+            </div>
+        </div>
+    </div>
+    <div class="main-web" style="display: none;">
+        <div class="remote-user-list">
+            <h2>房间成员</h2>
+            <ul class="user-ul"></ul>
+        </div>
+        <div class="container-box">
+            <div class="local-display-name">
+                <span class="username">User: <b></b></span>
+                <span class="channelid">Channel Id: <b></b></span>
+                <span class="streamstate">推流状态：<b></b></span>
+            </div>
+            <div class="publisher">
+                <button class="select-preview">关闭预览</button>
+                <button class="push-stream">处理中...</button>&nbsp;&nbsp;
+                <span class="streamType" style="display: none;">
+                    <label for="cameraPublisher">推视频流</label>
+                    <input 
+                        id="cameraPublisher"
+                        value="cameraPublisher"
+                        type="checkbox"
+                        name="streamType"
+                        checked
+                    />&nbsp;
+                    <label for="screenPublish">推共享流</label>
+                    <input
+                        id="screenPublish"
+                        value="screenPublish"
+                        type="checkbox"
+                        name="streamType"
+                    />
+                </span>
+            </div>
+            <div class="local-video">
+                <video autoplay playsinline></video>
+            </div>
+        </div>
+        
+        <div class="video-container"></div>
+    </div>
+    <div class="alert"></div>
+</body>
+</html>
+<script>
+    /**
+     * 请找到 GenerateAliRtcAuthInfo方法，配置appId、key
+     */ 
+    var channelId;
+    var userName = Math.random().toString(36).replace(/[^a-z]+/g, "").substr(0, 5);
+    var publisherList = [];
+    var aliWebrtc;
+
+    try{
+        aliWebrtc = new AliRtcEngine();
+        support();
+    }catch(error){
+        console.log(error)
+        alert("请从官网下载最新SDK，添加到同层目录，取消第11行注释")
+    }
+
+    /**
+     * isSupport webrtc能力检测 
+     */
+    function support() {
+        aliWebrtc.isSupport().then(re => {
+            console.log(re);
+            init();
+        }).catch(error => {
+            alert(error.message);
+        })
+    }
+    
+    function init() {
+        /**
+         * remote用户加入房间 onJoin
+         * 更新在线用户列表
+         */ 
+        aliWebrtc.on("onJoin", (publisher) => {
+            if(publisher.userId){
+                updateUserList();
+            }
+            //重置订阅状态
+            //默认订阅远端音频和视频大流，但需要调用subscribe才能生效
+            //这里取消默认订阅，根据需求进行订阅
+            aliWebrtc.configRemoteAudio(publisher.userId, false);
+            aliWebrtc.configRemoteCameraTrack(publisher.userId, false, false);
+            showAlert(publisher.displayName + "加入房间","success");
+        });
+        /**
+         * remote流发布事件 onPublish
+         * 将该用户新增到推流列表
+         * 若该用户已存在推流列表，则进行状态更新
+         */
+        aliWebrtc.on("onPublisher", (publisher) => {
+            console.log("onPublisher", publisher);
+            let index = publisherList.getIndexByProprety(publisher.userId, "userId");
+            if (index === -1) {
+                //新增
+                publisherList.push(publisher);
+            } else {
+                //流状态更新
+                updatePublisherStream(publisher, index);
+            }
+        });
+
+        /**
+         * remote流结束发布事件 onUnPublisher
+         * 推流列表删除该用户
+         * 移除用户视图
+         * 初始化订阅状态
+         */ 
+        aliWebrtc.on("onUnPublisher", (publisher) => {
+            console.log("onUnPublisher",publisher);
+            detelePublisher(publisher.userId);
+            removeDom(publisher.userId);
+            initialization(publisher.userId);
+        });
+
+        /**
+         * 被服务器踢出或者频道关闭时回调 onBye
+         */
+        aliWebrtc.on("onBye",(message) =>{
+            //1:被服务器踢出
+            //2:频道关闭
+            //3:同一个ID在其他端登录,被服务器踢出
+            var msg;
+            switch (message.code) {
+                case 1: msg = "被服务器踢出";
+                    break;
+                case 2: msg = "频道关闭";
+                    break;
+                case 3: msg = "同一个ID在其他端登录,被服务器踢出";
+                    break;
+                default: msg = "onBye";
+            }
+            showAlert(msg,"danger");
+        });
+        
+        /**
+         *  错误信息
+         */ 
+        aliWebrtc.on("onError", (error) => {
+            console.log(error)
+            var msg = error && error.message ? error.message : error;
+            if (msg && msg.indexOf("no session") > -1) {
+                msg = "请重新登录：" + msg;
+            }
+            if (error.errorCode === 10011 || error.errorCode === 10012) {
+                msg = error.errorCode === 10011 ? "屏幕共享被禁止" : "屏幕共享已取消";
+                setTimeout(() => {
+                    $("#screenPublish").removeAttr("checked");
+                    getPublishState("danger");
+                }, 2000);
+            }
+
+            if(error.code == 15) {
+                msg = "没有开启H5兼容";
+            }
+            if(error.type === "publish") {
+                // 提示用户网络状态不佳 
+                console.log("推流断开 需要停止推流,然后重新推流");
+                // 先记录当前推流状态
+                var pubAudio = aliWebrtc.configLocalAudioPublish;
+                var pubCamera = aliWebrtc.configLocalCameraPublish;
+                var pubScreen = aliWebrtc.configLocalScreenPublish;
+                // 设置取消推流
+                aliWebrtc.configLocalAudioPublish = false;
+                aliWebrtc.configLocalCameraPublish = false;
+                aliWebrtc.configLocalScreenPublish = false;
+                aliWebrtc.publish().then(()=>{
+                    console.log("推流断开取消推流成功");
+                    aliWebrtc.configLocalAudioPublish = pubAudio;
+                    aliWebrtc.configLocalCameraPublish = pubCamera;
+                    aliWebrtc.configLocalScreenPublish = pubScreen;
+                    aliWebrtc.publish().then(()=>{
+                        console.log("推流断开重新推流成功");
+                    }).catch(err => {
+                        console.log("推流断开重新推流失败");
+                    })
+                }).catch(err => {
+                    console.log("推流断开取消推流失败");
+                })
+            }
+            if(error.type === "subscribe") {
+                console.log("订阅断开 取消订阅该userId的所有订阅并移除所有该userId的dom");
+                //先记录当前用户的订阅状态
+                var subInfo = getSubscribeInfo(error.userId);
+                //取消订阅状态
+                initialization(error.userId);
+                aliWebrtc.subscribe(error.userId).then(re => {
+                    console.log("订阅断开 取消订阅成功");
+                    aliWebrtc.configRemoteAudio(error.userId,subInfo.isSubAudio);
+                    aliWebrtc.configRemoteCameraTrack(error.userId,subInfo.isSubLarge,subInfo.isSubCamera);
+                    aliWebrtc.configRemoteScreenTrack(error.userId,subInfo.isSubScreen);
+                    aliWebrtc.subscribe(error.userId).then(re => {
+                        console.log("订阅断开 重新订阅成功")
+                        if($("#" + error.userId + "_camera")){
+                            aliWebrtc.setDisplayRemoteVideo(error.userId,$("#" + error.userId + "_camera video")[0], 1)
+                        }
+                        if($("#" + error.userId + "_screen")){
+                            aliWebrtc.setDisplayRemoteVideo(error.userId,$("#" + error.userId + "_screen video")[0], 2)
+                        }
+                    }).catch(err=>{
+                        console.log("订阅断开 重新订阅失败");
+                        detelePublisher(error.userId);
+                        removeDom(error.userId);
+                    })
+                }).catch(err => {
+                    console.log("订阅断开 取消订阅失败", err)
+                    detelePublisher(error.userId);
+                    removeDom(error.userId);
+                });
+            }
+            showAlert(msg,"danger")
+        });
+
+        /**
+         * 检测到用户离开频道 
+         * 更新用户列表 
+         * 移除用户视图
+         */ 
+        aliWebrtc.on("onLeave", (publisher) => {
+            initialization(publisher.userId);
+            updateUserList();
+            removeDom(publisher.userId);
+            showAlert(publisher.displayName + "离开房间","success");
+        })
+    }
+
+    /**
+     * 加入房间
+     * 触发：输入房间号、单击加入房间按钮
+     * 更新页面信息
+     * 默认开启预览
+     * 获取鉴权信息
+     * 加入房间
+     * 本地默认自动推视频流（视频流 + 音频流）
+     * 发布本地流
+     */ 
+    function joinroom() {
+        $(".local-display-name .username b").text(userName);
+        $(".local-display-name .channelid b").text(channelId);
+        $(".local-display-name .streamstate b").text("当前未推流");
+        //1.预览
+        var localVideo = $(".local-video video");
+        aliWebrtc.startPreview(localVideo[0]).then((obj) => {
+            }).catch((error) => { 
+            showAlert("[开启预览失败]" + error.message,"danger");
+        });
+        //2. 获取频道鉴权令牌参数 为了防止被盗用建议该方法在服务端获取
+        var authInfo = GenerateAliRtcAuthInfo(channelId);
+        //3. 加入房间 默认推音频视频流
+        aliWebrtc.joinChannel(authInfo, userName).then(() => {
+            showAlert( "加入房间成功", "success");
+            // 4. 发布本地流
+            aliWebrtc.configLocalAudioPublish = true;
+            aliWebrtc.configLocalCameraPublish = true;
+            aliWebrtc.publish().then((res) => {
+                setTimeout(() => {
+                    console.log("发布流成功");
+                    $(".push-stream").text("停止推流");
+                    $(".streamType").show();
+                    $(".local-display-name .streamstate b").text("视频流");
+                },2000)
+            }, (error) => {
+                $(".streamType").show();
+                showAlert("[推流失败]" + error.message, "danger");
+            });
+        }).catch((error) => {
+            showAlert("[加入房间失败]" + error.message, "danger");
+        })
+    }
+
+    /**
+     * 更新在线用户列表
+     */ 
+    var updateUserList = () => {
+        $(".user-ul").empty();
+        let userList = aliWebrtc.getUserList();
+        let frg = document.createDocumentFragment();
+        userList.map((user) => {
+            let html = $("<li class='user-ul-li'>" + user.displayName + "<ul class='menu'></ul></li>");
+            $(html).bind("mouseover",user.userId,showUserMenu).bind("mouseleave",hideUserMenu);
+            frg.append(html[0]);
+        })
+        $(".user-ul").append($(frg));
+    }
+
+    /*
+     * 获取测试token
+     * @param {*} channelId 频道号
+     * @return {object} authinfo 
+     */
+    var GenerateAliRtcAuthInfo = (channelId) => {
+        var appId = "yourAppId"; // 修改为自己的appid 该方案仅为开发测试使用，正式上线需要使用服务端的AppServer
+        var key = "yourKey";     // 修改为自己的key 该方案仅为开发测试使用，正式上线需要使用服务端的AppServer
+        userId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });// 可以自定义
+        var timestamp = parseInt(new Date().getTime() / 1000 + 48 * 60 * 60);
+        var nonce = 'AK-' + timestamp;
+        var token = sha256(appId + key + channelId + userId + nonce + timestamp);
+        return {
+            appid:appId,
+            userid:userId,
+            timestamp:timestamp,
+            nonce:nonce,
+            token:token,
+            gslb: ["https://rgslb.rtc.aliyuncs.com"],
+            channel:channelId
+        };
+    }
+
+    /**
+     * 获取当前remote用户的流菜单
+     */ 
+    var showUserMenu = (evt) => {
+        let userId = evt.data;
+        if(!$(event.target).eq(0).hasClass("user-ul-li")){
+            return
+        }
+        $(".menu").hide();
+        $(event.target).find(".menu").empty().show();
+        let userInfo = aliWebrtc.getUserInfo(userId);
+        let streamTypeList = userInfo.streamConfigs.filter(item => {
+            return item.state === "active";
+        });
+        var html = "";
+        if(streamTypeList.length == 0){
+            html = $("<li>该用户未推流</li>");
+            $(event.target).find(".menu").append(html[0]);
+        }else{
+            var frg = document.createDocumentFragment()
+            streamTypeList.map(item => {
+                item.userId = userId;
+                var labelName = "";
+                if(item.type === "video"){
+                    switch (item.label) {
+                        case "sophon_video_camera_large":
+                            labelName = "视频流";
+                            break;
+                        case "sophon_video_screen_share":
+                            labelName = "共享流";
+                            break;
+                        case "sophon_audio":
+                            labelName = "";
+                            break;
+                        default:
+                            labelName = "";
+                    }
+                } else {
+                    labelName = "";
+                }
+                //将音频流或小流的标签不显示
+                if(labelName !== ""){
+                    let subState = item.subscribed === true ? "取消订阅" : "订阅";
+                    html = $("<li>"+ labelName +"&nbsp;<span>"+ subState +"</span></li>");
+                    $(html).find("span").off("click").on("click", item, unSub);
+                    frg.append(html[0]);
+                }
+            })
+            $(event.target).find(".menu").append($(frg));
+        }
+    }
+
+    /**
+     * 隐藏当前remote用户的流菜单
+     */ 
+    var hideUserMenu = () => {
+        $(event.currentTarget).find(".menu").hide();
+    }
+
+    /**
+     * 订阅&取消订阅
+     */ 
+    var unSub = (evt) => {
+        let v = evt.data;
+        if(v.subscribed){
+            setConfigRemote(v.userId, v.label).then(re => {
+                removeDom(v.userId, v.label);
+                console.log("取消订阅");
+            });
+        }else {
+            receivePublishManual(v).then(re => {
+                creatDomAndshowRemoteVideo(v);
+                console.log("订阅成功");
+            });
+        }
+        $(".menu").hide();
+    }
+
+
+    /**
+     * 获取dom标签 设置video
+     */ 
+    var creatDomAndshowRemoteVideo = (v) => {
+        var dom = getDisplayRemoteVideo(v.userId, v.label);
+        if (v.label != "sophon_video_screen_share") {
+            aliWebrtc.setDisplayRemoteVideo(v.userId, dom, 1);
+        } else {
+            aliWebrtc.setDisplayRemoteVideo(v.userId, dom, 2);
+        }
+    }
+
+    /**
+     * 创建获取订阅的remote的video标签
+     */ 
+    var getDisplayRemoteVideo = function (userId, label) {
+        var label = label === "sophon_video_camera_large" ? "camera" : "screen";
+        var id = userId + "_" + label;
+        var videoWrapper = $("#" + id);
+        if (videoWrapper.length == 0) {
+            var userInfo = aliWebrtc.getUserList().filter(item => {
+                return item.userId === userId;
+            })
+            var displayName = userInfo[0].displayName;
+            videoWrapper = $("<div class='remote-subscriber' id=" + id + "> <video autoplay playsinline></video><div class='display-name'></div></div>");
+            $(".video-container").append(videoWrapper);
+        }
+        videoWrapper.find(".display-name").text(displayName + "—" + label);
+        return videoWrapper.find("video")[0];
+    }
+
+    /**
+     * 移除dom
+     */ 
+    var removeDom = (userId, label) => {
+        if(label === "sophon_audio") return
+        if(userId) {
+            if(!label){
+                $("#" + userId + "_camera").remove();
+                $("#" + userId + "_screen").remove();
+            }else {
+                label = label === "sophon_video_camera_large" ? "camera" : "screen";
+                $("#" + userId + "_" + label).remove();
+            }
+        }
+    }
+
+    /**
+     * 取消订阅设置
+     */ 
+    var setConfigRemote = (userId, label) => {
+        return new Promise((resolve, reject) => {
+            //demo中只订阅大流
+            if (label === "sophon_video_camera_large") {
+                aliWebrtc.configRemoteCameraTrack(userId, false, false);
+                aliWebrtc.configRemoteAudio(userId,false);
+            } else if (label === "sophon_video_screen_share") {
+                aliWebrtc.configRemoteScreenTrack(userId, false);
+            }
+            aliWebrtc.subscribe(userId).then(re => {
+                resolve();
+            }).catch(error => console.log("取消订阅失败", error))
+        });
+    }
+
+    
+
+    /**
+     * 订阅设置
+     */
+    var receivePublishManual = (v)  =>{
+        console.log("receivePublishManual订阅", v);
+        return new Promise((resolve, reject) => {
+            if (v.label === "sophon_video_camera_large") {
+                console.log("订阅固定视频流");
+                aliWebrtc.configRemoteCameraTrack(v.userId, true, true);
+                aliWebrtc.configRemoteAudio(v.userId, true);
+            } else if (v.label === "sophon_video_screen_share") {
+                console.log("订阅屏幕共享流");
+                aliWebrtc.configRemoteScreenTrack(v.userId, true);
+            }
+            aliWebrtc.subscribe(v.userId).then(re => {
+                resolve();
+            }).catch((error) => {
+                reject(error);
+                showAlert("[subscribe失败]" + error.message, "danger");
+            });
+        })
+    }
+
+    /**
+     * 更新推流状态
+     * 当远端流发生变化时，通过onPublisher回调接收到信息
+     * 远端流不可用时其state值为inactive
+     * 通过对比本地维护的publisherList来进行dom的删除
+     * 并且更新本地维护的publisherList
+     */
+    var updatePublisherStream = (publisher,index) => {
+        let oldStreamConfigs = JSON.parse(JSON.stringify(publisherList[index].streamConfigs));
+        let newStreamConfigs = publisher.streamConfigs;
+        let subscribeInfo = getSubscribeInfo(publisher.userId);
+        oldStreamConfigs.forEach((v, i, a) => {
+          let newStream = newStreamConfigs.getObjByProprety(v.label, "label");
+          // 判断流状态改变了 但不确定我们是否订阅了该流
+          if (v.state != newStream.state) {
+            console.log("流的状态变了" + v.label, v, v.type, ">"+ v.state + ">>" + newStream.state + ">", newStream, subscribeInfo);
+            //并且要取消订阅某个流，不然就不能再次订阅了
+            subscribeInfo.subscribeInfoArr.forEach(sv => {
+              if (v.label === sv.label) {
+                console.log("setConfigRemote取消订阅调用[api]:subscribe", publisher.userId, sv.type, sv.label);
+                setConfigRemote(publisher.userId, sv.type, sv.label).then(re => {
+                  // 移除dom
+                  removeDom(publisher.userId, v.label);
+                }).catch(error => {
+                    console.error("流的状态变了重新订阅出问题", error);
+                });
+              }
+            });
+          }
+        });
+        publisherList.splice(index, 1, publisher);
+    }
+
+    /**
+     * 用户停止推流时 删除用户列表中该用户
+     */ 
+    var detelePublisher = (userId) => {
+        let index = publisherList.getIndexByProprety(userId, "userId");
+        if (index != -1) {
+          publisherList.splice(index, 1);
+          this.detelePublisher(userId);
+        } else {
+          console.log("未找到之前的推流数据"); //删除推流用户
+        }
+    }
+
+    /**
+     * 正在推流时,热切换进行republish操作 
+     */
+    var rePublish = () => {
+        if($(".publisher .push-stream").text() === "停止推流"){
+            $(".publisher .push-stream").text("处理中...");
+            $(".streamType").hide();
+            aliWebrtc.publish().then(re => {
+                setTimeout(() => {
+                    getPublishState("success");
+                },2000);
+            }).catch(error => {
+                setTimeout(() => {
+                    getPublishState("danger");
+                }, 2000);
+            });
+        }
+    }
+
+    /**
+     * 根据推流状态设置当前推流UI
+     */
+    var getPublishState = (type) => {
+        var streamstate = $(".streamstate b").text()
+        if(aliWebrtc.configLocalAudioPublish || aliWebrtc.configLocalCameraPublish || aliWebrtc.configLocalScreenPublish){
+            $(".publisher .push-stream").text("停止推流");
+            if(aliWebrtc.configLocalScreenPublish && aliWebrtc.configLocalCameraPublish){
+                streamstate = "视频流 + 共享流";
+            } else {
+                if(aliWebrtc.configLocalScreenPublish) {
+                    streamstate = "共享流";
+                } else if(aliWebrtc.configLocalCameraPublish) {
+                    streamstate = "视频流";
+                }
+            }
+        } else {
+            $(".publisher .push-stream").text("开始推流");
+            streamstate = "当前未推流";
+        }
+        showAlert("推流状态：" + streamstate, type);
+        $(".streamstate b").text(streamstate);
+        $(".streamType").show();
+    }
+
+    /**
+     * 进入房间
+     */ 
+    $(".main-button button").click(() => {
+        var value = $(".main-input input").val();
+        if(!value){
+            showAlert("请输入房间号","danger");
+            return
+        }
+        if(!aliWebrtc){
+            showAlert("isSupport失败,未能初始化aliWebrtc","danger");
+            return
+        }
+        channelId = value;
+        joinroom();
+        $(".login").hide();
+        $(".main-web").show();
+    })
+
+    /**
+     * 控制预览
+     */
+    $(".publisher .select-preview").click(function(e) {
+        var localVideo = $(".local-video video");
+        if($(this).text() === "开启预览"){
+            $(this).text("处理中...");
+            aliWebrtc.startPreview(localVideo[0]).then((obj) => {
+                setTimeout(() => {
+                    $(this).text("关闭预览");
+                },2500);
+            }).catch((error) => { 
+                setTimeout(() => {
+                    $(this).text("开启预览");
+                },2500);
+                showAlert("[关闭预览失败]" + error.message, "danger"); 
+            });
+        }else if($(this).text() === "关闭预览") {
+            $(this).text("处理中...");
+            aliWebrtc.stopPreview().then((re) => {
+                setTimeout(() => {
+                    $(this).text("开启预览");
+                },2500);
+            }).catch((error) => { 
+                setTimeout(() => {
+                    $(this).text("关闭预览");
+                },2500);
+                showAlert("[开启预览失败]" + error.message, "danger"); 
+            });
+        }else {
+            return
+        }
+    })
+
+    /**
+     * 控制推流选项
+     */
+    $(".publisher .streamType input").click(function(e) {
+        var config = $(this).val();
+        var isChecked = $(this).prop("checked");
+        if(config === "cameraPublisher"){
+            if(isChecked){
+                aliWebrtc.configLocalAudioPublish = true;
+                aliWebrtc.configLocalCameraPublish = true;
+            } else {
+                aliWebrtc.configLocalAudioPublish = false;
+                aliWebrtc.configLocalCameraPublish = false;
+            }
+        }else {
+            if(isChecked){
+                aliWebrtc.configLocalScreenPublish = true;
+            } else {
+                aliWebrtc.configLocalScreenPublish = false;
+            }
+        }
+        //正在推流时可以热切换
+        rePublish();
+    })
+
+    /**
+     * 处理推流
+     */ 
+    $(".publisher .push-stream").click(function(e) {
+        if($(this).text() === "开始推流") {
+            $(this).text("处理中...")
+            $(".streamType").hide()
+            aliWebrtc
+                .publish()
+                .then(re => {
+                    setTimeout(() => {
+                        getPublishState("success");
+                    },2000);
+                })
+                .catch(error => {
+                    $(this).text("开始推流");
+                    $(".streamType").show();
+                    showAlert( "[开始推流失败]" + error.message, "danger");
+                });
+        }else if($(this).text() === "停止推流") {
+            $(this).text("处理中...");
+            $(".streamType").hide();
+            aliWebrtc.configLocalAudioPublish = false;
+            aliWebrtc.configLocalCameraPublish = false;
+            aliWebrtc.configLocalScreenPublish = false;
+            aliWebrtc.publish().then((re)=>{
+                setTimeout(() => {
+                    $("input[type='checkbox']").removeAttr("checked");
+                    $(".streamType").show();
+                    $(this).text("开始推流");
+                    $(".local-display-name .streamstate b").text("当前未推流");
+                },2000);
+            } ,(error)=>{
+                $(".streamType").show();
+                showAlert( "[停止推流失败]" +  error.message, "danger");
+            });
+        }else {
+            return
+        }
+    });
+
+    /**
+     * 页面刷新时调用离会
+     */ 
+    window.onbeforeunload = function (e) {
+        if(!aliWebrtc){
+            showAlert("isSupport失败,未能初始化aliWebrtc","danger");
+            return
+        }
+        aliWebrtc.leaveChannel();
+        aliWebrtc.dispose();
+    };
+</script>

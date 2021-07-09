@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">RTCSample</string>
+
+    <string name="alirtc_title">AliRTCSample</string>
+    <string name="alirtc_join_channel">开始</string>
+    <string name="alirtc_out">退出</string>
+    <string name="alirtc_mode">视频通话</string>
+    <string name="alirtc_permission">请先给予权限</string>
+    <string name="alirtc_enter">确定</string>
+    <string name="alirtc_chart_flip">是否镜像</string>
+    <string name="alirtc_chart_show_media_info">显示媒体信息</string>
+
+
+</resources>

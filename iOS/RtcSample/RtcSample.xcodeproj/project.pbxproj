@@ -1,0 +1,452 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0D94964D209860C0005FBD53 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D94964C209860C0005FBD53 /* AppDelegate.m */; };
+		0D949653209860C0005FBD53 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0D949651209860C0005FBD53 /* Main.storyboard */; };
+		0D949655209860C0005FBD53 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0D949654209860C0005FBD53 /* Assets.xcassets */; };
+		0D949658209860C0005FBD53 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0D949656209860C0005FBD53 /* LaunchScreen.storyboard */; };
+		0D94965B209860C0005FBD53 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D94965A209860C0005FBD53 /* main.m */; };
+		0D94967420986996005FBD53 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D94967320986996005FBD53 /* CoreMedia.framework */; };
+		0D949676209869AD005FBD53 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D949675209869AD005FBD53 /* AVFoundation.framework */; };
+		0D949678209869C1005FBD53 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D949677209869C1005FBD53 /* libz.tbd */; };
+		0D94967A209869DF005FBD53 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D949679209869DF005FBD53 /* libresolv.tbd */; };
+		0D94968020986A20005FBD53 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D94967F20986A20005FBD53 /* AudioToolbox.framework */; };
+		0D94968220986A34005FBD53 /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D94968120986A34005FBD53 /* VideoToolbox.framework */; };
+		64138825222A440900A176A7 /* RTCSampleChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6413881E222A440800A176A7 /* RTCSampleChatViewController.m */; };
+		64138826222A440900A176A7 /* UIViewController+RTCSampleAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 64138821222A440900A176A7 /* UIViewController+RTCSampleAlert.m */; };
+		6489C62F225B34A1009BC6B7 /* RTCSampleRemoteUserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6489C62E225B34A1009BC6B7 /* RTCSampleRemoteUserManager.m */; };
+		64C4172B225F325000F68B3F /* RTCSampleRemoteUserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 64C4172A225F325000F68B3F /* RTCSampleRemoteUserModel.m */; };
+		6C7997FA2201D3CD004FE646 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C7997F92201D3CD004FE646 /* libc++.tbd */; };
+		9E30FE6B26579BAD00B34585 /* RTCRemoterUserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E30FE6A26579BAD00B34585 /* RTCRemoterUserView.m */; };
+		F382AFAA264BC0EC008E2E2C /* AliRTCSdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F382AFA8264BC0E4008E2E2C /* AliRTCSdk.framework */; };
+		F382AFAB264BC0EC008E2E2C /* AliRTCSdk.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F382AFA8264BC0E4008E2E2C /* AliRTCSdk.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		F382AF75264BA81A008E2E2C /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				F382AFAB264BC0EC008E2E2C /* AliRTCSdk.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0D949648209860C0005FBD53 /* RtcSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RtcSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0D94964B209860C0005FBD53 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		0D94964C209860C0005FBD53 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		0D949652209860C0005FBD53 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		0D949654209860C0005FBD53 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		0D949657209860C0005FBD53 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		0D949659209860C0005FBD53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0D94965A209860C0005FBD53 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		0D94967320986996005FBD53 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		0D949675209869AD005FBD53 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		0D949677209869C1005FBD53 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		0D949679209869DF005FBD53 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
+		0D94967B209869F9005FBD53 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
+		0D94967D20986A11005FBD53 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		0D94967F20986A20005FBD53 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		0D94968120986A34005FBD53 /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
+		6413881E222A440800A176A7 /* RTCSampleChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RTCSampleChatViewController.m; sourceTree = "<group>"; };
+		64138820222A440900A176A7 /* UIViewController+RTCSampleAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+RTCSampleAlert.h"; sourceTree = "<group>"; };
+		64138821222A440900A176A7 /* UIViewController+RTCSampleAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+RTCSampleAlert.m"; sourceTree = "<group>"; };
+		64138824222A440900A176A7 /* RTCSampleChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RTCSampleChatViewController.h; sourceTree = "<group>"; };
+		6489C62D225B34A1009BC6B7 /* RTCSampleRemoteUserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RTCSampleRemoteUserManager.h; sourceTree = "<group>"; };
+		6489C62E225B34A1009BC6B7 /* RTCSampleRemoteUserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RTCSampleRemoteUserManager.m; sourceTree = "<group>"; };
+		64C41729225F325000F68B3F /* RTCSampleRemoteUserModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTCSampleRemoteUserModel.h; sourceTree = "<group>"; };
+		64C4172A225F325000F68B3F /* RTCSampleRemoteUserModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RTCSampleRemoteUserModel.m; sourceTree = "<group>"; };
+		6C7997F92201D3CD004FE646 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		9E30FE6926579BAD00B34585 /* RTCRemoterUserView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RTCRemoterUserView.h; sourceTree = "<group>"; };
+		9E30FE6A26579BAD00B34585 /* RTCRemoterUserView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RTCRemoterUserView.m; sourceTree = "<group>"; };
+		F382AFA8264BC0E4008E2E2C /* AliRTCSdk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AliRTCSdk.framework; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		0D949645209860C0005FBD53 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F382AFAA264BC0EC008E2E2C /* AliRTCSdk.framework in Frameworks */,
+				6C7997FA2201D3CD004FE646 /* libc++.tbd in Frameworks */,
+				0D94968220986A34005FBD53 /* VideoToolbox.framework in Frameworks */,
+				0D94968020986A20005FBD53 /* AudioToolbox.framework in Frameworks */,
+				0D94967A209869DF005FBD53 /* libresolv.tbd in Frameworks */,
+				0D949678209869C1005FBD53 /* libz.tbd in Frameworks */,
+				0D949676209869AD005FBD53 /* AVFoundation.framework in Frameworks */,
+				0D94967420986996005FBD53 /* CoreMedia.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0D94963F209860C0005FBD53 = {
+			isa = PBXGroup;
+			children = (
+				F382AFA7264BC0E4008E2E2C /* AliSdk */,
+				0D94964A209860C0005FBD53 /* RtcSample */,
+				0D949649209860C0005FBD53 /* Products */,
+				0D94966120986164005FBD53 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		0D949649209860C0005FBD53 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0D949648209860C0005FBD53 /* RtcSample.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0D94964A209860C0005FBD53 /* RtcSample */ = {
+			isa = PBXGroup;
+			children = (
+				0D94964B209860C0005FBD53 /* AppDelegate.h */,
+				0D94964C209860C0005FBD53 /* AppDelegate.m */,
+				0D949654209860C0005FBD53 /* Assets.xcassets */,
+				0D949659209860C0005FBD53 /* Info.plist */,
+				0D949656209860C0005FBD53 /* LaunchScreen.storyboard */,
+				0D94965A209860C0005FBD53 /* main.m */,
+				0D949651209860C0005FBD53 /* Main.storyboard */,
+				64138824222A440900A176A7 /* RTCSampleChatViewController.h */,
+				6413881E222A440800A176A7 /* RTCSampleChatViewController.m */,
+				9E30FE6926579BAD00B34585 /* RTCRemoterUserView.h */,
+				9E30FE6A26579BAD00B34585 /* RTCRemoterUserView.m */,
+				6489C62D225B34A1009BC6B7 /* RTCSampleRemoteUserManager.h */,
+				6489C62E225B34A1009BC6B7 /* RTCSampleRemoteUserManager.m */,
+				64C41729225F325000F68B3F /* RTCSampleRemoteUserModel.h */,
+				64C4172A225F325000F68B3F /* RTCSampleRemoteUserModel.m */,
+				64138820222A440900A176A7 /* UIViewController+RTCSampleAlert.h */,
+				64138821222A440900A176A7 /* UIViewController+RTCSampleAlert.m */,
+			);
+			path = RtcSample;
+			sourceTree = "<group>";
+		};
+		0D94966120986164005FBD53 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6C7997F92201D3CD004FE646 /* libc++.tbd */,
+				0D94968120986A34005FBD53 /* VideoToolbox.framework */,
+				0D94967F20986A20005FBD53 /* AudioToolbox.framework */,
+				0D94967D20986A11005FBD53 /* CoreAudio.framework */,
+				0D94967B209869F9005FBD53 /* AudioUnit.framework */,
+				0D949679209869DF005FBD53 /* libresolv.tbd */,
+				0D949677209869C1005FBD53 /* libz.tbd */,
+				0D949675209869AD005FBD53 /* AVFoundation.framework */,
+				0D94967320986996005FBD53 /* CoreMedia.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F382AFA7264BC0E4008E2E2C /* AliSdk */ = {
+			isa = PBXGroup;
+			children = (
+				F382AFA8264BC0E4008E2E2C /* AliRTCSdk.framework */,
+			);
+			name = AliSdk;
+			path = RtcSample/AliSdk;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		0D949647209860C0005FBD53 /* RtcSample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0D94965E209860C0005FBD53 /* Build configuration list for PBXNativeTarget "RtcSample" */;
+			buildPhases = (
+				0D949644209860C0005FBD53 /* Sources */,
+				0D949645209860C0005FBD53 /* Frameworks */,
+				0D949646209860C0005FBD53 /* Resources */,
+				F382AF75264BA81A008E2E2C /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RtcSample;
+			productName = RtcSample;
+			productReference = 0D949648209860C0005FBD53 /* RtcSample.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0D949640209860C0005FBD53 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0920;
+				ORGANIZATIONNAME = tiantian;
+				TargetAttributes = {
+					0D949647209860C0005FBD53 = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Manual;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
+					};
+				};
+			};
+			buildConfigurationList = 0D949643209860C0005FBD53 /* Build configuration list for PBXProject "RtcSample" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 0D94963F209860C0005FBD53;
+			productRefGroup = 0D949649209860C0005FBD53 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				0D949647209860C0005FBD53 /* RtcSample */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		0D949646209860C0005FBD53 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0D949658209860C0005FBD53 /* LaunchScreen.storyboard in Resources */,
+				0D949655209860C0005FBD53 /* Assets.xcassets in Resources */,
+				0D949653209860C0005FBD53 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		0D949644209860C0005FBD53 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6489C62F225B34A1009BC6B7 /* RTCSampleRemoteUserManager.m in Sources */,
+				0D94965B209860C0005FBD53 /* main.m in Sources */,
+				64138826222A440900A176A7 /* UIViewController+RTCSampleAlert.m in Sources */,
+				64C4172B225F325000F68B3F /* RTCSampleRemoteUserModel.m in Sources */,
+				9E30FE6B26579BAD00B34585 /* RTCRemoterUserView.m in Sources */,
+				0D94964D209860C0005FBD53 /* AppDelegate.m in Sources */,
+				64138825222A440900A176A7 /* RTCSampleChatViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		0D949651209860C0005FBD53 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0D949652209860C0005FBD53 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		0D949656209860C0005FBD53 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0D949657209860C0005FBD53 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		0D94965C209860C0005FBD53 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		0D94965D209860C0005FBD53 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		0D94965F209860C0005FBD53 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = LJUJZGPE73;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/RtcSample/AliRTCSdk",
+					"$(PROJECT_DIR)/AliRTCSdk",
+					"$(PROJECT_DIR)/RtcSample",
+					"$(PROJECT_DIR)/RtcSample/AliSdk",
+				);
+				INFOPLIST_FILE = RtcSample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = com.aliyun.lltest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = com.alirtc.develop;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		0D949660209860C0005FBD53 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = LJUJZGPE73;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/RtcSample/AliRTCSdk",
+					"$(PROJECT_DIR)/RtcSample",
+					"$(PROJECT_DIR)/RtcSample/AliSdk",
+				);
+				INFOPLIST_FILE = RtcSample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = com.aliyun.lltest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = com.alirtc.develop;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0D949643209860C0005FBD53 /* Build configuration list for PBXProject "RtcSample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0D94965C209860C0005FBD53 /* Debug */,
+				0D94965D209860C0005FBD53 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0D94965E209860C0005FBD53 /* Build configuration list for PBXNativeTarget "RtcSample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0D94965F209860C0005FBD53 /* Debug */,
+				0D949660209860C0005FBD53 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0D949640209860C0005FBD53 /* Project object */;
+}

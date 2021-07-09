@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>932</width>
+    <height>735</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QLabel" name="lb_userName01">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lb_view01">
+        <property name="minimumSize">
+         <size>
+          <width>160</width>
+          <height>120</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="0" column="8">
+     <layout class="QVBoxLayout" name="verticalLayout_6">
+      <item>
+       <widget class="QPushButton" name="pushButton_left">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>40</width>
+          <height>80</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>&lt;&lt;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_right">
+        <property name="maximumSize">
+         <size>
+          <width>40</width>
+          <height>80</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>&gt;&gt;</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="0" column="1" colspan="2">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QLabel" name="lb_userName02">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lb_view02">
+        <property name="minimumSize">
+         <size>
+          <width>160</width>
+          <height>120</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="0" column="5" colspan="3">
+     <layout class="QVBoxLayout" name="verticalLayout_5">
+      <item>
+       <widget class="QLabel" name="lb_userName05">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lb_view05">
+        <property name="minimumSize">
+         <size>
+          <width>160</width>
+          <height>120</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="0" column="3">
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <item>
+       <widget class="QLabel" name="lb_userName03">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lb_view03">
+        <property name="minimumSize">
+         <size>
+          <width>160</width>
+          <height>120</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="0" column="4">
+     <layout class="QVBoxLayout" name="verticalLayout_4">
+      <item>
+       <widget class="QLabel" name="lb_userName04">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lb_view04">
+        <property name="minimumSize">
+         <size>
+          <width>160</width>
+          <height>120</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="10" column="0" colspan="9">
+     <widget class="QWidget" name="widget" native="true">
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="5" column="6">
+        <widget class="QLabel" name="label_white">
+         <property name="minimumSize">
+          <size>
+           <width>45</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>0.00</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="4">
+        <widget class="QCheckBox" name="checkBox_beauty">
+         <property name="text">
+          <string>开启美颜</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="5">
+        <widget class="QLabel" name="label1">
+         <property name="text">
+          <string>美白：</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="10">
+        <widget class="QSlider" name="slider_smooth">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="3">
+        <widget class="QPushButton" name="pushButton_Screen">
+         <property name="text">
+          <string>开启共享</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="2">
+        <widget class="QCheckBox" name="checkBox_muteAudio">
+         <property name="text">
+          <string>静音</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="8">
+        <widget class="QLabel" name="label2">
+         <property name="text">
+          <string>磨皮：</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="7">
+        <widget class="QSlider" name="slider_white">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="9">
+        <widget class="QLabel" name="label_smooth">
+         <property name="minimumSize">
+          <size>
+           <width>45</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>0.00</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="2" column="0" rowspan="7" colspan="9">
+     <widget class="QLabel" name="lb_view">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,31 @@
+def supportVersion = "26.1.0"
+def constraintVersion = "1.0.2"
+def leakcanaryVersion = "1.6.2"
+
+project.ext {
+    android = [
+            compileSdkVersion: 28,
+            buildToolsVersion: "28.0.2",
+            applicationId    : "com.aliyun.rtcdemo",
+            minSdkVersion    : 16,
+            targetSdkVersion : 28,
+            versionCode      : 1,
+            versionName      : "1.0",
+    ]
+
+    dependencies = [
+            //android-support
+            "support-v4"                  : "com.android.support:support-v4:${supportVersion}",
+            "appcompat-v7"                : "com.android.support:appcompat-v7:${supportVersion}",
+            "design"                      : "com.android.support:design:${supportVersion}",
+            "recyclerview"                : "com.android.support:recyclerview-v7:${supportVersion}",
+            "cardview"                    : "com.android.support:cardview-v7:${supportVersion}",
+            "constraint-layout"           : "com.android.support.constraint:constraint-layout:${constraintVersion}",
+
+            //leakcanary
+            "leakcanary-android"          : "com.squareup.leakcanary:leakcanary-android:${leakcanaryVersion}",
+            "leakcanary-android-no-op"    : "com.squareup.leakcanary:leakcanary-android-no-op:${leakcanaryVersion}",
+            "leakcanary-android-fragment" : "com.squareup.leakcanary:leakcanary-support-fragment:${leakcanaryVersion}",
+
+    ]
+}

@@ -1,0 +1,16 @@
+<resources>
+    <!-- FloatingActionButton -->
+    <dimen name="fab_size_normal">56dp</dimen>
+    <dimen name="fab_size_mini">40dp</dimen>
+    <dimen name="labels_text_size">14sp</dimen>
+    <dimen name="title_size">16sp</dimen>
+
+    <dimen name="dimen_1">1dp</dimen>
+    <dimen name="dimen_3">3dp</dimen>
+    <dimen name="dimen_10">10dp</dimen>
+    <dimen name="dimen_15">15dp</dimen>
+    <dimen name="dimen_44">44dp</dimen>
+    <dimen name="dimen_50">50dp</dimen>
+    <dimen name="dimen_64">64dp</dimen>
+
+</resources>

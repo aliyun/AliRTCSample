@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+
+    <LinearLayout
+        android:id="@+id/chart_content_userlist_item_video_layout"
+        android:layout_width="150dp"
+        android:layout_height="200dp"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:background="@drawable/chart_userlist_item_video_layout_bg">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorAccent" />
+
+            <FrameLayout
+                android:id="@+id/chart_content_userlist_item_surface_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/video_params"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/chart_userlist_item_tv_bg"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/chart_userlist_item_video_flip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/alirtc_chart_flip"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/chart_userlist_item_show_video_media_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/alirtc_chart_show_media_info"
+                android:textColor="@android:color/white"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/chart_content_userlist_item_screen_layout"
+        android:layout_width="150dp"
+        android:layout_height="200dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <FrameLayout
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:background="@drawable/chart_userlist_item_video_layout_bg">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorAccent" />
+
+            <FrameLayout
+                android:id="@+id/chart_content_userlist_item2_surface_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/screen_params"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/chart_userlist_item_tv_bg"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/chart_userlist_item_screen_flip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/alirtc_chart_flip"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/chart_userlist_item_show_screen_media_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/alirtc_chart_show_media_info"
+                android:textColor="@android:color/white"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
