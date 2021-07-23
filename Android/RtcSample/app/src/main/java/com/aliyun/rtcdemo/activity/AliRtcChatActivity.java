@@ -179,7 +179,7 @@ public class AliRtcChatActivity extends AppCompatActivity {
         mLocalView.getHolder().setFormat(PixelFormat.TRANSLUCENT);
         mLocalView.setZOrderOnTop(false);
         mLocalView.setZOrderMediaOverlay(false);
-        AliRtcEngine.AliVideoCanvas aliVideoCanvas = new AliRtcEngine.AliVideoCanvas();
+        AliRtcEngine.AliRtcVideoCanvas aliVideoCanvas = new AliRtcEngine.AliRtcVideoCanvas();
         aliVideoCanvas.view = mLocalView;
         aliVideoCanvas.renderMode = AliRtcRenderModeAuto;
         if (mAliRtcEngine != null) {
@@ -245,8 +245,8 @@ public class AliRtcChatActivity extends AppCompatActivity {
                     return;
                 }
                 //change
-                AliRtcEngine.AliVideoCanvas cameraCanvas = remoteUserInfo.getCameraCanvas();
-                AliRtcEngine.AliVideoCanvas screenCanvas = remoteUserInfo.getScreenCanvas();
+                AliRtcEngine.AliRtcVideoCanvas cameraCanvas = remoteUserInfo.getCameraCanvas();
+                AliRtcEngine.AliRtcVideoCanvas screenCanvas = remoteUserInfo.getScreenCanvas();
                 //视频情况
                 if (vt == AliRtcVideoTrackNo) {
                     //没有视频流
@@ -292,10 +292,10 @@ public class AliRtcChatActivity extends AppCompatActivity {
         return ret;
     }
 
-    private AliRtcEngine.AliVideoCanvas createCanvasIfNull(AliRtcEngine.AliVideoCanvas canvas) {
+    private AliRtcEngine.AliRtcVideoCanvas createCanvasIfNull(AliRtcEngine.AliRtcVideoCanvas canvas) {
         if (canvas == null || canvas.view == null) {
             //创建canvas，Canvas为SophonSurfaceView或者它的子类
-            canvas = new AliRtcEngine.AliVideoCanvas();
+            canvas = new AliRtcEngine.AliRtcVideoCanvas();
             SophonSurfaceView surfaceView = new SophonSurfaceView(this);
             surfaceView.setZOrderOnTop(true);
             surfaceView.setZOrderMediaOverlay(true);
@@ -307,8 +307,8 @@ public class AliRtcChatActivity extends AppCompatActivity {
     }
 
     private ChartUserBean convertRemoteUserInfo(AliRtcRemoteUserInfo remoteUserInfo,
-                                                AliRtcEngine.AliVideoCanvas cameraCanvas,
-                                                AliRtcEngine.AliVideoCanvas screenCanvas) {
+                                                AliRtcEngine.AliRtcVideoCanvas cameraCanvas,
+                                                AliRtcEngine.AliRtcVideoCanvas screenCanvas) {
         String uid = remoteUserInfo.getUserID();
         ChartUserBean ret = mUserListAdapter.createDataIfNull(uid);
         ret.mUserId = remoteUserInfo.getUserID();
@@ -441,7 +441,7 @@ public class AliRtcChatActivity extends AppCompatActivity {
             switch (flag) {
                 case CAMERA:
                     if (userInfo != null) {
-                        AliRtcEngine.AliVideoCanvas cameraCanvas = userInfo.getCameraCanvas();
+                        AliRtcEngine.AliRtcVideoCanvas cameraCanvas = userInfo.getCameraCanvas();
                         if (cameraCanvas != null) {
                             cameraCanvas.mirrorMode = flip ? AliRtcEngine.AliRtcRenderMirrorMode.AliRtcRenderMirrorModeAllEnabled : AliRtcEngine.AliRtcRenderMirrorMode.AliRtcRenderMirrorModeAllDisable;
                             mAliRtcEngine.setRemoteViewConfig(cameraCanvas, uid, AliRtcVideoTrackCamera);
@@ -450,7 +450,7 @@ public class AliRtcChatActivity extends AppCompatActivity {
                     break;
                 case SCREEN:
                     if (userInfo != null) {
-                        AliRtcEngine.AliVideoCanvas screenCanvas = userInfo.getScreenCanvas();
+                        AliRtcEngine.AliRtcVideoCanvas screenCanvas = userInfo.getScreenCanvas();
                         if (screenCanvas != null) {
                             screenCanvas.mirrorMode = flip ? AliRtcEngine.AliRtcRenderMirrorMode.AliRtcRenderMirrorModeAllEnabled : AliRtcEngine.AliRtcRenderMirrorMode.AliRtcRenderMirrorModeAllDisable;
                             mAliRtcEngine.setRemoteViewConfig(screenCanvas, uid, AliRtcVideoTrackScreen);

@@ -479,7 +479,21 @@ ALIRTCSDK_API int  AliRtcAddVideoWatermark(AliRTCVideoTrack track, const char* i
   float alpha, bool normalized);
 
 /*录制接口组 */
-ALIRTCSDK_API int AliRtcAddRecordTemplate(const AliRTCRecordTemplate& rTemplate,const AliRTCRecordVideoLayoutMode mode, const AliRTCRecordVideoBgColor& color);
+ALIRTCSDK_API int AliRtcAddRecordTemplate(AliRTCRecordType recordType,
+    AliRTCRecordFormat recordFormat,
+    AliRTCAudioSampleRate sampleRate,
+    AliRTCAudioQuality audioQuality,
+    bool externalPcmCaptureRecording,
+    bool externalPcmRenderRecording,
+    int canvasWidth,
+    int canvasHeight,
+    bool isFragment,
+    int fps,
+    int bitrate,
+    AliRTCRecordVideoLayoutMode mode,
+    unsigned char r,
+    unsigned char g,
+    unsigned char b);
 /*添加录制人员 */
 ALIRTCSDK_API int AliRtcAddRecordUserStream(const char* uid);
 /*移除录制人员 */

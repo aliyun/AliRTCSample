@@ -1431,44 +1431,68 @@ ALIRTCSDK_API int  AliRtcAddVideoWatermark(AliRTCVideoTrack track, const char* i
   return -1;
 }
 
-ALIRTCSDK_API int AliRtcAddRecordTemplate(const AliRTCRecordTemplate& rTemplate, const AliRTCRecordVideoLayoutMode mode, const AliRTCRecordVideoBgColor& color)
+ALIRTCSDK_API int AliRtcAddRecordTemplate(AliRTCRecordType recordType,
+    AliRTCRecordFormat recordFormat,
+    AliRTCAudioSampleRate sampleRate,
+    AliRTCAudioQuality audioQuality,
+    bool externalPcmCaptureRecording,
+    bool externalPcmRenderRecording,
+    int canvasWidth,
+    int canvasHeight,
+    bool isFragment,
+    int fps,
+    int bitrate,
+    AliRTCRecordVideoLayoutMode mode,
+    unsigned char r,
+    unsigned char g,
+    unsigned char b)
 {
-  if (_sharedEngine)
-  {
-    _RecordVideoLayout.mode = (AliEngineRecordVideoLayoutMode)mode;
-    _RecordVideoLayout.backColor.b = color.b;
-    _RecordVideoLayout.backColor.g = color.g;
-    _RecordVideoLayout.backColor.r = color.r;
+    if (_sharedEngine)
+    {
+        _RecordVideoLayout.mode = (AliEngineRecordVideoLayoutMode)mode;
+        _RecordVideoLayout.backColor.b = b;
+        _RecordVideoLayout.backColor.g = g;
+        _RecordVideoLayout.backColor.r = r;
 
-    _RecordTemplate.audioQuality = (AliEngineAudioQuality)rTemplate.audioQuality;
-    _RecordTemplate.bitrate = rTemplate.bitrate;
-    _RecordTemplate.canvas.canvasHeight = rTemplate.canvas.canvasHeight;
-    _RecordTemplate.canvas.canvasWidth = rTemplate.canvas.canvasWidth;
-    _RecordTemplate.externalPcmCaptureRecording = rTemplate.externalPcmCaptureRecording;
-    _RecordTemplate.externalPcmRenderRecording = rTemplate.externalPcmRenderRecording;
-    _RecordTemplate.fps = rTemplate.fps;
-    _RecordTemplate.isFragment = rTemplate.isFragment;
-    _RecordTemplate.recordFormat = (AliEngineRecordFormat)rTemplate.recordFormat;
-    _RecordTemplate.recordType = (AliEngineRecordType)rTemplate.recordType;
-    _RecordTemplate.sampleRate = (AliEngineAudioSampleRate)rTemplate.sampleRate;
-    return _sharedEngine->AddRecordTemplate(_RecordTemplate);
-  }
-  return -1;
+        _RecordTemplate.audioQuality = (AliEngineAudioQuality)audioQuality;
+        _RecordTemplate.bitrate = bitrate;
+        _RecordTemplate.canvas.canvasHeight = canvasHeight;
+        _RecordTemplate.canvas.canvasWidth = canvasWidth;
+        _RecordTemplate.externalPcmCaptureRecording = externalPcmCaptureRecording;
+        _RecordTemplate.externalPcmRenderRecording = externalPcmRenderRecording;
+        _RecordTemplate.fps = fps;
+        _RecordTemplate.isFragment = isFragment;
+        _RecordTemplate.recordFormat = (AliEngineRecordFormat)recordFormat;
+        _RecordTemplate.recordType = (AliEngineRecordType)recordType;
+        _RecordTemplate.sampleRate = (AliEngineAudioSampleRate)sampleRate;
+        return _sharedEngine->AddRecordTemplate(_RecordTemplate);
+    }
+    return -1;
 }
 
 ALIRTCSDK_API int AliRtcAddRecordUserStream(const char* uid)
 {
-  mMutexRecordUserStreams.lock();
-  mMapRecordUserStreams[uid] = true;
-  mMutexRecordUserStreams.unlock();
+  if (uid)
+  {
+    mMutexRecordUserStreams.lock();
+    mMapRecordUserStreams[uid] = true;
+    mMutexRecordUserStreams.unlock();
+    return 0;
+  }
+  return -1;
 }
 
 ALIRTCSDK_API int AliRtcRemoveRecordUserStream(const char* uid)
 {
-  mMutexRecordUserStreams.lock();
-  mMapRecordUserStreams[uid] = false;
-  mMapRecordUserStreams.erase(uid);
-  mMutexRecordUserStreams.unlock();
+  if (uid)
+  {
+    mMutexRecordUserStreams.lock();
+    mMapRecordUserStreams[uid] = false;
+    mMapRecordUserStreams.erase(uid);
+    mMutexRecordUserStreams.unlock();    
+    return 0;
+  }
+  return -1;
 }
 
 ALIRTCSDK_API int AliRtcClearAllRecordUserStreams()
@@ -1480,6 +1504,7 @@ ALIRTCSDK_API int AliRtcClearAllRecordUserStreams()
   }
   mMapRecordUserStreams.clear();
   mMutexRecordUserStreams.unlock();
+  return 0;
 }
 
 ALIRTCSDK_API bool AliRtcUpdateRecordUserStreams(const char* uid /*= ""*/)
