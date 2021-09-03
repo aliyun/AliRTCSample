@@ -1,0 +1,20 @@
+<!--login.wxml-->
+<view class=" alirtc-bg">
+  <view class="content flex-center-column">
+    <view class="title">
+      <image class="logo" src="../../images/logo.png" mode="aspectFit"></image>
+      <text class="title-text">阿里云音视频通信RTC提供基础通信服务</text>
+    </view>
+    <view class="form-section flex-center-column">
+      <view class="inputWrapper">
+        <input class="channelInput" value="{{channel}}" placeholder='输入房间名' bindinput="onInputChannel" bindconfirm="onInputChannel" bindblur="onInputChannel"></input>
+      </view>
+      <view class="inputWrapper">
+        <input class="nameInput" value="{{displayName}}" placeholder='输入用户名' bindinput="onInputDisplayName" bindconfirm="onInputDisplayName" bindblur="onInputDisplayName"></input>
+      </view>
+      <!-- <button plain="true" bindtap="onJoin" disabled="{{disableJoin}}" class="joinBtn">进入频道</button> -->
+      <button plain="true" open-type="getUserInfo" bindgetuserinfo="onGotUserInfo" disabled="{{disableJoin}}" class="joinBtn">进入频道</button>
+      <text class="title-text">Beta版本，体验时间10分钟，具体上线时间请关注官网</text>
+    </view>
+  </view>
+</view>

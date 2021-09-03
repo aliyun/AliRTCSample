@@ -1,0 +1,78 @@
+@import "../../common.wxss";
+/**login.wxss**/
+page {
+  height: 100%;
+}
+
+.content {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 150rpx 40rpx 0;
+  height: 100%;
+  background-size: contain;
+  /* background-position: right top; */
+  background-repeat: no-repeat;
+  background-image:joinBtn url("https://img.alicdn.com/imgextra/i1/O1CN01udvSqT1TXa2LBK1Mv_!!6000000002392-2-tps-1125-792.png");
+}
+
+.title {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  width: 50%;
+  height: 140rpx;
+}
+.title-text {
+  font-size: 24rpx;
+  color:rgba(38,38,38, .7)
+}
+
+.content .form-section{
+  margin-top: 120rpx;
+  width: 100%;
+  display: flex;
+}
+
+.content .inputWrapper{
+  width: 90%;
+  border-radius: 5px;
+  background-color: rgba(255,255,255,0.4);
+  border: 1px solid #222222;
+  margin-bottom: 32rpx;
+}
+
+.content .channelInput{
+  font-size: 28rpx;
+  padding: 0 30rpx;
+  height: 80rpx;
+  color: #000;
+}
+.content .nameInput{
+  font-size: 28rpx;
+  padding: 0 30rpx;
+  height: 80rpx;
+  color: #000;
+}
+
+.content .joinBtn {
+  margin: 20rpx 0;
+  padding: 0;
+  background-color: #013EBE;
+  width: 80%;
+  height: 80rpx;
+  color: #fff;
+  font-size: 28rpx;
+  line-height: 80rpx;
+  box-shadow: 0px 4px 4px rgba(84,163,186,0.15);  
+  font-weight: bold;
+  border: 0;
+  border-radius: 40rpx;
+}
+.content .joinBtn[disabled]{
+  background-color: #013EBE;
+  opacity: 0.3;
+  color: #fff;
+}

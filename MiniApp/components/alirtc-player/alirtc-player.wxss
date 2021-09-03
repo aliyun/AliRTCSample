@@ -1,0 +1,30 @@
+/* components/alirtc-player/alirtc-player.wxss */
+@import "../../common.wxss";
+.play-container{
+  border: 1px solid #fff;
+  background: black;
+  display: block;
+  position: absolute;
+}
+
+.displayName {
+  color: #fff;
+  font-size: 32rpx;
+  text-shadow:3px 2px 8px rgba(0,0,0,.8);
+}
+
+.icon {
+  display: block;
+  width:64rpx;
+  height: 64rpx;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.mic-on {
+  background-image: url('https://img.alicdn.com/imgextra/i1/O1CN01CIfaHE1WGaBY1RCWO_!!6000000002761-2-tps-144-144.png');
+}
+.mic-off {
+  background-image: url('https://img.alicdn.com/imgextra/i2/O1CN013FHZwc1JUEzX4kpfy_!!6000000001031-2-tps-144-144.png');
+}
