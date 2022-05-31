@@ -119,20 +119,24 @@ Component({
       this.data.pusherContext.switchCamera();
     },
 
+    binderror(e) {
+      console.log('binderror', e);
+    },
+
     /**
      * 推流状态更新回调
      */
     recorderStateChange: function (e) {
       Utils.log(`live-pusher code: ${e.detail.code} - ${e.detail.message}`)
 
-      if (e.detail.code === 1008) {
-        // Utils.log(`live-pusher started`);
-        if(this.data.status === "loading") {
-          this.setData({
-            status: "ok"
-          })
-        }
-      }
+      // if (e.detail.code === 1008) {
+      //   // Utils.log(`live-pusher started`);
+      //   if(this.data.status === "loading") {
+      //     this.setData({
+      //       status: "ok"
+      //     })
+      //   }
+      // }
 
       if(e.detail.code === 5001){
         if(app.globalData.systemInfo.platform === "android") {

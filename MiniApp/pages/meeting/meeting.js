@@ -57,13 +57,13 @@ Page({
         key: ts,
         name: this.displayName
       });
-      wx.nextTick(() => {
-        this.onPublish()
-        // 限时体验10分钟，超时离会。
-        if(AUTO_LEAVE_STATE) {
-          this.onLeaveTimeout()
-        }
-      })
+      // wx.nextTick(() => {
+      //   // this.onPublish()
+      //   // 限时体验10分钟，超时离会。
+      //   if(AUTO_LEAVE_STATE) {
+      //     this.onLeaveTimeout()
+      //   }
+      // })
     }).catch(e => {
       Utils.log(`init alirtc client failed: ${e}`);
       wx.showToast({
@@ -90,22 +90,25 @@ Page({
       // 订阅事件
       this.subscribeEvents(client);
       let authInfo = app.globalData.authInfo
+      console.log('join authInfo', authInfo);
       client.join(authInfo, () => {
         Utils.log(`client join channel success`);
         // 推流获取推流地址
-        client.getPublishUrl(url => {
+        client.publish((url) => {
+          console.log('推流成功', url);
           resolve(url);
-        }, e => {
-          Utils.log(`client getPublishUrl failed: ${e.code} ${e.reason}`);
+        }, (err) => {
+          Utils.log(`client publish failed: ${ err.code } ${ err.reason }`);
           wx.showToast({
-            title: 'getPublishUrl failed',
+            title: 'publish failed',
             icon: 'none',
             duration: 2000
           })
-          reject(e)
+          reject(err);
         });
       }, e => {
         Utils.log(`client join channel failed`);
+        console.log('join err', e);
         wx.showToast({
           title: `client join channel failed（${e.reason}）`,
           icon: 'none',
@@ -295,6 +298,7 @@ Page({
       } else {
         // while in background, the player maybe added but not starting
         // in this case we need to start it once come back
+        console.log('player.start');
         player.start();
       }
     });
@@ -404,18 +408,15 @@ Page({
     if (!this.data.isPublish) {
       // 未推流状态进行推流
 
-      this.client.getPublishUrl(url => {
+      this.client.publish((url) => {
         this.addMedia(0, this.uid, url, {
           key: ts,
           name: this.displayName
         });
-        wx.nextTick(()=>{
-          this.onPublish()
-        })
       }, e => {
-        Utils.log(`client getPublishUrl failed: ${e.code} ${e.reason}`);
+        Utils.log(`client publish failed: ${e.code} ${e.reason}`);
         wx.showToast({
-          title: 'getPublishUrl failed',
+          title: 'publish failed',
           icon: 'none',
           duration: 2000
         })
@@ -428,18 +429,15 @@ Page({
         })
         Utils.log('client unpublish success')
         this.removeMedia(this.uid);
-        this.client.getPublishUrl(url => {
+        this.client.publish((url) => {
           this.addMedia(0, this.uid, url, {
             key: ts,
             name: this.displayName
           });
-          wx.nextTick(()=>{
-            this.onPublish()
-          })
         }, e => {
-          Utils.log(`client getPublishUrl failed: ${e.code} ${e.reason}`);
+          Utils.log(`client publish failed: ${e.code} ${e.reason}`);
           wx.showToast({
-            title: `client getPublishUrl failed`,
+            title: `client publish failed`,
             icon: 'none',
             duration: 2000
           })
@@ -592,6 +590,7 @@ Page({
        * subscribe to get corresponding url
        */
       client.subscribe(uid, (url) => {
+        console.log('subscribe url', JSON.stringify(url));
         Utils.log(`stream ${uid} subscribed successful`);
         let media = this.data.media || [];
         let matchItem = null;

@@ -1,8 +1,8 @@
 <!--meeting.wxml-->
 <view id="main" class="content alirtc-bg flex-center-column">
   <view id="video-container" class="video-container n{{totalUser}}">
-     <block wx:for="{{media}}" wx:key="key">
-        <alirtc-pusher 
+    <block wx:for="{{media}}" wx:key="key">
+      <alirtc-pusher 
           wx:if="{{item.type === 0 && !item.holding}}" 
           id="rtc-pusher" 
           x="{{item.left}}" 

@@ -2,15 +2,15 @@
 <view class="play-container" style="left:{{x}}px; top:{{y}}px; width: {{width - 2}}px; height: {{height - 2}}px; ">
   <live-player wx:if="{{url!==''}}" 
     id="player-{{uid}}" 
-    data-uid="{{uid}}"
-    data-name="{{name}}"
     src="{{url}}" 
     mode="RTC" 
+    autoplay
     class="player" 
     bindstatechange="playerStateChange" 
-    object-fit="fillCrop" 
+    binderror="error"
     style="height:{{height - 2}}px; position: absolute; width: 100%; top: 0; left: 0;"
   />
+
   <view style="position: absolute;top:10px;left:10px;">
     <text class="text-overflow displayName" style="width: {{width - 10}}px">{{name}}</text>
   </view>

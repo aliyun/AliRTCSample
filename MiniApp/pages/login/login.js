@@ -72,7 +72,7 @@ Page({
         this.lockJoin();
         // 请求appServer返回入会鉴权信息，请求接口名及参数请根据业务实际情况进行修改。
         wx.request({
-          url: appServer + "/getRtcAuth?channelId=" + channel,
+          url: appServer,
           data: '',
           header: {
             "content-type": "application/json"
@@ -80,11 +80,20 @@ Page({
           method: 'GET',
           dataType: 'json',
           responseType: 'text',
-          success: (res) => {
-            let authInfo = res.data.data;
-            authInfo.channel = channel;
-            authInfo.displayName = displayName;
+          success: (authInfo) => {
+            /**
+             * authInfo 包含信息如下所示：
+             * appid: string (应用ID)
+             * channel: string (频道号)
+             * gslb: Array (服务器地址)
+             * nonce: string (令牌随机码)
+             * timestamp: Number (时间戳)
+             * token: (令牌)
+             * userid: (用户ID)
+             * displayName: stirng (用户名称)
+             */
             app.globalData.authInfo = authInfo;
+            console.log('authInfo--->authInfo', authInfo);
             wx.navigateTo({
               url: `../meeting/meeting?channel=${channel}&displayName=${displayName}`
             });

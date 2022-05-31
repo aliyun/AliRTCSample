@@ -5,9 +5,11 @@
     style="height:{{height - 2}}px; position: absolute; width: 100%; " 
     url="{{url}}" mode="RTC" 
     aspect="{{aspect}}" 
+    autopush
     class="camera" 
     bindstatechange="recorderStateChange" 
     bindnetstatus="recorderNetChange" 
+    binderror="binderror"
     background-mute="true"
     enable-mic="{{mic}}"
     enable-camera="{{camera}}"

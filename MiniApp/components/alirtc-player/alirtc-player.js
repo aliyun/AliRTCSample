@@ -144,5 +144,8 @@ Component({
     // auto stop player when detached
     this.data.playContext && this.data.playContext.stop();
     this.data.detached = true;
+  },
+  error(e) {
+    console.error('live-player error:', e.detail.errMsg)
   }
 })
