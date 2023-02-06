@@ -1,6 +1,0 @@
-{
-  "usingComponents": {
-    "alirtc-pusher": "../../components/alirtc-pusher/alirtc-pusher",
-    "alirtc-player": "../../components/alirtc-player/alirtc-player"
-  }
-}

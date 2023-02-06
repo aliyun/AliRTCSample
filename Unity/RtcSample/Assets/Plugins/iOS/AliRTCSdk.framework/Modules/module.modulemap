@@ -1,6 +1,0 @@
-framework module AliRTCSdk {
-  umbrella header "AliRTCSdk.h"
-
-  export *
-  module * { export * }
-}
