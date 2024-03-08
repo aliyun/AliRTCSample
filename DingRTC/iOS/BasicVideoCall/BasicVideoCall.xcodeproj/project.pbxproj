@@ -1,0 +1,410 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4D8968E22B67C4C0007F1BE6 /* WebRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D8968E02B67C4C0007F1BE6 /* WebRTC.xcframework */; };
+		4D8968E32B67C4C0007F1BE6 /* WebRTC.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4D8968E02B67C4C0007F1BE6 /* WebRTC.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4D8968E42B67C4C0007F1BE6 /* DingRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D8968E12B67C4C0007F1BE6 /* DingRTC.xcframework */; };
+		4D8968E52B67C4C0007F1BE6 /* DingRTC.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4D8968E12B67C4C0007F1BE6 /* DingRTC.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		573F61502403B5AB00DD8E8E /* UserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 573F614F2403B5AB00DD8E8E /* UserInfo.m */; };
+		5793BBDE2402192900EC9137 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5793BBDD2402192900EC9137 /* AppDelegate.m */; };
+		5793BBE12402192900EC9137 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5793BBE02402192900EC9137 /* SceneDelegate.m */; };
+		5793BBE72402192900EC9137 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5793BBE52402192900EC9137 /* Main.storyboard */; };
+		5793BBE92402192B00EC9137 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5793BBE82402192B00EC9137 /* Assets.xcassets */; };
+		5793BBEC2402192B00EC9137 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5793BBEA2402192B00EC9137 /* LaunchScreen.storyboard */; };
+		5793BBEF2402192B00EC9137 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5793BBEE2402192B00EC9137 /* main.m */; };
+		5793BBF924021BBD00EC9137 /* ChannelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5793BBF624021BBD00EC9137 /* ChannelViewController.m */; };
+		5793BBFA24021BBD00EC9137 /* JoinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5793BBF824021BBD00EC9137 /* JoinViewController.m */; };
+		5793BBFD24021D1100EC9137 /* ChannelInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 5793BBFC24021D1100EC9137 /* ChannelInfo.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4D8968E62B67C4C0007F1BE6 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				4D8968E32B67C4C0007F1BE6 /* WebRTC.xcframework in Embed Frameworks */,
+				4D8968E52B67C4C0007F1BE6 /* DingRTC.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		4D8968E02B67C4C0007F1BE6 /* WebRTC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WebRTC.xcframework; path = ../SDK/WebRTC.xcframework; sourceTree = "<group>"; };
+		4D8968E12B67C4C0007F1BE6 /* DingRTC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = DingRTC.xcframework; path = ../SDK/DingRTC.xcframework; sourceTree = "<group>"; };
+		573F614E2403B5AB00DD8E8E /* UserInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserInfo.h; sourceTree = "<group>"; };
+		573F614F2403B5AB00DD8E8E /* UserInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserInfo.m; sourceTree = "<group>"; };
+		5793BBD92402192900EC9137 /* BasicVideoCall.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BasicVideoCall.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5793BBDC2402192900EC9137 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		5793BBDD2402192900EC9137 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		5793BBDF2402192900EC9137 /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
+		5793BBE02402192900EC9137 /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
+		5793BBE62402192900EC9137 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		5793BBE82402192B00EC9137 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		5793BBEB2402192B00EC9137 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		5793BBED2402192B00EC9137 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5793BBEE2402192B00EC9137 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		5793BBF524021BBD00EC9137 /* ChannelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelViewController.h; sourceTree = "<group>"; };
+		5793BBF624021BBD00EC9137 /* ChannelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelViewController.m; sourceTree = "<group>"; };
+		5793BBF724021BBD00EC9137 /* JoinViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JoinViewController.h; sourceTree = "<group>"; };
+		5793BBF824021BBD00EC9137 /* JoinViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JoinViewController.m; sourceTree = "<group>"; };
+		5793BBFB24021D1100EC9137 /* ChannelInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChannelInfo.h; sourceTree = "<group>"; };
+		5793BBFC24021D1100EC9137 /* ChannelInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChannelInfo.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5793BBD62402192900EC9137 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4D8968E22B67C4C0007F1BE6 /* WebRTC.xcframework in Frameworks */,
+				4D8968E42B67C4C0007F1BE6 /* DingRTC.xcframework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5793BBD02402192900EC9137 = {
+			isa = PBXGroup;
+			children = (
+				5793BBDB2402192900EC9137 /* BasicVideoCall */,
+				5793BBFE24021D4800EC9137 /* Frameworks */,
+				5793BBDA2402192900EC9137 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		5793BBDA2402192900EC9137 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5793BBD92402192900EC9137 /* BasicVideoCall.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5793BBDB2402192900EC9137 /* BasicVideoCall */ = {
+			isa = PBXGroup;
+			children = (
+				5793BBDC2402192900EC9137 /* AppDelegate.h */,
+				5793BBDD2402192900EC9137 /* AppDelegate.m */,
+				5793BBDF2402192900EC9137 /* SceneDelegate.h */,
+				5793BBE02402192900EC9137 /* SceneDelegate.m */,
+				5793BBF724021BBD00EC9137 /* JoinViewController.h */,
+				5793BBF824021BBD00EC9137 /* JoinViewController.m */,
+				5793BBF524021BBD00EC9137 /* ChannelViewController.h */,
+				5793BBF624021BBD00EC9137 /* ChannelViewController.m */,
+				5793BBFB24021D1100EC9137 /* ChannelInfo.h */,
+				5793BBFC24021D1100EC9137 /* ChannelInfo.m */,
+				573F614E2403B5AB00DD8E8E /* UserInfo.h */,
+				573F614F2403B5AB00DD8E8E /* UserInfo.m */,
+				5793BBE52402192900EC9137 /* Main.storyboard */,
+				5793BBE82402192B00EC9137 /* Assets.xcassets */,
+				5793BBEA2402192B00EC9137 /* LaunchScreen.storyboard */,
+				5793BBED2402192B00EC9137 /* Info.plist */,
+				5793BBEE2402192B00EC9137 /* main.m */,
+			);
+			path = BasicVideoCall;
+			sourceTree = "<group>";
+		};
+		5793BBFE24021D4800EC9137 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4D8968E12B67C4C0007F1BE6 /* DingRTC.xcframework */,
+				4D8968E02B67C4C0007F1BE6 /* WebRTC.xcframework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5793BBD82402192900EC9137 /* BasicVideoCall */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5793BBF22402192B00EC9137 /* Build configuration list for PBXNativeTarget "BasicVideoCall" */;
+			buildPhases = (
+				5793BBD52402192900EC9137 /* Sources */,
+				5793BBD62402192900EC9137 /* Frameworks */,
+				5793BBD72402192900EC9137 /* Resources */,
+				4D8968E62B67C4C0007F1BE6 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BasicVideoCall;
+			productName = BasicVideoCall;
+			productReference = 5793BBD92402192900EC9137 /* BasicVideoCall.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5793BBD12402192900EC9137 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1130;
+				ORGANIZATIONNAME = DingTalk;
+				TargetAttributes = {
+					5793BBD82402192900EC9137 = {
+						CreatedOnToolsVersion = 11.3.1;
+					};
+				};
+			};
+			buildConfigurationList = 5793BBD42402192900EC9137 /* Build configuration list for PBXProject "BasicVideoCall" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 5793BBD02402192900EC9137;
+			productRefGroup = 5793BBDA2402192900EC9137 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5793BBD82402192900EC9137 /* BasicVideoCall */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5793BBD72402192900EC9137 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5793BBEC2402192B00EC9137 /* LaunchScreen.storyboard in Resources */,
+				5793BBE92402192B00EC9137 /* Assets.xcassets in Resources */,
+				5793BBE72402192900EC9137 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5793BBD52402192900EC9137 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5793BBF924021BBD00EC9137 /* ChannelViewController.m in Sources */,
+				5793BBFD24021D1100EC9137 /* ChannelInfo.m in Sources */,
+				5793BBDE2402192900EC9137 /* AppDelegate.m in Sources */,
+				5793BBEF2402192B00EC9137 /* main.m in Sources */,
+				5793BBFA24021BBD00EC9137 /* JoinViewController.m in Sources */,
+				5793BBE12402192900EC9137 /* SceneDelegate.m in Sources */,
+				573F61502403B5AB00DD8E8E /* UserInfo.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		5793BBE52402192900EC9137 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5793BBE62402192900EC9137 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		5793BBEA2402192B00EC9137 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5793BBEB2402192B00EC9137 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		5793BBF02402192B00EC9137 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				"ARCHS[sdk=iphonesimulator*]" = x86_64;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		5793BBF12402192B00EC9137 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				"ARCHS[sdk=iphonesimulator*]" = x86_64;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		5793BBF32402192B00EC9137 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/../SDK",
+				);
+				INFOPLIST_FILE = BasicVideoCall/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.dingtalk.BasicVideoCall;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		5793BBF42402192B00EC9137 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/../SDK",
+				);
+				INFOPLIST_FILE = BasicVideoCall/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.dingtalk.BasicVideoCall;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5793BBD42402192900EC9137 /* Build configuration list for PBXProject "BasicVideoCall" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5793BBF02402192B00EC9137 /* Debug */,
+				5793BBF12402192B00EC9137 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5793BBF22402192B00EC9137 /* Build configuration list for PBXNativeTarget "BasicVideoCall" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5793BBF32402192B00EC9137 /* Debug */,
+				5793BBF42402192B00EC9137 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5793BBD12402192900EC9137 /* Project object */;
+}

@@ -1,0 +1,7 @@
+<resources>
+    <dimen name="normal_button_size">54dp</dimen>
+    <dimen name="large_button_size">60dp</dimen>
+    <dimen name="small_button_size">48dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="toolbox_button_size">32dp</dimen>
+</resources>
