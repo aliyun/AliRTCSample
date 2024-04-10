@@ -1,8 +1,9 @@
+import { parseSearch } from './tools';
+
 export const request = (url: string, params: any) => {
-  url = _getUrl(url, params);
   let res: Response;
   return new Promise((resolve, reject) => {
-    fetch(url, {
+    fetch(formmatUrl(url, params), {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -32,13 +33,32 @@ export const request = (url: string, params: any) => {
   });
 };
 
-const _getUrl = (url: string, params: any) => {
+const formmatUrl = (url: string, params: any) => {
   if (!params) return url;
-  const paramsArr = [];
-  for (const key in params) {
-    paramsArr.push(key + '=' + params[key]);
+  const args = Object.keys(params).map(key => `${key}=${params[key]}`).join('&');
+  return `${url.includes('?') ? url : `${url}?`}${args}`;
+};
+
+const APP_SERVER_DOMAIN = 'https://******';
+
+const token = parseSearch('token') || '';
+
+export const getAppToken = async (
+  userId?: string,
+  appId?: string,
+  channelId?: string,
+): Promise<{ token: string, gslb?: string[] }> => {
+  console.log(appId, userId, channelId);
+  if (token) {
+    return {
+      token,
+      gslb: [],
+    }
   }
-  const args = paramsArr.join('&');
-  url = (url.indexOf('?') != -1 ? url : url + '?') + args;
-  return url;
+  const loginParam = {};
+  const result = (await request(`${APP_SERVER_DOMAIN}`, loginParam)) as {
+    token: string;
+    gslb: string[];
+  };
+  return result;
 };

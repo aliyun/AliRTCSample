@@ -169,7 +169,7 @@
     info.userId = ChannelInfo.userId;
     info.appId = ChannelInfo.appId;
     info.token = ChannelInfo.token;
-    info.gslb = @[ChannelInfo.gslbServer];
+    info.gslbServer = ChannelInfo.gslbServer;
     
     [self.engine subscribeAllRemoteVideoStreams:NO];
     

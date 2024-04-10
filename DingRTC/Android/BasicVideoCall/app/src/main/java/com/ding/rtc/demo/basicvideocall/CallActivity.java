@@ -34,8 +34,6 @@ public class CallActivity extends CallBaseActivity implements EventHandler {
     private static final String INTENT_MEETING_USER_NAME = "meeting_user_name";
     private static final String INTENT_MEETING_APP_ID = "meeting_app_id";
     private static final String INTENT_MEETING_CHANNEL_ID = "meeting_channel_id";
-    private static final String INTENT_MEETING_NONCE = "meeting_nonce";
-    private static final String INTENT_MEETING_TIME_STAMP = "meeting_timestamp";
     private static final String INTENT_MEETING_GSLB = "meeting_gslb";
 
     private String mSelfUid = "";
@@ -43,7 +41,7 @@ public class CallActivity extends CallBaseActivity implements EventHandler {
 
     public static void launch(Context context, String userId, String userName,
                               String token, String appId,
-                              String channelName, String nonce, long timeStamp, String[] gslb) {
+                              String channelName, String gslb) {
         Intent intent = new Intent();
         intent.setClass(context, CallActivity.class);
         intent.putExtra(INTENT_MEETING_USER_ID, userId);
@@ -51,8 +49,6 @@ public class CallActivity extends CallBaseActivity implements EventHandler {
         intent.putExtra(INTENT_MEETING_TOKEN, token);
         intent.putExtra(INTENT_MEETING_APP_ID, appId);
         intent.putExtra(INTENT_MEETING_CHANNEL_ID, channelName);
-        intent.putExtra(INTENT_MEETING_NONCE, nonce);
-        intent.putExtra(INTENT_MEETING_TIME_STAMP, timeStamp);
         intent.putExtra(INTENT_MEETING_GSLB, gslb);
         context.startActivity(intent);
     }
@@ -327,9 +323,7 @@ public class CallActivity extends CallBaseActivity implements EventHandler {
         mAuthInfo.token = intent.getStringExtra(INTENT_MEETING_TOKEN);
         mAuthInfo.appId = intent.getStringExtra(INTENT_MEETING_APP_ID);
         mAuthInfo.channelId = intent.getStringExtra(INTENT_MEETING_CHANNEL_ID);
-        mAuthInfo.nonce = intent.getStringExtra(INTENT_MEETING_NONCE);
-        mAuthInfo.timestamp = intent.getLongExtra(INTENT_MEETING_TIME_STAMP, 0);
-        mAuthInfo.gslbServers = intent.getStringArrayExtra(INTENT_MEETING_GSLB);
+        mAuthInfo.gslbServer = intent.getStringExtra(INTENT_MEETING_GSLB);
         String userName = intent.getStringExtra(INTENT_MEETING_USER_NAME);
         int ret = mRtcEngine.joinChannel(mAuthInfo, userName);
         if (ret != 0) {

@@ -181,6 +181,6 @@ public class MainActivity extends AppCompatActivity {
         mProgressDialog.show();
         CallActivity.launch(MainActivity.this,
                 userId, userName, DingApplication.TOKEN, DingApplication.APP_ID,
-                channelId, DingApplication.NONCE, DingApplication.TIMESTAMP, DingApplication.GSLB_SERVER);
+                channelId, DingApplication.GSLB_SERVER);
     }
 }

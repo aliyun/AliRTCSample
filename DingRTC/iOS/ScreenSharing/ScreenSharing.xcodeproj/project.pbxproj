@@ -9,10 +9,7 @@
 /* Begin PBXBuildFile section */
 		4D8653F32B6A22EE00C6BA83 /* DingRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D8653F12B6A22EE00C6BA83 /* DingRTC.xcframework */; };
 		4D8653F42B6A22EE00C6BA83 /* DingRTC.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4D8653F12B6A22EE00C6BA83 /* DingRTC.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		4D8653F52B6A22EE00C6BA83 /* WebRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D8653F22B6A22EE00C6BA83 /* WebRTC.xcframework */; };
-		4D8653F62B6A22EE00C6BA83 /* WebRTC.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4D8653F22B6A22EE00C6BA83 /* WebRTC.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4D8653F82B6A22F900C6BA83 /* DingRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D8653F12B6A22EE00C6BA83 /* DingRTC.xcframework */; };
-		4D8653FA2B6A22F900C6BA83 /* WebRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D8653F22B6A22EE00C6BA83 /* WebRTC.xcframework */; };
 		4DDA0E15262EDD3F009F54D0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DDA0E14262EDD3F009F54D0 /* AppDelegate.m */; };
 		4DDA0E18262EDD3F009F54D0 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DDA0E17262EDD3F009F54D0 /* SceneDelegate.m */; };
 		4DDA0E1E262EDD3F009F54D0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4DDA0E1C262EDD3F009F54D0 /* Main.storyboard */; };
@@ -46,7 +43,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				4D8653F62B6A22EE00C6BA83 /* WebRTC.xcframework in Embed Frameworks */,
 				4D8653F42B6A22EE00C6BA83 /* DingRTC.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -67,7 +63,6 @@
 
 /* Begin PBXFileReference section */
 		4D8653F12B6A22EE00C6BA83 /* DingRTC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = DingRTC.xcframework; path = ../SDK/DingRTC.xcframework; sourceTree = "<group>"; };
-		4D8653F22B6A22EE00C6BA83 /* WebRTC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WebRTC.xcframework; path = ../SDK/WebRTC.xcframework; sourceTree = "<group>"; };
 		4DDA0E10262EDD3F009F54D0 /* ScreenSharing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScreenSharing.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DDA0E13262EDD3F009F54D0 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4DDA0E14262EDD3F009F54D0 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -101,7 +96,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4D8653F52B6A22EE00C6BA83 /* WebRTC.xcframework in Frameworks */,
 				4D8653F32B6A22EE00C6BA83 /* DingRTC.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -112,7 +106,6 @@
 			files = (
 				4DDA0E34262FC2E0009F54D0 /* ReplayKit.framework in Frameworks */,
 				4D8653F82B6A22F900C6BA83 /* DingRTC.xcframework in Frameworks */,
-				4D8653FA2B6A22F900C6BA83 /* WebRTC.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -168,7 +161,6 @@
 			isa = PBXGroup;
 			children = (
 				4D8653F12B6A22EE00C6BA83 /* DingRTC.xcframework */,
-				4D8653F22B6A22EE00C6BA83 /* WebRTC.xcframework */,
 				4DDA0E33262FC2E0009F54D0 /* ReplayKit.framework */,
 			);
 			name = Frameworks;

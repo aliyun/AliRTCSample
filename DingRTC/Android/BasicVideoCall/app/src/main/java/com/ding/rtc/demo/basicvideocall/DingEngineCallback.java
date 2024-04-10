@@ -122,10 +122,6 @@ public class DingEngineCallback extends DingRtcEngineEventListener {
     }
 
     @Override
-    public void onConnectionStatusChange(DingRtcEngine.DingRtcConnectionStatus status, DingRtcEngine.DingRtcConnectionStatusChangeReason reason) {
-    }
-
-    @Override
     public void onRemoteUserOnLineNotify(String uid, int elapsed) {
         runOnUiThread(()-> {
             for (EventHandler handler : mHandler) {

@@ -8,5 +8,7 @@ module.exports = {
   ],
   "plugins": [
     ["@babel/transform-runtime"],
+    ["import", { "libraryName": "dingtalk-design-desktop", "libraryDirectory": "es"}, 'dingtalk-design-desktop'],
+    ["import", { "libraryName": "dd-icons", "libraryDirectory": "es"}, 'dd-icons']
   ]
 }

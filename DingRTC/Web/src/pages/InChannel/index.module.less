@@ -1,0 +1,200 @@
+.toolBarWrap {
+  background-color: #fff;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 56px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  & > button {
+    position: absolute;
+    top: 12px;
+    right: 40px;
+  }
+  & .toolBtn {
+    flex-direction: column;
+    cursor: pointer;
+    width: 72px;
+    justify-content: center;
+    align-items: center;
+    height: 48px;
+    color: rgba(23, 26, 29, 0.85);
+    & > span:last-of-type {
+      font-size: 12px;
+      opacity: 0.56;
+    }
+    &:hover {
+      background-color: #dcdcdc;
+      border-radius: 4px;
+    }
+  }
+  & svg {
+    font-size: 18px;
+  }
+}
+
+.mainView {
+  width: 100%;
+  height: 100%;
+}
+
+.videoWrapper {
+  border-radius: 6px;
+  background-color: #dce1e6;
+  height: 100%;
+  position: relative;
+  & > span:first-of-type{
+    position: absolute;
+    left: 4px;
+    top: -2px;
+  }
+}
+
+.confInfo {
+  position: absolute;
+  top: 0;
+  z-index: 11;
+  font-size: 12px;
+  padding-left: 4px;
+  color: rgba(23, 26, 29, 0.85);
+  left: 0;
+  flex-direction: column;
+}
+
+.blockWrapper {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+.smallVideoItems {
+  width: 100%;
+  padding-top: 16px;
+  padding-bottom: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5f7fa;
+}
+
+.smallVideoItem {
+  width: 184.889px;
+  height: 104px;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  border-radius: 6px;
+  // overflow: hidden;
+  display: flex;
+  background-color: #dce1e6;
+  & :global(.dtd-avatar) {
+    display: none;
+  }
+}
+
+.smallViewStatus {
+  position: absolute;
+  bottom: 14px;
+  left: 12px;
+  padding: 0 4px;
+  border-radius: 4px;
+  background-color: lightgray;
+  z-index: 1;
+}
+
+.avatar {
+  :global(.dtd-avatar) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  & video {
+    display: none;
+  }
+}
+
+.camera {
+  :global(.dtd-avatar) {
+    display: none;
+  }
+  & video {
+    border-radius: 6px;
+    display: inline-block;
+  }
+}
+
+.stopShare {
+  & :global(.deviceIcon) {
+    color: #fb602d!important;
+  }
+}
+:global(.dtd-drawer-body) {
+  padding-right: 0;
+}
+.logWrap {
+  height: 100%;
+  white-space: pre;
+  & :global(#logOutput) {
+    width: 100%;
+    background-color: #fff;
+    overflow-y: auto;
+    overflow-x: hidden;
+    color: #000;
+    white-space: pre-wrap;
+    word-break: break-all;
+    min-height: 100px;
+    max-height: 500px;
+  }
+}
+
+.smallViewActions {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  padding: 0 4px;
+  border-radius: 4px;
+  background-color: lightgray;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.userId {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  font-size: 12px;
+  color: #fb602d;
+}
+
+.speaking {
+  &::after {
+    content: '';
+    position: absolute;
+    top: -1.5px;
+    border-radius: 6px;
+    left: -1.5px;
+    width: calc(100% + 3px);
+    height: calc(100% + 3px);
+    border: 1.5px solid green;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .toolBarWrap {
+    & button:last-of-type {
+      right: 8px;
+    }
+    & .toolBtn {
+      width: 90px;
+    }
+  }
+  .confInfo {
+    padding-left: 0;
+    transform: scale(0.8);
+  }
+}

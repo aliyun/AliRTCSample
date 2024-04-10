@@ -7,10 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4D8968E22B67C4C0007F1BE6 /* WebRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D8968E02B67C4C0007F1BE6 /* WebRTC.xcframework */; };
-		4D8968E32B67C4C0007F1BE6 /* WebRTC.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4D8968E02B67C4C0007F1BE6 /* WebRTC.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		4D8968E42B67C4C0007F1BE6 /* DingRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D8968E12B67C4C0007F1BE6 /* DingRTC.xcframework */; };
-		4D8968E52B67C4C0007F1BE6 /* DingRTC.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4D8968E12B67C4C0007F1BE6 /* DingRTC.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4D85085D2BBAD8AE00BAF782 /* DingRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D8968E12B67C4C0007F1BE6 /* DingRTC.xcframework */; };
+		4D85085E2BBAD8AE00BAF782 /* DingRTC.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4D8968E12B67C4C0007F1BE6 /* DingRTC.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		573F61502403B5AB00DD8E8E /* UserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 573F614F2403B5AB00DD8E8E /* UserInfo.m */; };
 		5793BBDE2402192900EC9137 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5793BBDD2402192900EC9137 /* AppDelegate.m */; };
 		5793BBE12402192900EC9137 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5793BBE02402192900EC9137 /* SceneDelegate.m */; };
@@ -24,14 +22,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		4D8968E62B67C4C0007F1BE6 /* Embed Frameworks */ = {
+		4D85085F2BBAD8AE00BAF782 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				4D8968E32B67C4C0007F1BE6 /* WebRTC.xcframework in Embed Frameworks */,
-				4D8968E52B67C4C0007F1BE6 /* DingRTC.xcframework in Embed Frameworks */,
+				4D85085E2BBAD8AE00BAF782 /* DingRTC.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -39,7 +36,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		4D8968E02B67C4C0007F1BE6 /* WebRTC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WebRTC.xcframework; path = ../SDK/WebRTC.xcframework; sourceTree = "<group>"; };
 		4D8968E12B67C4C0007F1BE6 /* DingRTC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = DingRTC.xcframework; path = ../SDK/DingRTC.xcframework; sourceTree = "<group>"; };
 		573F614E2403B5AB00DD8E8E /* UserInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserInfo.h; sourceTree = "<group>"; };
 		573F614F2403B5AB00DD8E8E /* UserInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserInfo.m; sourceTree = "<group>"; };
@@ -66,8 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4D8968E22B67C4C0007F1BE6 /* WebRTC.xcframework in Frameworks */,
-				4D8968E42B67C4C0007F1BE6 /* DingRTC.xcframework in Frameworks */,
+				4D85085D2BBAD8AE00BAF782 /* DingRTC.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,7 +114,6 @@
 			isa = PBXGroup;
 			children = (
 				4D8968E12B67C4C0007F1BE6 /* DingRTC.xcframework */,
-				4D8968E02B67C4C0007F1BE6 /* WebRTC.xcframework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -134,7 +128,7 @@
 				5793BBD52402192900EC9137 /* Sources */,
 				5793BBD62402192900EC9137 /* Frameworks */,
 				5793BBD72402192900EC9137 /* Resources */,
-				4D8968E62B67C4C0007F1BE6 /* Embed Frameworks */,
+				4D85085F2BBAD8AE00BAF782 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

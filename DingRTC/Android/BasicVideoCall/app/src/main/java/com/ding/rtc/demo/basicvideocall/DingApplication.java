@@ -11,9 +11,7 @@ public class DingApplication extends Application {
 
     public static final String APP_ID = ; // 应用ID
     public static final String TOKEN = ; // 频道鉴权令牌Token
-    public static final String NONCE = ; // 随机码
-    public static final long TIMESTAMP  = ; // 时间戳
-    public static final String[] GSLB_SERVER = ; // GSLB地址
+    public static final String GSLB_SERVER = ; // GSLB地址
     private DingRtcEngine mRtcEngine;
     private final DingEngineCallback mRtcCallback = new DingEngineCallback();
 
@@ -43,8 +41,8 @@ public class DingApplication extends Application {
     public void initDingEngine() {
         if (mRtcEngine == null) {
             mRtcEngine = DingRtcEngine.create(getApplicationContext(), "");
-            mRtcEngine.setDefaultSubscribeAllRemoteAudioStreams(true);
-            mRtcEngine.setDefaultSubscribeAllRemoteVideoStreams(false);
+            mRtcEngine.subscribeAllRemoteAudioStreams(true);
+            mRtcEngine.subscribeAllRemoteVideoStreams(false);
             mRtcEngine.setRemoteDefaultVideoStreamType(DingRtcEngine.DingRtcVideoStreamType.DingRtcVideoStreamTypeFHD);
             mRtcEngine.setRtcEngineEventListener(mRtcCallback);
         }
