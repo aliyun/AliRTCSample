@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppToken", "AppToken\AppToken.csproj", "{9AD4E487-4C17-49C7-B8B2-B16D745F1B2D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9AD4E487-4C17-49C7-B8B2-B16D745F1B2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AD4E487-4C17-49C7-B8B2-B16D745F1B2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AD4E487-4C17-49C7-B8B2-B16D745F1B2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AD4E487-4C17-49C7-B8B2-B16D745F1B2D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
