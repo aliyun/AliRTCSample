@@ -19,5 +19,5 @@
 
 - 访问 [音视频通信RTC官网](https://www.aliyun.com/product/rtc) 了解更多功能和信息
 - 访问 [音视频通信产品文档](https://help.aliyun.com/product/61399.html) 查看入门介绍和详细文档
-- 访问 [SDK 参考手册](https://help.aliyun.com/document_detail/71330.html) 查看完整的 API 接口说明
+- 访问 [SDK 参考手册](https://help.aliyun.com/document_detail/2640091.html) 查看完整的 API 接口说明
 - [点击此处](https://help.aliyun.com/document_detail/324609.html) 免费注册账号，[点击此处](https://rtc.console.aliyun.com/) 登录控制台 
