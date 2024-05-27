@@ -83,7 +83,7 @@ public class AppToken {
     }
 
     public static void main(String[] args) throws Throwable {
-        final AppToken appToken = new AppToken("appId", "appKey", (int) (System.currentTimeMillis() / 1000));
+        final AppToken appToken = new AppToken("appId", "appKey",(int) (System.currentTimeMillis() / 1000) + 12 * 60 * 60);
         final Service service = new Service("channelId", "userId");
         appToken.addService(service);
         final String appTokenStr = appToken.buildTokenString();

@@ -8,8 +8,8 @@ import (
 func main() {
 	appId := "appId"
 	appKey := "appKey"
-	timestamp := int32(time.Now().Unix())
-	appTokenX := apptoken.CreateAppToken(appId, appKey, timestamp)
+	expiredTs := int32(time.Now().Unix()) + 12*60*60 // expired after 12h
+	appTokenX := apptoken.CreateAppToken(appId, appKey, expiredTs)
 
 	//
 	channelId := "channelId"

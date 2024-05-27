@@ -126,9 +126,9 @@ class AppToken:
 if __name__ == "__main__":
     app_id = "appId"
     app_key = "appKey"
-    timestamp = int(time.time())
+    expired_ts = int(time.time()) + 12 * 60 * 60  # expired after 12h
 
-    appToken = AppToken(app_id, app_key, timestamp)
+    appToken = AppToken(app_id, app_key, expired_ts)
 
     channel_id = 'channelId'
     user_id = 'userId'

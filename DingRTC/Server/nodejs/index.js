@@ -18,8 +18,8 @@ options.setEngineOptions({ k1: 'v1', k2: 'v2' });
 
 const appId = 'appId';
 const appKey = 'appKey';
-const timestamp = Math.floor(Date.now() / 1000);
-let appToken = new AppToken(appId, appKey, timestamp);
+const expiredTs = Math.floor(Date.now() / 1000) + 12 * 60 * 60; // expired after 12h
+let appToken = new AppToken(appId, appKey, expiredTs);
 
 appToken.setOptions(options);
 appToken.setService(service);

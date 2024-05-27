@@ -14,9 +14,9 @@ $options->set_engine_options(['k1' => 'v1', 'k2' => 'v2']);
 
 $appId = 'appId';
 $appKey = 'appKey';
-$timestamp = time() + 1 * 86400;
+$expiredTs = time() + 12 * 60 * 60; // expired after 12h
 
-$appToken = new AppToken($appId, $appKey, $timestamp);
+$appToken = new AppToken($appId, $appKey, $expiredTs);
 $appToken->setService($service);
 $appToken->setOptions($options);
 

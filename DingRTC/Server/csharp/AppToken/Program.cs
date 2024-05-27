@@ -10,14 +10,14 @@ namespace Program
         {
             string appId = "appId";
             string appKey = "appKey";
-            int timestamp = (int)(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() / 1000);
+            int expiredTs = (int)(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() / 1000) + 12 * 60 * 60; // expired after 12h
 
             Service service = new Service("channelId", "userId");
             service.AddAudioPublishPrivilege();
 
             AppTokenOptions options = new AppTokenOptions();
 
-            AppToken.Model.AppToken appTokenBuilder = new AppToken.Model.AppToken(appId, appKey, timestamp);
+            AppToken.Model.AppToken appTokenBuilder = new AppToken.Model.AppToken(appId, appKey, expiredTs);
             appTokenBuilder.SetOptions(options);
             appTokenBuilder.SetService(service);
 
