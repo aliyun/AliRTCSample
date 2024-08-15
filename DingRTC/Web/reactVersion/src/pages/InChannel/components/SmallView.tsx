@@ -5,10 +5,11 @@ import { RemoteUser } from 'dingrtc';
 import { downloadFileByBase64, isIOS, isWeixin } from '~/utils/tools';
 import styles from '../index.module.less';
 import classNames from 'classnames';
-import { useMainView, useRemoteChannel } from '~/hooks/channel';
+import { useRemoteChannel } from '~/hooks/channel';
 import { useDevice } from '~/hooks/device';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { client, smallViewTrackMap } from '~/store';
+import { client, mainViewPrefer } from '~/store';
+
 
 interface UserItemProps {
   user: RemoteUser;
@@ -17,18 +18,13 @@ interface UserItemProps {
 
 const SmallView = memo((props: UserItemProps) => {
   const { user, isLocal } = props;
-  const { subscribe, speakers, subscribeAllVideo } = useRemoteChannel();
-  const IClient = useRecoilValue(client);
+  const { speakers } = useRemoteChannel();
+  const rtcClient = useRecoilValue(client);
   const [showActions, setShowActions] = useState(false);
-  const [viewMap, setViewMap] = useRecoilState(smallViewTrackMap);
-  const { updateMainView } = useMainView();
+  const [mainPrefer, setMainPrefer] = useRecoilState(mainViewPrefer);
   const { cameraEnabled, micEnabled } = useDevice();
   const [streamType, setStreamType] = useState('high');
   const ref = useRef<HTMLDivElement>(null);
-  const cameraIconEnable = useMemo(() => {
-    if (isLocal) return cameraEnabled;
-    return user?.hasVideo && !user?.videoMuted;
-  }, [isLocal, user?.hasVideo, user?.videoMuted, cameraEnabled]);
 
   const micIconEnable = useMemo(() => {
     if (isLocal) return micEnabled;
@@ -36,18 +32,23 @@ const SmallView = memo((props: UserItemProps) => {
   }, [isLocal, user?.hasAudio, user?.audioMuted, micEnabled]);
 
   const videoIsPlay = useMemo(() => {
-    const track = viewMap[user.userId];
+    let track;
+    if (mainPrefer.userId === user.userId) {
+      track = mainPrefer.prefer === 'auxiliary' ? user.videoTrack : user.auxiliaryTrack
+    } else {
+      track = user.auxiliaryTrack || user.videoTrack;
+    }
     if (!track) return false;
     if (track === user.videoTrack)
       return isLocal ? cameraEnabled : !user?.videoMuted;
     if (track === user.auxiliaryTrack)
       return isLocal || !user.auxiliaryMuted;
   }, [
+    mainPrefer,
     user?.videoTrack?.isPlaying,
     isLocal,
     cameraEnabled,
     user?.videoMuted,
-    viewMap,
     user?.auxiliaryTrack,
     user?.auxiliaryMuted,
   ]);
@@ -59,54 +60,48 @@ const SmallView = memo((props: UserItemProps) => {
       okText: '确认',
       onOk() {
         track.play(ref.current, { fit: 'cover' });
-        setViewMap((prev) => ({ ...prev, [user.userId]: track }));
       },
       onCancel() {
         track.play(ref.current, { fit: 'cover' });
-        setViewMap((prev) => ({ ...prev, [user.userId]: track }));
       }
     })
   }, []);
 
-  const currentTrack = useMemo(() => viewMap[user.userId], [viewMap])
+  const currentTrack = useMemo(() => {
+    if (mainPrefer.userId === user.userId) {
+      return mainPrefer.prefer === 'camera' ? user.auxiliaryTrack : user.videoTrack;
+    }
+    return user.auxiliaryTrack || user.videoTrack;
+  }, [mainPrefer, user.videoTrack, user.auxiliaryTrack]);
 
   useEffect(() => {
-    if (currentTrack && !currentTrack.isPlaying) {
-      if (isIOS() && isWeixin()) {
-        playTrack(currentTrack);
-      } else {
-        currentTrack.play(ref.current, { fit: 'cover' });
-        setViewMap((prev) => ({ ...prev, [user.userId]: currentTrack }));
-      }
+    if (!currentTrack) return;
+    if (isIOS() && isWeixin()) {
+      playTrack(currentTrack);
+    } else {
+      currentTrack.play(ref.current, { fit: 'cover' });
     }
-  }, [currentTrack?.isPlaying]);
+  }, [currentTrack]);
 
   const isCamera = useMemo(() => {
-    const base = viewMap[user.userId] === user.videoTrack && !!viewMap[user.userId];
+    const base = currentTrack && currentTrack === user.videoTrack;
     if (isLocal) return base && cameraEnabled;
     return base;
-  }, [viewMap, user, isLocal, cameraEnabled]);
+  }, [currentTrack, user.videoTrack, isLocal, cameraEnabled]);
   const isScreen = useMemo(
-    () => viewMap[user.userId] === user.auxiliaryTrack && !!viewMap[user.userId],
-    [viewMap, user],
+    () => currentTrack && currentTrack === user.auxiliaryTrack,
+    [currentTrack, user.auxiliaryTrack],
   );
 
   const viewBigger = useCallback(() => {
-    const isEmpty = !isCamera && !isScreen;
-    if ((isEmpty || isScreen) && user.hasAuxiliary) {
-      if (isLocal) {
-        updateMainView(user, user.auxiliaryTrack);
-      } else if (user.auxiliaryTrack) {
-        updateMainView(user, user.auxiliaryTrack);
-      } else if (subscribeAllVideo) {
-        subscribe(user, 'video', true);
+    setMainPrefer((prev) => {
+      if (prev.userId === user.userId) {
+        return ({ userId: user.userId, prefer: prev.prefer === 'camera' ? 'auxiliary' : 'camera'})
+      } else {
+        return ({ userId: user.userId, prefer: 'camera' })
       }
-      return;
-    }
-    if ((isCamera || isEmpty) && user.hasVideo && user.videoTrack) {
-      updateMainView(user, user.videoTrack);
-    }
-  }, [user, isLocal, updateMainView, isCamera, isScreen, subscribeAllVideo]);
+    })
+  }, [user, isScreen]);
 
   const wrapClass = classNames({
     [styles.smallVideoItem]: true,
@@ -131,7 +126,7 @@ const SmallView = memo((props: UserItemProps) => {
         text: '切大流',
         show: !isLocal && isCamera && streamType === 'low',
         onClick: () => {
-          IClient.setRemoteVideoStreamType(user.userId, 'high').then(() => {
+          rtcClient.setRemoteVideoStreamType(user.userId, 'high').then(() => {
             setStreamType('high');
           });
         },
@@ -140,7 +135,7 @@ const SmallView = memo((props: UserItemProps) => {
         text: '切小流',
         show: !isLocal && isCamera && streamType === 'high',
         onClick: () => {
-          IClient.setRemoteVideoStreamType(user.userId, 'low').then(() => {
+          rtcClient.setRemoteVideoStreamType(user.userId, 'low').then(() => {
             setStreamType('low');
           });
         },
@@ -196,15 +191,12 @@ const SmallView = memo((props: UserItemProps) => {
       </span>
       <Avatar size="large">{user.userName}</Avatar>
       <div className={styles.smallViewStatus}>
-        {!micIconEnable ? <Icon type="iconXDS_UnMute2Fill" /> : <Icon type="iconXDS_Mute2" />}
-        {!cameraIconEnable ? (
-          <Icon type="iconXDS_FrameMeetingFill" />
-        ) : (
-          <Icon type="iconXDS_FrameMeetingLine" />
-        )}
-        {user?.auxiliaryTrack || user?.hasAuxiliary ? (
+        {user?.auxiliaryTrack ? (
           <Icon style={{ color: 'limegreen' }} type="iconXDS_share_screen1" />
-        ) : null}
+        ) : !micIconEnable ? <Icon type="iconXDS_UnMute2Fill" /> : <Icon type="iconXDS_Mute2" />}
+        <Tooltip title={user.userName}>
+          <span>{user.userName}</span>
+        </Tooltip>
       </div>
       {Actions}
     </Col>

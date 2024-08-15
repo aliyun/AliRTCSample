@@ -1,12 +1,13 @@
 import { Button, Row, Space, Col } from 'dingtalk-design-desktop';
-import { memo, useCallback, useState } from 'react';
-import { useRecoilValue } from 'recoil';
-import { client, constantConfig, currentUserInfo, localChannelInfo } from '~/store';
+import { memo, useCallback, useEffect, useState } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { client, constantConfig, currentUserInfo, globalFlag, localChannelInfo } from '~/store';
 import styles from '../index.module.less';
 import { Camera, Mic, Screen } from '~/components/Device';
 import { useDevice } from '~/hooks/device';
 import Icon from '~/components/Icon';
 import Settings from './Settings';
+import classNames from 'classnames';
 
 interface IProps {
   onLeave: () => void;
@@ -15,22 +16,38 @@ interface IProps {
 const Index = (props: IProps) => {
   const { onLeave: _onLeave } = props;
   const { screenTrack } = useRecoilValue(localChannelInfo);
-  const IClient = useRecoilValue(client);
+  const [{ hideToolBar }, setGlobalFlag] = useRecoilState(globalFlag);
+  const rtcClient = useRecoilValue(client);
   const [showSetting, setShowSetting] = useState(false);
   const { isMobile } = useRecoilValue(constantConfig);
   const { channel, appId } = useRecoilValue(currentUserInfo);
   const { operateCamera, operateMic, operateScreen, cameraEnabled, micEnabled } = useDevice('in');
   const onLeave = useCallback(() => {
     _onLeave();
-    IClient.leave();
-  }, [IClient, _onLeave]);
+    rtcClient.leave();
+  }, [rtcClient, _onLeave]);
+
+  useEffect(() => {
+    let timer: number = null;
+    const hideAfterStill = () => {
+      if (timer) clearTimeout(timer);
+      setGlobalFlag((prev) => ({ ...prev, hideToolBar: false }));
+      timer = window.setTimeout(() => {
+        setGlobalFlag((prev) => ({ ...prev, hideToolBar: true }));
+      }, 10000);
+    }
+    document.addEventListener('mousemove', hideAfterStill)
+    return () => {
+      document.removeEventListener('mousemove', hideAfterStill)
+    }
+  }, []);
 
   const toggleShowSettings = useCallback(() => {
     setShowSetting((prev) => !prev)
   }, [])
 
   return (
-    <Row className={styles.toolBarWrap}>
+    <Row className={classNames(styles.toolBarWrap, hideToolBar ? styles.hideToolBar : '')}>
       <Row className={styles.confInfo} gutter={16}>
         <Col>
           <span>应用: </span>

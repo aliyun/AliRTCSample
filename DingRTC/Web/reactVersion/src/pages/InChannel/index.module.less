@@ -1,10 +1,15 @@
+.hideToolBar {
+  height: 0!important;
+}
 .toolBarWrap {
   background-color: #fff;
-  position: fixed;
-  bottom: 0;
   width: 100%;
+  align-self: flex-end;
   height: 56px;
   display: flex;
+  position: fixed;
+  bottom: 0;
+  transition: height 0.5s ease;
   justify-content: center;
   align-items: center;
   & > button {
@@ -35,19 +40,12 @@
 }
 
 .mainView {
-  width: 100%;
-  height: 100%;
-}
-
-.videoWrapper {
-  border-radius: 6px;
-  background-color: #dce1e6;
-  height: 100%;
+  flex: 1;
+  overflow: hidden;
   position: relative;
-  & > span:first-of-type{
-    position: absolute;
-    left: 4px;
-    top: -2px;
+  & .higherMainUserInfo {
+    bottom: 60px;
+    // transition: bottom 0.5s ease;
   }
 }
 
@@ -66,17 +64,44 @@
   width: 100%;
   height: 100%;
   overflow-x: hidden;
+  flex-direction: column;
+  background-color: #dce1e6;
+  & > div:first-of-type {
+    height: 32px;
+    width: 100%;
+    background-color: rgb(245, 247, 250);
+    & > span:first-of-type {
+      position: relative;
+      left: 4px;
+      top: 4px;
+    }
+  }
 }
 
+.fullscreen {
+  position: absolute;
+  right: 16px;
+  top: 4px;
+  align-items: center;
+  cursor: pointer;
+  color: var(--common_level1_base_color, #171a1d);
+  font-size: 14px;
+  & span {
+    margin-right: 4px;
+  }
+}
 .smallVideoItems {
   width: 100%;
-  padding-top: 16px;
   padding-bottom: 12px;
-  display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   background-color: #f5f7fa;
+  border-radius: 6px;
+  min-height: 120px;
+  max-height: 250px;
+  overflow-y: scroll;
+  padding-left: 20px;
 }
 
 .smallVideoItem {
@@ -97,12 +122,22 @@
 
 .smallViewStatus {
   position: absolute;
-  bottom: 14px;
-  left: 12px;
+  bottom: 4px;
+  left: 4px;
   padding: 0 4px;
+  max-width: 110px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   border-radius: 4px;
-  background-color: lightgray;
+  background-color: hsla(0,0%,100%,0.8);
   z-index: 1;
+  transition: bottom 0.5s ease;
+  & > span:last-of-type {
+    font-size: 12px;
+    margin-left: 2px;
+    color: #171a1d;
+  }
 }
 
 .avatar {
@@ -130,17 +165,17 @@
 
 .stopShare {
   & :global(.deviceIcon) {
-    color: #fb602d!important;
+    color: #fb602d !important;
   }
 }
 
 .smallViewActions {
   position: absolute;
-  right: 10px;
-  bottom: 10px;
+  right: 4px;
+  bottom: 4px;
   padding: 0 4px;
   border-radius: 4px;
-  background-color: lightgray;
+  background-color: hsla(0,0%,100%,0.8);
   cursor: pointer;
   z-index: 1;
 }
@@ -175,9 +210,21 @@
       width: 90px;
     }
   }
+  .smallVideoItems {
+    padding-left: 0;
+  }
   .confInfo {
     padding-left: 0;
     transform: scale(0.8);
+  }
+  .settings {
+    & :global(.dtd-modal) {
+      margin-top: 0;
+    }
+    & :global(.dtd-modal-content) {
+      max-width: 100vw;
+      max-height: 100vh;
+    }
   }
 }
 
@@ -215,7 +262,7 @@
     top: 14px;
     cursor: pointer;
   }
-  & :global(.dtd-form-item) {
+  & :global(.dtd-form .dtd-form-item) {
     margin-bottom: 12px;
   }
   .apply {
@@ -248,4 +295,78 @@
       object-fit: cover;
     }
   }
+}
+
+.qualityItem {
+  width: 100%;
+  flex-direction: row;
+  border: 1px solid #dcdcdc;
+  border-radius: 4px;
+  margin-bottom: 12px;
+  & > div {
+    width: 100%;
+    padding: 4px 6px;
+    &:first-of-type {
+      background-color: #dce1e6;
+      font-size: 14px;
+    }
+  }
+  & .qualityLabel {
+    font-size: 12px;
+  }
+}
+.disconnectIconWrapper {
+  margin: 0 8px;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  overflow: hidden;
+  :hover {
+    background-color: var(--btm-toolbar-btn-bg-color);
+    cursor: pointer;
+  }
+  .disconnectIcon {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.cardWrapper {
+  width: 100%;
+  height: 100%;
+  min-width: 240px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .labelWrap {
+    flex-shrink: 1;
+    flex-grow: 0;
+    display: flex;
+    flex-direction: column;
+    margin-right: 10px;
+    .label {
+      margin: 8px 0;
+    }
+  }
+  .valueWrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    .value {
+      margin: 8px 0;
+      white-space: nowrap;
+    }
+  }
+}
+.networkIcon {
+  width: 24px;
+  height: 24px;
+}
+
+.networkTrigger {
+  margin-left: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 }

@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { currentUserInfo, deviceInfo, localChannelInfo, smallViewTrackMap } from '~/store';
+import { useRecoilState } from 'recoil';
+import { deviceInfo, localChannelInfo } from '~/store';
 import DingRTC, {
   CameraVideoTrack,
   DeviceInfo,
@@ -20,9 +20,7 @@ export const useDevice = (scene?: 'pre' | 'in') => {
     { cameraId, micId, cameraDimension, cameraFrameRate, screenDimension, screenFrameRate, cameraMaxBitrate, screenMaxBitrate },
     setDeviceInfo,
   ] = useRecoilState(deviceInfo);
-  const { userId } = useRecoilValue(currentUserInfo);
   const { publish } = useLocalChannel();
-  const setSmallViewMap = useSetRecoilState(smallViewTrackMap);
   const updateDeviceList = useCallback((deviceType: DeviceType, info: DeviceInfo) => {
     setDeviceInfo((prev) => {
       const { cameraList, micList, speakerList } = prev;
@@ -167,7 +165,6 @@ export const useDevice = (scene?: 'pre' | 'in') => {
     if (!cameraTrack) {
       openCamera().then((track) => {
         if (scene !== 'pre') {
-          setSmallViewMap((prev) => ({ ...prev, [userId]: track }));
           publish([track]);
         }
         DingRTC.getCameras().then((list) => {

@@ -1,0 +1,13 @@
+{
+  "builder": {
+    "name": "@ali/builder-base",
+    "config": {}
+  },
+  "nodeVersion": 18,
+  "assets": {
+    "type": "command",
+    "command": {
+      "cmd": ["tnpm install", "tnpm run build", "mv ./dist $BUILD_DEST"]
+    }
+  }
+}

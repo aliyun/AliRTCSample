@@ -4,11 +4,12 @@ import {
   currentUserInfo,
   globalFlag,
   localChannelInfo,
+  MainViewPrefer,
+  mainViewPrefer,
   remoteChannelInfo,
-  smallViewTrackMap,
 } from '~/store';
 import { print } from '~/utils/tools';
-import DingRTC, { RemoteAudioTrack, RemoteVideoTrack, SubscribeParam } from 'dingrtc';
+import DingRTC, { RemoteAudioTrack, SubscribeParam } from 'dingrtc';
 import { Button, Card, Form, Input, Toast } from 'dingtalk-design-desktop';
 import { useCallback, memo, useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
@@ -22,11 +23,10 @@ const Join = () => {
     setCurrentUserInfo,
   ] = useRecoilState(currentUserInfo);
   const clientInfo = useRecoilValue(localChannelInfo);
+  const setMainPrefer = useSetRecoilState(mainViewPrefer);
   const setRemoteChannelInfo = useSetRecoilState(remoteChannelInfo);
-  const setViewMap = useSetRecoilState(smallViewTrackMap);
   const newClient = useRecoilValue(client);
   const setLocalChannelInfo = useSetRecoilState(localChannelInfo);
-
   const initialValues = {
     appId,
     userId,
@@ -51,7 +51,7 @@ const Join = () => {
     print('localJoinChannel');
     setJoining(true);
     try {
-      const appTokenResult = await getAppToken(uid, app, channelName);
+      let appTokenResult = await getAppToken(uid, app, channelName);
       const loginParam = {
         appId: app,
         userId: uid,
@@ -59,7 +59,7 @@ const Join = () => {
         channelName,
         appToken: appTokenResult.token,
       };
-      if (appTokenResult?.gslb?.length) {
+      if (appTokenResult.gslb?.length) {
         DingRTC.setClientConfig({ gslb: appTokenResult.gslb });
       }
       try {
@@ -79,21 +79,21 @@ const Join = () => {
         });
         setLocalChannelInfo((prev) => ({ ...prev, timeLeft: result.timeLeft }));
         Toast.success('加入房间成功');
-        setGlobalData((pre) => ({ ...pre, joined: true }));
         setRemoteChannelInfo((prev) => ({ ...prev, remoteUsers: result.remoteUsers }));
         const subParams: SubscribeParam[] = [
           { uid: 'mcu', mediaType: 'audio', auxiliary: false }
         ];
         for (const user of result.remoteUsers) {
-          if (user.hasVideo) {
-            subParams.push({ uid: user.userId, mediaType: 'video', auxiliary: false });
-
-          }
           if (user.hasAuxiliary) {
             subParams.push({ uid: user.userId, mediaType: 'video', auxiliary: true });
           }
+          if (user.hasVideo) {
+            subParams.push({ uid: user.userId, mediaType: 'video', auxiliary: false });
+          }
         }
-        newClient.batchSubscribe(subParams).then((batchSubscribeResult) => {
+        let mainPrefer: MainViewPrefer;
+        const tasks = [];
+        const subTask = newClient.batchSubscribe(subParams).then((batchSubscribeResult) => {
           for (const { error, track, uid: usrId, auxiliary } of batchSubscribeResult) {
             if (error) {
               Toast.info(
@@ -111,23 +111,28 @@ const Join = () => {
               setGlobalData((pre) => ({ ...pre, mcuAudioSubscribed: true }));
               audioTrack.play();
             } else {
+              if (!mainPrefer) {
+                mainPrefer = { userId: usrId, prefer: auxiliary ? 'auxiliary' : 'camera' };
+              }
               print(`subscribe user ${usrId} ${auxiliary ? 'screenShare' : 'camera'}`);
-              setViewMap((prev) => ({ ...prev, [usrId]: prev[usrId] || track as RemoteVideoTrack }));
               setRemoteChannelInfo((prev) => ({
                 ...prev,
                 remoteUsers: [...newClient.remoteUsers],
               }));
             }
           }
+          if (clientInfo.cameraTrack && !mainPrefer) {
+            clientInfo.cameraTrack.stop();
+            mainPrefer = { userId: uid, prefer: 'camera' };
+          }
+          if (mainPrefer) {
+            setMainPrefer(mainPrefer)
+          }
         });
-
+        tasks.push(subTask);
         const localTracks = [clientInfo.cameraTrack, clientInfo.micTrack].filter((item) => !!item);
-        if (clientInfo.cameraTrack) {
-          clientInfo.cameraTrack.stop();
-          setViewMap((prev) => ({ ...prev, [uid]: clientInfo.cameraTrack }));
-        }
         if (localTracks.length) {
-          newClient
+          const pubTask = newClient
             ?.publish(localTracks)
             .then(() => {
               setLocalChannelInfo((prev) => ({
@@ -145,16 +150,20 @@ const Join = () => {
               );
               throw e;
             });
+          tasks.push(pubTask);
         }
+        Promise.all(tasks).finally(() => {
+          setGlobalData((pre) => ({ ...pre, joined: true }));
+        })
       } catch (e: any) {
         setJoining(false);
         setGlobalData((pre) => ({ ...pre, joined: false }));
         Toast.error(`加入房间失败${e?.reason || e?.message || JSON.stringify(e)}`);
       }
-    } catch (error: any) {
+    } catch (error) {
       setGlobalData((pre) => ({ ...pre, joined: false }));
       setJoining(false);
-      Toast.error(`访问appServer失败,${error?.reason || error?.message || JSON.stringify(error)}`);
+      Toast.error(`访问appServer失败${JSON.stringify(error)}`);
       print('error to join', error);
     }
   }, [form, clientInfo]);

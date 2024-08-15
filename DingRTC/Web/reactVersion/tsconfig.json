@@ -27,8 +27,13 @@
     "paths": {
       "~": ["src"],
       "~/*": ["src/*"]
-    }
+    },
+    "declaration": true, 
+    "declarationDir": "./dist/types",
+    "emitDeclarationOnly": true,
+    "rootDir": "./",
+    "composite": true,
+    "allowSyntheticDefaultImports": true,
   },
   "include": ["vite-env.d.ts", "tsconfig.node.json", "vite.config.ts", "src"],
-  "references": [{ "path": "tsconfig.node.json" }]
 }

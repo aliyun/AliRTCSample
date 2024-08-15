@@ -10,7 +10,6 @@ import { print } from '~/utils/tools';
 import VConsole from 'vconsole';
 import { useDevice } from '~/hooks/device';
 
-
 const App = () => {
   const { joined } = useRecoilValue(globalFlag);
   const { updateDeviceList } = useDevice();

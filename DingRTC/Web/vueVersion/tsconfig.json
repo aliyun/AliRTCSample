@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "noImplicitAny": false,
+    "target": "es5",
+    "allowJs": true,
+    "moduleResolution": "Bundler",
+    "module": "ES2015",
+    "paths": {
+      "@src/*": ["./src/*"]
+    },
+    "jsx": "preserve"
+  },
+  "include": ["./src"],
+  "files": ["src/main.ts"]
+}

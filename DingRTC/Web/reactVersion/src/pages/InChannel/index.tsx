@@ -1,22 +1,27 @@
-import { memo, useCallback, useEffect, useRef, useState } from 'react';
-import DingRTC, { RemoteUser, RemoteStreamType, TrackMediaType } from 'dingrtc';
+import { memo, useCallback, useEffect, useState } from 'react';
+import {
+  RemoteUser,
+  RemoteStreamType,
+  TrackMediaType,
+  NetworkQuality,
+} from 'dingrtc';
 import { Space, Row, Toast } from 'dingtalk-design-desktop';
 import SmallView from './components/SmallView';
 import { print, parseTime } from '~/utils/tools';
 import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 import {
   client,
-  currentUserInfo,
   globalFlag,
   localChannelInfo,
-  mainView,
+  mainViewPrefer,
   remoteChannelInfo,
-  smallViewTrackMap,
 } from '~/store';
 import ToolBar from './components/ToolBar';
 import styles from './index.module.less';
-import { useRemoteChannel } from '~/hooks/channel';
+import { useLocalChannel, useNetworkStats, useRemoteChannel } from '~/hooks/channel';
 import MainView from './components/MainView';
+import { NetworkDetector } from './components/NetWorkBar/Networks';
+import Icon from '~/components/Icon';
 
 const Timer = memo(() => {
   const { timeLeft } = useRecoilValue(localChannelInfo);
@@ -34,36 +39,34 @@ const Timer = memo(() => {
 
 const Index = memo(() => {
   const setGlobalFlag = useSetRecoilState(globalFlag);
-  const [{ cameraTrack, micTrack, screenTrack, timeLeft }, setLocalChannelInfo] = useRecoilState(localChannelInfo);
-  const IClient = useRecoilValue(client);
-  const { userId, userName } = useRecoilValue(currentUserInfo);
+  const rtcClient = useRecoilValue(client);
+  const [fullscreen, setFullScreen] = useState(false);
+  const { allUsers, cameraTrack, micTrack, screenTrack, timeLeft, setLocalChannelInfo, userId } = useLocalChannel();
   const { subscribe, unsubscribe, subscribeAllVideo } = useRemoteChannel();
-  const setMainView = useSetRecoilState(mainView);
   const resetLocalChannelInfo = useResetRecoilState(localChannelInfo);
+  const resetMainViewPrefer = useResetRecoilState(mainViewPrefer);
   const resetRemoteChannelInfo = useResetRecoilState(remoteChannelInfo);
-  const setSmallVideMap = useSetRecoilState(smallViewTrackMap);
   const [{ remoteUsers, mcuAudioTrack }, setRemoteChannelInfo] = useRecoilState(remoteChannelInfo);
-  const otherVideosWrapperRef = useRef<HTMLDivElement>(null);
-  const customVideo = useRef<HTMLVideoElement>(null);
+  const { getRtcStats } = useNetworkStats();
 
-  useEffect(() => {
-    if (!customVideo.current) return;
-    customVideo.current.onplay = async () => {
-      // @ts-ignore
-      const videoTrack = customVideo.current.captureStream().getVideoTracks()[0];
-      const customTrack = await DingRTC.createCustomVideoTrack({
-        mediaStreamTrack: videoTrack,
-        frameRate: 45,
-        dimension: 'VD_1920x1080',
-      });
-      // setCustomVideoTrak(customTrack);
-      IClient.publish(customTrack);
-    };
-  }, []);
+  const onFullScreen = useCallback(() => {
+    if (!document.fullscreenElement) {
+      setFullScreen(true);
+      document.documentElement.requestFullscreen();
+    } else {
+      if (document.exitFullscreen) {
+        setFullScreen(false);
+        document.exitFullscreen();
+      }
+    }
+  }, [])
 
   const clearRoom = useCallback(() => {
     if (cameraTrack) {
       cameraTrack.close();
+    }
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
     }
     if (micTrack) {
       micTrack.close();
@@ -84,53 +87,62 @@ const Index = memo(() => {
       }
     });
     resetLocalChannelInfo();
-    setMainView(null);
     resetRemoteChannelInfo();
-    setSmallVideMap({});
+    resetMainViewPrefer();
     setGlobalFlag({
       joined: false,
+      hideToolBar: false,
     });
-  }, [mcuAudioTrack, remoteUsers, micTrack, cameraTrack, screenTrack, screenTrack, IClient]);
+  }, [mcuAudioTrack, remoteUsers, micTrack, cameraTrack, screenTrack, screenTrack, rtcClient]);
   useEffect(() => {
-    IClient.on('user-joined', (user: RemoteUser) => {
+    rtcClient.on('user-joined', (user: RemoteUser) => {
       print(`user ${user.userId} joined`);
-      setRemoteChannelInfo((prev) => ({ ...prev, remoteUsers: [...IClient.remoteUsers] }));
+      setRemoteChannelInfo((prev) => ({ ...prev, remoteUsers: [...rtcClient.remoteUsers] }));
     });
-    IClient.on('stream-type-changed', (uid: string, streamType: RemoteStreamType) => {
+    rtcClient.on('stream-type-changed', (uid: string, streamType: RemoteStreamType) => {
       print(`user ${uid} streamType changeTo ${streamType}`);
     });
 
-    IClient.on('connection-state-change', (current, _, reason) => {
+    rtcClient.on('connection-state-change', (current, _, reason) => {
       print(`connection-state-change ${current} ${reason || ''}`);
       if (current === 'disconnected') {
-        Toast.info(reason);
+        if (reason !== 'leave') {
+          Toast.info(reason);
+        }
         clearRoom();
       }
     });
-
-    IClient.on('volume-indicator', (uids: string[]) => {
+    rtcClient.on('network-quality', (uplink: NetworkQuality, downlink: NetworkQuality) => {
+      setLocalChannelInfo((prev) => ({ ...prev, networkQuality: uplink > downlink ? uplink : downlink }));
+    });
+    rtcClient.on('volume-indicator', (uids: string[]) => {
       if (uids.length) {
         print(`${uids.join()} is speaking`);
       }
       setRemoteChannelInfo((prev) => ({ ...prev, speakers: uids }));
     });
-    IClient.on('user-info-updated', (uid, msg) => {
+    rtcClient.on('user-info-updated', (uid, msg) => {
       print(`user ${uid}: ${msg}`);
-      setRemoteChannelInfo((prev) => ({ ...prev, remoteUsers: [...IClient.remoteUsers] }));
+      setRemoteChannelInfo((prev) => ({ ...prev, remoteUsers: [...rtcClient.remoteUsers] }));
     });
-    IClient.on('user-left', (user: RemoteUser) => {
+    rtcClient.on('user-left', (user: RemoteUser) => {
       print(`user ${user.userId} left`);
-      setRemoteChannelInfo((prev) => ({ ...prev, remoteUsers: [...IClient.remoteUsers] }));
+      setRemoteChannelInfo((prev) => ({ ...prev, remoteUsers: [...rtcClient.remoteUsers] }));
     });
+    const onExitFullScreen = () => {
+      if (!document.fullscreenElement) setFullScreen(false);
+    }
+    document.addEventListener('fullscreenchange', onExitFullScreen);
     return () => {
-      IClient.removeAllListeners();
+      document.removeEventListener('fullscreenchange', onExitFullScreen);
+      rtcClient.removeAllListeners();
     };
   }, []);
 
   useEffect(() => {
     const onUserPublished = (user: RemoteUser, mediaType: TrackMediaType, auxiliary: boolean) => {
-      print(`user ${user.userId} published ${auxiliary ? 'screenShare' : mediaType}}`);
-      setRemoteChannelInfo((prev) => ({ ...prev, remoteUsers: [...IClient.remoteUsers] }));
+      print(`user ${user.userId} published ${mediaType === 'audio' ? 'audio' : auxiliary ? 'screenShare' : mediaType}}`);
+      setRemoteChannelInfo((prev) => ({ ...prev, remoteUsers: [...rtcClient.remoteUsers] }));
       if (mediaType !== 'video') {
         return;
       }
@@ -139,27 +151,22 @@ const Index = memo(() => {
       }
     };
     const onUserUnpublished = (user: RemoteUser, mediaType: TrackMediaType, auxiliary: boolean) => {
-      setRemoteChannelInfo((prev) => ({ ...prev, remoteUsers: [...IClient.remoteUsers] }));
-      if (mediaType !== 'video') {
-        return;
-      }
-      if (subscribeAllVideo) {
-        unsubscribe(user, 'video', auxiliary);
-      }
+      print(`user ${user.userId} unpublished ${mediaType === 'audio' ? 'audio' : auxiliary ? 'screenShare' : mediaType}}`);
+      setRemoteChannelInfo((prev) => ({ ...prev, remoteUsers: [...rtcClient.remoteUsers] }));
     };
-    IClient.on('user-unpublished', onUserUnpublished);
-    IClient.on('user-published', onUserPublished);
+    rtcClient.on('user-unpublished', onUserUnpublished);
+    rtcClient.on('user-published', onUserPublished);
     return () => {
-      IClient.off('user-unpublished', onUserUnpublished);
-      IClient.off('user-published', onUserPublished);
+      rtcClient.off('user-unpublished', onUserUnpublished);
+      rtcClient.off('user-published', onUserPublished);
     };
-  }, [subscribeAllVideo]);
+  }, [subscribeAllVideo, subscribe, unsubscribe]);
 
   useEffect(() => {
     if (!screenTrack) return;
     const clearTrack = () => {
       screenTrack.stop();
-      IClient.unpublish(screenTrack);
+      rtcClient.unpublish(screenTrack);
       setLocalChannelInfo((prev) => ({ ...prev, screenTrack: null }));
     };
     screenTrack.on('track-ended', clearTrack);
@@ -167,35 +174,36 @@ const Index = memo(() => {
       screenTrack.off('track-ended', clearTrack);
     };
   }, [screenTrack]);
+
+  useEffect(() => {
+    getRtcStats();
+    const timer = setInterval(() => {
+      getRtcStats();
+    }, 2000);
+    return () => {
+      clearInterval(timer);
+    };
+  }, [getRtcStats]);
+
   return (
-    <Space direction="vertical" className={styles.blockWrapper}>
-      <Row ref={otherVideosWrapperRef} className={styles.videoWrapper}>
+    <Row className={styles.blockWrapper}>
+      <Row>
         {timeLeft ? <Timer /> : null}
-        <Space size={8} className={styles.smallVideoItems}>
-          {[
-            {
-              userId,
-              videoTrack: cameraTrack,
-              userName,
-              hasVideo: !!cameraTrack,
-              videoMuted: !cameraTrack?.enabled,
-              auxiliaryMuted: !screenTrack?.enabled,
-              hasAuxiliary: !!screenTrack,
-              auxiliaryTrack: screenTrack,
-            },
-            ...remoteUsers,
-          ].map((user) => (
-            <SmallView
-              isLocal={user.userId === userId}
-              user={user as RemoteUser}
-              key={user.userId}
-            />
-          ))}
-        </Space>
-        <MainView />
+        <NetworkDetector />
+        <Row className={styles.fullscreen} onClick={onFullScreen}><Icon type={fullscreen ? 'iconXDS_Minimize' : 'iconXDS_FullScreen'} />{fullscreen ? '退出全屏' : '全屏'}</Row>
       </Row>
+      <Space size={8} className={styles.smallVideoItems}>
+        {allUsers.map((user) => (
+          <SmallView
+            isLocal={user.userId === userId}
+            user={user as RemoteUser}
+            key={user.userId}
+          />
+        ))}
+      </Space>
+      <MainView />
       <ToolBar onLeave={clearRoom} />
-    </Space>
+    </Row>
   );
 });
 

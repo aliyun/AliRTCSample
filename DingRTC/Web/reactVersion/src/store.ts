@@ -1,11 +1,11 @@
-import DingRTC, { CameraVideoTrack, DingRTCClient, LocalAudioTrack, LocalTrack, LocalVideoTrack, MicrophoneAudioTrack, RemoteAudioTrack, RemoteUser, RemoteVideoTrack, VideoDimension } from "dingrtc";
+import DingRTC, { CameraVideoTrack, DingRTCClient, LocalAudioTrack, LocalTrack, LocalVideoTrack, MicrophoneAudioTrack, RemoteAudioTrack, RemoteUser, VideoDimension, NetworkQuality } from "dingrtc";
 import { atom } from "recoil";
 import { isIOS, isMobile, isWeixin, logLevel, parseSearch } from "./utils/tools";
 import configJson from '~/config.json'
 
 DingRTC.setLogLevel(logLevel);
 
-interface ILocalChannelInfo {
+export interface ILocalChannelInfo {
   cameraTrack?: CameraVideoTrack;
   micTrack?: MicrophoneAudioTrack;
   screenTrack?: LocalVideoTrack;
@@ -13,6 +13,37 @@ interface ILocalChannelInfo {
   customAudioTrack?: LocalAudioTrack;
   publishedTracks?: LocalTrack[];
   timeLeft?: number;
+  networkQuality: NetworkQuality,
+  rtcStats: RTCStats;
+}
+
+interface Resolution {
+  width: number;
+  height: number; 
+}
+
+export interface RTCStats {
+  localCameraFPS?: number;
+  localCameraResolution?: Resolution;
+  localCameraBitrate?: number;
+  localScreenFPS?: number;
+  localScreenResolution?: Resolution;
+  localScreenBitrate?: number;
+  localBitrate?: number;
+  remoteBitrate?: number;
+  remoteCameraFPS?: number;
+  remoteCameraResolution?: Resolution;
+  remoteCameraBitrate?: number;
+  remoteScreenFPS?: number;
+  remoteScreenResolution?: Resolution;
+  localAudioBitrate?: number;
+  localAudioLevel?: number;
+  remoteCamerateBitrate?: number;
+  remoteScreenBitrate?: number;
+  remoteAudioBitrate?: number;
+  remoteAudioLevel?: number;
+  loss?: number;
+  rtt?: number;
 }
 
 interface IDeviceInfo {
@@ -40,6 +71,7 @@ interface IRemoteChannelInfo {
 
 interface IGlobalFlag {
   joined: boolean;
+  hideToolBar: boolean;
 }
 
 export const client = atom<DingRTCClient>({
@@ -53,7 +85,6 @@ export const constantConfig = atom({
   default: {
     isMobile: isMobile(),
     hideLog: logLevel === 'none',
-    env: parseSearch('env') || '',
     isIOS: isIOS(),
     isWeixin: isWeixin(),
   }
@@ -91,7 +122,7 @@ export const deviceInfo = atom<IDeviceInfo>({
 })
 
 export const localChannelInfo = atom<ILocalChannelInfo>({
-  key: 'IlocalChanel',
+  key: 'ILocalChannelInfo',
   dangerouslyAllowMutability: true,
   default: {
     cameraTrack: null,
@@ -100,7 +131,9 @@ export const localChannelInfo = atom<ILocalChannelInfo>({
     customAudioTrack: null,
     micTrack: null,
     timeLeft: 0,
+    networkQuality: 1,
     publishedTracks: [],
+    rtcStats: {},
   }
 });
 
@@ -119,19 +152,20 @@ export const globalFlag = atom<IGlobalFlag>({
   key: 'IglobalFlag',
   default: {
     joined: false,
+    hideToolBar: false,
   }
 });
 
-export const mainView = atom<LocalVideoTrack | RemoteVideoTrack>({
-  key: 'ImainView',
-  dangerouslyAllowMutability: true,
-  default: null
-});
+export interface MainViewPrefer {
+  userId: string;
+  prefer: 'camera' | 'auxiliary',
+}
 
-type SmallViewTrackMap = Record<string, LocalVideoTrack | RemoteVideoTrack>
-
-export const smallViewTrackMap = atom<SmallViewTrackMap>({
-  key: 'IsmallViewTrackMap',
+export const mainViewPrefer = atom<MainViewPrefer>({
+  key: 'IMainViewPrefer',
   dangerouslyAllowMutability: true,
-  default: {},
+  default: {
+    userId: '',
+    prefer: 'auxiliary',
+  },
 })

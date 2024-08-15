@@ -17,7 +17,6 @@ export const request = (url: string, params: any) => {
         }
       })
       .then((data) => {
-        console.log(data);
         if (res?.ok) {
           if (data.code) {
             reject(data);
@@ -49,9 +48,6 @@ export const getAppToken = async (
   appId: string,
   channelId: string,
 ): Promise<{ token: string, gslb?: string[] }> => {
-  if (appId === "******") {
-    throw new TypeError('请先参考readme 调整参数配置');
-  }
   if (token) {
     return {
       token,

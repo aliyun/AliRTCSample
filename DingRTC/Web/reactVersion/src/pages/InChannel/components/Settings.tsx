@@ -16,10 +16,10 @@ import {
   UploadFile,
   Checkbox,
 } from 'dingtalk-design-desktop';
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { ReactNode, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Icon from '~/components/Icon';
 import styles from '../index.module.less';
-import { useLocalChannel, useRemoteChannel } from '~/hooks/channel';
+import { useLocalChannel, useNetworkStats, useRemoteChannel } from '~/hooks/channel';
 import { useRecoilState } from 'recoil';
 import { deviceInfo } from '~/store';
 import DingRTC, { LocalAudioTrack, LocalTrack, RemoteAudioTrack } from 'dingrtc';
@@ -149,7 +149,7 @@ const Video = (props: ISettingsProps) => {
   return (
     <Row className={styles.videoSetting}>
       <div className={styles.videoWrapper}>
-        <video loop autoPlay controls={false} muted ref={videoRef} />
+        <video loop autoPlay playsInline webkit-playsinline x5-playsinline controls={false} muted ref={videoRef} />
       </div>
       <Form
         form={form}
@@ -188,6 +188,122 @@ const Video = (props: ISettingsProps) => {
     </Row>
   );
 };
+
+const Statistic = (props: { title: string, items: Array<{ label: string, value: ReactNode }> }) => {
+  const { title, items } = props;
+  return (
+    <Row className={styles.qualityItem}>
+      <Row>{title}</Row>
+      <Row>
+        {items.map((item, idx) => (
+          <Col span={8} key={`${item.label}${idx}`}>
+            <Row className={styles.qualityLabel}>
+              <Col span={8} >{item.label}</Col>
+              <Col span={14}>{item.value}</Col>
+            </Row>
+          </Col>
+        ))}
+      </Row>
+    </Row>
+  )
+}
+
+
+
+const Quality = memo(() => {
+  const { rtcStats } = useNetworkStats();
+
+  const networkItems = [
+    {
+      label: '带宽',
+      value: <span>&uarr; {rtcStats.localBitrate ? `${Math.round(rtcStats.localBitrate / 1000)} kbps` : '--'}</span>,
+    },
+    {
+      label: '丢包率',
+      value: `${rtcStats.loss} %`,
+    },
+    {
+      label: '延迟',
+      value: rtcStats.rtt ? `${rtcStats.rtt} ms` : '--',
+    },
+    {
+      label: '',
+      value: <span>&darr; {rtcStats.remoteBitrate ? `${Math.round(rtcStats.remoteBitrate / 1000)} kbps` : '--'}</span>,
+    },
+
+  ]
+  const audioItems = [
+    {
+      label: '码率',
+      value: <span>&uarr; {rtcStats.localAudioBitrate ? `${Math.round(rtcStats.localAudioBitrate / 1000)} kbps` : '--'}</span>,
+    },
+    {
+      label: '',
+      value: <span>&darr; {rtcStats.remoteAudioBitrate ? `${Math.round(rtcStats.remoteAudioBitrate / 1000)} kbps` : '--'}</span>,
+    },
+  ]
+  const videoItems = [
+    {
+      label: '分辨率',
+      value: <span>&uarr; {rtcStats.localCameraResolution ? `${rtcStats.localCameraResolution.width}*${rtcStats.localCameraResolution.height}` : '--'}</span>,
+    },
+    {
+      label: '码率',
+      value: <span>&uarr; {rtcStats.localCameraBitrate ? `${Math.round(rtcStats.localCameraBitrate / 1000)} kbps` : '--'}</span>,
+    },
+    {
+      label: '帧率',
+      value: <span>&uarr; {rtcStats.localCameraFPS ? `${rtcStats.localCameraFPS} fps` : '--'}</span>,
+    },
+    {
+      label: '',
+      value: <span>&darr; {rtcStats.remoteCameraResolution ? `${rtcStats.remoteCameraResolution.width}*${rtcStats.remoteCameraResolution.height}` : '--'}</span>,
+    },
+    {
+      label: '',
+      value: <span>&darr; {rtcStats.remoteCameraBitrate ? `${Math.round(rtcStats.remoteCameraBitrate / 1000)} kbps` : '--'}</span>,
+    },
+    {
+      label: '',
+      value: <span>&darr; {rtcStats.remoteCameraFPS ? `${rtcStats.remoteCameraFPS} fps` : '--'}</span>,
+    },
+  ]
+  const screenItems = [
+    {
+      label: '分辨率',
+      value: <span>&uarr; {rtcStats.localScreenResolution ? `${rtcStats.localScreenResolution.width}*${rtcStats.localScreenResolution.height}` : '--'}</span>,
+    },
+    {
+      label: '码率',
+      value: <span>&uarr; {rtcStats.localScreenBitrate ? `${Math.round(rtcStats.localScreenBitrate / 1000)} kbps` : '--'}</span>,
+    },
+    {
+      label: '帧率',
+      value: <span>&uarr; {rtcStats.localScreenFPS ? `${rtcStats.localScreenFPS} fps` : '--'}</span>,
+    },
+    {
+      label: '',
+      value: <span>&darr; {rtcStats.remoteScreenResolution ? `${rtcStats.remoteScreenResolution.width}*${rtcStats.remoteScreenResolution.height}` : '--'}</span>,
+    },
+    {
+      label: '',
+      value: <span>&darr; {rtcStats.remoteScreenBitrate ? `${Math.round(rtcStats.remoteScreenBitrate / 1000)} kbps` : '--'}</span>,
+    },
+    {
+      label: '',
+      value: <span>&darr; {rtcStats.remoteScreenFPS ? `${rtcStats.remoteScreenFPS} fps` : '--'}</span>,
+    },
+  ]
+
+  return (
+    <Row>
+      <Statistic title='网络' items={networkItems} />
+      <Statistic title='音频' items={audioItems} />
+      <Statistic title='视频' items={videoItems} />
+      <Statistic title='屏幕分享' items={screenItems} />
+    </Row>
+  )
+});
 
 const General = () => {
   const { micTrack, publishedTracks, cameraTrack, publish, unpublish } = useLocalChannel();
@@ -269,7 +385,7 @@ const General = () => {
         initialValues={{
           videoPublish: isCameraPublish,
           audioPublish: isMicPublish,
-          videoSubscribe: true,
+          videoSubscribe: subscribeAllVideo,
           audioSubscribe: !!mcuAudioTrack,
         }}
       >
@@ -557,7 +673,7 @@ const External = () => {
   return (
     <Row className={styles.videoSetting}>
       <div className={styles.videoWrapper}>
-        <video loop autoPlay controls={false} ref={videoRef} />
+        <video loop autoPlay playsInline webkit-playsinline x5-playsinline controls={false} ref={videoRef} />
         <audio loop autoPlay controls={false} ref={audioRef} />
       </div>
       <Form style={{ width: '100%' }} labelCol={{ span: 5 }} labelAlign="left">
@@ -632,6 +748,11 @@ const menus = [
     key: 'external',
     tip: '仅在当前窗口打开时生效',
   },
+  {
+    label: '质量监测',
+    icon: <Icon type="iconyibiaopan" />,
+    key: 'quality',
+  },
 ];
 
 const Settings = (props: ISettingsProps) => {
@@ -671,9 +792,11 @@ const Settings = (props: ISettingsProps) => {
   }, [onUnloadExternal]);
 
   const onCancel = useCallback(() => {
-    onUnloadExternal();
+    if (activeTab === 'external') {
+      onUnloadExternal();
+    }
     onClose();
-  }, [onUnloadExternal, onClose]);
+  }, [onUnloadExternal, onClose, activeTab]);
 
   return (
     <Modal open wrapClassName={styles.settings} width={680} onCancel={onCancel} footer={null}>
@@ -702,6 +825,7 @@ const Settings = (props: ISettingsProps) => {
           {activeTab === 'video' ? <Video onClose={onClose} /> : null}
           {activeTab === 'share' ? <Share onClose={onClose} /> : null}
           {activeTab === 'external' ? <External /> : null}
+          {activeTab === 'quality' ? <Quality /> : null}
         </Col>
       </Row>
     </Modal>
