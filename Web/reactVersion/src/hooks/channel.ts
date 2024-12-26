@@ -9,7 +9,7 @@ import {
 } from 'dingrtc';
 import Toast from 'dingtalk-design-desktop/es/toast';
 import { useCallback, useMemo } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   MainViewPrefer,
   RTCStats,
@@ -18,6 +18,7 @@ import {
   localChannelInfo,
   mainViewPrefer,
   remoteChannelInfo,
+  remoteUserNetworks,
 } from '~/store';
 import { print } from '~/utils/tools';
 
@@ -39,6 +40,7 @@ export const useLocalChannel = () => {
       customVideoTrack,
       networkQuality,
       timeLeft,
+      defaultRemoteStreamType,
     },
     setLocalChannelInfo,
   ] = useRecoilState(localChannelInfo);
@@ -46,7 +48,8 @@ export const useLocalChannel = () => {
   const rtcClient = useRecoilValue(client);
   const publish = useCallback(
     (tracks: LocalTrack[]) => {
-      return rtcClient?.publish(tracks)
+      return rtcClient
+        ?.publish(tracks)
         .then(() => {
           setLocalChannelInfo((prev) => ({ ...prev, publishedTracks: [...rtcClient.localTracks] }));
           print(`publish ${tracks.map((item) => item.trackMediaType)} tracks`);
@@ -98,7 +101,8 @@ export const useLocalChannel = () => {
 
   const unpublish = useCallback(
     (tracks: LocalTrack[]) => {
-      return rtcClient.unpublish(tracks)
+      return rtcClient
+        .unpublish(tracks)
         .then(() => {
           setLocalChannelInfo((prev) => ({ ...prev, publishedTracks: [...rtcClient.localTracks] }));
           print(`unpublish ${tracks.map((item) => item.trackMediaType)} tracks`);
@@ -132,18 +136,22 @@ export const useLocalChannel = () => {
     customAudioTrack,
     customVideoTrack,
     setLocalChannelInfo,
+    defaultRemoteStreamType,
   };
 };
 
 export const useRemoteChannel = () => {
-  const [{ mcuAudioTrack, speakers, subscribeAllVideo, remoteUsers }, setRemoteChannelInfo] =
-    useRecoilState(remoteChannelInfo);
+  const [
+    { mcuAudioTrack, speakers, subscribeAllVideo, remoteUsers, groups, subscribeAudio },
+    setRemoteChannelInfo,
+  ] = useRecoilState(remoteChannelInfo);
   const [mainPrefer, setMainPrefer] = useRecoilState(mainViewPrefer);
   const rtcClient = useRecoilValue(client);
 
   const subscribe = useCallback(
     (user: RemoteUser, mediaType: TrackMediaType, auxiliary?: boolean) => {
-      return rtcClient.subscribe(user.userId, mediaType, auxiliary)
+      return rtcClient
+        .subscribe(user.userId, mediaType, auxiliary)
         .then((track: any) => {
           print(`subscribe user ${user.userId} ${auxiliary ? 'screenShare' : 'camera'}}`);
           setRemoteChannelInfo((prev) => ({ ...prev, remoteUsers: [...rtcClient.remoteUsers] }));
@@ -166,16 +174,20 @@ export const useRemoteChannel = () => {
     (user: RemoteUser, mediaType: TrackMediaType, auxiliary?: boolean) => {
       if (!auxiliary && user.videoTrack) user.videoTrack.stop();
       if (auxiliary && user.auxiliaryTrack) user.auxiliaryTrack.stop();
-      return rtcClient.unsubscribe(user.userId, mediaType, auxiliary)
+      return rtcClient
+        .unsubscribe(user.userId, mediaType, auxiliary)
         .then(() => {
           setMainPrefer((prev) => {
             if (prev.userId === user.userId && mediaType === 'video') {
-              if ((prev.prefer === 'auxiliary' && auxiliary) || (prev.prefer === 'camera' && !auxiliary)) {
-                return ({ userId: '', prefer: 'camera' })
+              if (
+                (prev.prefer === 'auxiliary' && auxiliary) ||
+                (prev.prefer === 'camera' && !auxiliary)
+              ) {
+                return { userId: '', prefer: 'camera' };
               }
             }
-            return prev
-          })
+            return prev;
+          });
           setRemoteChannelInfo((prev) => ({ ...prev, remoteUsers: [...rtcClient.remoteUsers] }));
           print(`unsubscribe user ${user.userId} ${auxiliary ? 'screenShare' : 'camera'}`);
         })
@@ -210,7 +222,7 @@ export const useRemoteChannel = () => {
       return Promise.resolve();
     }
     return rtcClient.batchSubscribe(subParams).then((batchSubscribeResult) => {
-      let mainPrefer: MainViewPrefer;
+      let tmainPrefer: MainViewPrefer;
       for (const { error, uid: usrId, auxiliary } of batchSubscribeResult) {
         if (error) {
           Toast.info(
@@ -221,8 +233,8 @@ export const useRemoteChannel = () => {
           );
           continue;
         }
-        if (!mainPrefer) {
-          mainPrefer = { userId: usrId, prefer: auxiliary ? 'auxiliary' : 'camera' };
+        if (!tmainPrefer) {
+          tmainPrefer = { userId: usrId, prefer: auxiliary ? 'auxiliary' : 'camera' };
         }
         print(`subscribe user ${usrId} ${auxiliary ? 'screenShare' : 'camera'}`);
         setRemoteChannelInfo((prev) => ({
@@ -230,8 +242,8 @@ export const useRemoteChannel = () => {
           remoteUsers: [...rtcClient.remoteUsers],
         }));
       }
-      if (mainPrefer) {
-        setMainPrefer(mainPrefer);
+      if (tmainPrefer) {
+        setMainPrefer(tmainPrefer);
       }
       setRemoteChannelInfo((prev) => ({
         ...prev,
@@ -276,7 +288,11 @@ export const useRemoteChannel = () => {
   }, [rtcClient, remoteUsers, mainPrefer]);
 
   const subscribeMCUAudio = useCallback(() => {
-    return rtcClient.subscribe('mcu', 'audio')
+    const fn =
+      subscribeAudio === 'mcu'
+        ? () => rtcClient.subscribe('mcu', 'audio')
+        : () => rtcClient.subscribeGroup(subscribeAudio);
+    return fn()
       .then((track) => {
         print(`subscribe mcu audio`);
         setRemoteChannelInfo((prev) => ({ ...prev, mcuAudioTrack: track as RemoteAudioTrack }));
@@ -288,11 +304,15 @@ export const useRemoteChannel = () => {
         print(`subscribe mcu audio failed: ${JSON.stringify(e)}`);
         throw e;
       });
-  }, [rtcClient]);
+  }, [rtcClient, subscribeAudio]);
 
   const unsubscribeMCUAudio = useCallback(() => {
     mcuAudioTrack?.stop();
-    return rtcClient.unsubscribe('mcu', 'audio')
+    const fn =
+      subscribeAudio === 'mcu'
+        ? () => rtcClient.unsubscribe('mcu', 'audio')
+        : () => rtcClient.unsubscribeGroup(subscribeAudio);
+    return fn()
       .then(() => {
         print(`unsubscribe mcu audio`);
         setRemoteChannelInfo((prev) => ({ ...prev, mcuAudioTrack: null }));
@@ -302,23 +322,28 @@ export const useRemoteChannel = () => {
         print(`subscribe mcu audio failed: ${JSON.stringify(e)}`);
         throw e;
       });
-  }, [mcuAudioTrack, rtcClient]);
+  }, [mcuAudioTrack, rtcClient, subscribeAudio]);
 
   return {
+    groups,
     speakers,
     subscribe,
     unsubscribe,
+    subscribeAudio,
     mcuAudioTrack,
     subscribeAllVideo,
     subscribeMCUAudio,
     unsubscribeAllRemoteVideo,
     subscribeAllRemoteVideo,
     unsubscribeMCUAudio,
+    setRemoteChannelInfo,
   };
 };
 
 export const useNetworkStats = () => {
   const rtcClient = useRecoilValue(client);
+  const setRemoteUserNetworks = useSetRecoilState(remoteUserNetworks);
+
   const [{ rtcStats, micTrack }, setLocalChannelInfo] = useRecoilState(localChannelInfo);
   const { mcuAudioTrack } = useRecoilValue(remoteChannelInfo);
   const getRtcStats = useCallback(() => {
@@ -338,18 +363,18 @@ export const useNetworkStats = () => {
         let recvCameraBitrate = 0;
         let recvScreenBitrate = 0;
         let maxRtt = Math.max(localAudioStats.rtt ?? 0, camera?.rtt ?? 0, auxiliary?.rtt ?? 0, 0);
-        if (localAudioStats.sendPacketsLost) {
-          maxLoss = Math.max(localAudioStats.sendPacketsLost / localAudioStats.sendPackets, maxLoss);
-        }
-        if (camera?.sendPacketsLost) {
-          maxLoss = Math.max(
-            camera.sendPacketsLost / camera.sendPackets,
-            maxLoss,
-          );
-        }
-        if (auxiliary?.sendPacketsLost) {
-          maxLoss =  Math.max(auxiliary.sendPacketsLost / auxiliary.sendPackets, maxLoss);
-        }
+        // if (localAudioStats.sendPacketsLost) {
+        //   maxLoss = Math.max(localAudioStats.sendPacketsLost / localAudioStats.sendPackets, maxLoss);
+        // }
+        // if (camera?.sendPacketsLost) {
+        //   maxLoss = Math.max(
+        //     camera.sendPacketsLost / camera.sendPackets,
+        //     maxLoss,
+        //   );
+        // }
+        // if (auxiliary?.sendPacketsLost) {
+        //   maxLoss =  Math.max(auxiliary.sendPacketsLost / auxiliary.sendPackets, maxLoss);
+        // }
         const sendBitrate =
           (localAudioStats?.sendBitrate ?? 0) +
           (camera?.sendBitrate ?? 0) +
@@ -369,10 +394,7 @@ export const useNetworkStats = () => {
             maxScreenFps = Math.max(maxScreenFps, receiveFrameRate || 0);
             maxRtt = Math.max(maxRtt, rtt ?? 0);
             if (receivePacketsLost) {
-              maxLoss = Math.max(
-                maxLoss,
-                receivePacketsLost / receivePackets,
-              );
+              maxLoss = Math.max(maxLoss, receivePacketsLost / receivePackets);
             }
             recvBtrate += receiveBitrate || 0;
             recvScreenBitrate += receiveBitrate ?? 0;
@@ -398,10 +420,7 @@ export const useNetworkStats = () => {
             maxRtt = Math.max(maxRtt, rtt ?? 0);
             recvCameraBitrate += receiveBitrate ?? 0;
             if (receivePacketsLost) {
-              maxLoss = Math.max(
-                maxLoss,
-                receivePacketsLost / receivePackets,
-              );
+              maxLoss = Math.max(maxLoss, receivePacketsLost / receivePackets);
             }
             maxCameraFps = Math.max(maxCameraFps, receiveFrameRate || 0);
             if (!maxCameraRemoteResolution) {
@@ -415,6 +434,8 @@ export const useNetworkStats = () => {
           }
         }
         const newRtcStats: RTCStats = {
+          uplinkProfile: (localVideoStats.uplinkProfile || []).join(';'),
+          downlinkProfile: (localVideoStats.downlinkProfile || []).join(';'),
           localCameraFPS: camera?.sendFrameRate,
           localCameraBitrate: camera?.sendBitrate,
           localCameraResolution: camera?.sendResolution,
@@ -426,12 +447,16 @@ export const useNetworkStats = () => {
           localAudioBitrate: localAudioStats?.sendBitrate,
           remoteCameraFPS: maxCameraFps,
           remoteCameraBitrate: recvCameraBitrate,
+          encodeCameraLayers: camera?.encodeLayers,
+          encodeScreenLayers: auxiliary?.encodeLayers,
+          sendCameraLayers: camera?.sendLayers,
+          sendScreenLayers: auxiliary?.sendLayers,
           remoteScreenBitrate: recvScreenBitrate,
           remoteCameraResolution: maxCameraRemoteResolution,
           remoteScreenFPS: maxScreenFps,
           remoteScreenResolution: maxScreenRemoteResolution,
           remoteAudioBitrate: remoteAudioStats?.receiveBitrate,
-          loss: Math.round(maxLoss * 100),
+          // loss: Math.round(maxLoss * 100),
           localAudioLevel: micTrack ? Math.round(micTrack.getVolumeLevel() * 100) : 0,
           remoteAudioLevel: mcuAudioTrack ? Math.round(mcuAudioTrack.getVolumeLevel() * 100) : 0,
           rtt: maxRtt,
@@ -447,8 +472,25 @@ export const useNetworkStats = () => {
     });
   }, [mcuAudioTrack, micTrack]);
 
+  const getRemoteUserNetworkStats = useCallback(() => {
+    const result = rtcClient.getRemoteNetworkQuality?.();
+    if (result) {
+      const newStats: any = {};
+      for (const uid in result) {
+        if (result[uid]) {
+          newStats[uid] = Math.max(
+            result[uid].uplinkNetworkQuality,
+            result[uid].downlinkNetworkQuality,
+          );
+        }
+      }
+      setRemoteUserNetworks(newStats);
+    }
+  }, []);
+
   return {
     rtcStats,
     getRtcStats,
+    getRemoteUserNetworkStats,
   };
 };

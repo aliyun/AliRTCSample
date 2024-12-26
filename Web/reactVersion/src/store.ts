@@ -15,6 +15,7 @@ export interface ILocalChannelInfo {
   timeLeft?: number;
   networkQuality: NetworkQuality,
   rtcStats: RTCStats;
+  defaultRemoteStreamType: string;
 }
 
 interface Resolution {
@@ -44,6 +45,12 @@ export interface RTCStats {
   remoteAudioLevel?: number;
   loss?: number;
   rtt?: number;
+  encodeCameraLayers?: number;
+  encodeScreenLayers?: number;
+  sendCameraLayers?: number;
+  sendScreenLayers?: number;
+  uplinkProfile?: string;
+  downlinkProfile?: string;
 }
 
 interface IDeviceInfo {
@@ -62,11 +69,13 @@ interface IDeviceInfo {
   facingMode: 'user' | 'environment';
 }
 
-interface IRemoteChannelInfo {
+export interface IRemoteChannelInfo {
   mcuAudioTrack: RemoteAudioTrack;
   remoteUsers: RemoteUser[];
   speakers?: string[];
   subscribeAllVideo?: boolean;
+  groups: any[];
+  subscribeAudio: string;
 }
 
 interface IGlobalFlag {
@@ -85,6 +94,7 @@ export const constantConfig = atom({
   default: {
     isMobile: isMobile(),
     hideLog: logLevel === 'none',
+    env: parseSearch('env') || configJson.env || '',
     isIOS: isIOS(),
     isWeixin: isWeixin(),
   }
@@ -101,6 +111,11 @@ export const currentUserInfo = atom({
   dangerouslyAllowMutability: true,
 });
 
+let defaultCameraDimension: VideoDimension = 'VD_640x480';
+if (isIOS()) {
+  defaultCameraDimension = 'VD_1280x720';
+}
+
 export const deviceInfo = atom<IDeviceInfo>({
   key: 'IdeviceInfo',
   dangerouslyAllowMutability: true,
@@ -113,7 +128,7 @@ export const deviceInfo = atom<IDeviceInfo>({
     micList: [],
     cameraFrameRate: 15,
     cameraMaxBitrate: 0,
-    cameraDimension: 'VD_640x480',
+    cameraDimension: defaultCameraDimension,
     screenFrameRate: 5,
     screenMaxBitrate: 0,
     screenDimension: 'VD_1920x1080',
@@ -131,6 +146,7 @@ export const localChannelInfo = atom<ILocalChannelInfo>({
     customAudioTrack: null,
     micTrack: null,
     timeLeft: 0,
+    defaultRemoteStreamType: 'FHD',
     networkQuality: 1,
     publishedTracks: [],
     rtcStats: {},
@@ -138,14 +154,22 @@ export const localChannelInfo = atom<ILocalChannelInfo>({
 });
 
 export const remoteChannelInfo = atom<IRemoteChannelInfo>({
-  key: 'IremoteChannelInfo',
+  key: 'IRemoteChannelInfo',
   dangerouslyAllowMutability: true,
   default: {
     mcuAudioTrack: null,
     remoteUsers: [],
+    groups: [],
     subscribeAllVideo: true,
     speakers: [],
+    subscribeAudio: '',
   }
+})
+
+export const remoteUserNetworks = atom<{[key: string]: number}>({
+  key: 'IRemoteUserNetworks',
+  dangerouslyAllowMutability: true,
+  default: {},
 })
 
 export const globalFlag = atom<IGlobalFlag>({

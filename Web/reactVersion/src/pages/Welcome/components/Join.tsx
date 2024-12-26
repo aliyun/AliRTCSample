@@ -19,7 +19,14 @@ import { useForm } from 'dingtalk-design-desktop/lib/form/Form';
 const Join = () => {
   const setGlobalData = useSetRecoilState(globalFlag);
   const [
-    { userName, userId, channel, appId },
+    {
+      userName,
+      userId,
+      channel,
+      appId,
+      // delay,
+      // duration
+    },
     setCurrentUserInfo,
   ] = useRecoilState(currentUserInfo);
   const clientInfo = useRecoilValue(localChannelInfo);
@@ -32,6 +39,10 @@ const Join = () => {
     userId,
     userName,
     channelName: channel,
+    // delay,
+    // duration,
+    // gslb: '',
+    // token: '',
   };
 
   const [joining, setJoining] = useState(false);
@@ -43,6 +54,10 @@ const Join = () => {
       appId: app,
       channelName,
       userName: name,
+      // duration: newDuration,
+      // delay: newDelay,
+      // gslb,
+      // token,
     } = await form.getFieldsValue();
     if (!uid || !app || !channelName || !name) {
       Toast.error('请检查参数填写');
@@ -51,7 +66,7 @@ const Join = () => {
     print('localJoinChannel');
     setJoining(true);
     try {
-      let appTokenResult = await getAppToken(uid, app, channelName);
+      const appTokenResult = await getAppToken(uid, app, channelName);
       const loginParam = {
         appId: app,
         userId: uid,
@@ -59,7 +74,7 @@ const Join = () => {
         channelName,
         appToken: appTokenResult.token,
       };
-      if (appTokenResult.gslb?.length) {
+      if (appTokenResult.gslb.length) {
         DingRTC.setClientConfig({ gslb: appTokenResult.gslb });
       }
       try {
@@ -107,8 +122,7 @@ const Join = () => {
             if (track.trackMediaType === 'audio') {
               print(`subscribe ${usrId} audio`);
               const audioTrack = track as RemoteAudioTrack;
-              setRemoteChannelInfo((prev) => ({ ...prev, mcuAudioTrack: audioTrack }));
-              setGlobalData((pre) => ({ ...pre, mcuAudioSubscribed: true }));
+              setRemoteChannelInfo((prev) => ({ ...prev, mcuAudioTrack: audioTrack, subscribeAudio: 'mcu' }));
               audioTrack.play();
             } else {
               if (!mainPrefer) {

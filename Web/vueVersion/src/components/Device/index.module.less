@@ -1,0 +1,56 @@
+.wrap {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  & svg {
+    font-size: 18px;
+  }
+}
+
+.arrow {
+  border-radius: 3px;
+  &:hover{
+    background-color: #b3b3b4;
+  }
+}
+
+.tooltip {
+  border-radius: 8px;
+  min-width: 160px;
+  max-width: 300px;
+}
+
+.list {
+  display: flex;
+  padding: 4px;
+  width: 100%;
+  color: #171a1d;
+  flex-direction: column;
+  & > span {
+    color: rgba(23,26,29,0.4);
+    font-size: 12px;
+    height: 28px;
+    line-height: 28px;
+  }
+  & > div {
+    height: 36px;
+    line-height: 36px;
+    position: relative;
+    width: 100%;
+    cursor: pointer;
+    white-space: nowrap;
+    padding-left: 20px;
+    .checked {
+      position: absolute;
+      left: 4px;
+      top: 10px;
+    }
+    overflow: hidden;
+    &:hover {
+      background-color: hsla(0,0%,100%,.8);
+      border-radius: 4px;
+    }
+  }
+}

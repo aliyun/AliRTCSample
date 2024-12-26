@@ -7,11 +7,6 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    Background: typeof import('./src/components/Background.vue')['default']
-    DeviceSelector: typeof import('./src/components/DeviceSelector.vue')['default']
-    GapLine: typeof import('./src/components/GapLine.vue')['default']
-    OperationLog: typeof import('./src/components/OperationLog.vue')['default']
-    RichBtn: typeof import('./src/components/RichBtn.vue')['default']
-    SettingContent: typeof import('./src/components/SettingContent.vue')['default']
+    Resumer: typeof import('./src/components/PlayResumer/Resumer.vue')['default']
   }
 }

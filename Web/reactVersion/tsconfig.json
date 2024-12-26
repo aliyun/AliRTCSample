@@ -31,7 +31,7 @@
     "declaration": true, 
     "declarationDir": "./dist/types",
     "emitDeclarationOnly": true,
-    "rootDir": "./",
+    // "rootDir": "./",
     "composite": true,
     "allowSyntheticDefaultImports": true,
   },

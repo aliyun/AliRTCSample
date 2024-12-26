@@ -1,18 +1,19 @@
-import path from 'path';
-import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers';
-import Components from 'unplugin-vue-components/vite';
 import { defineConfig } from 'vite';
-import commonjs from 'vite-plugin-commonjs';
-
 import vue from '@vitejs/plugin-vue';
+import vueJsx from '@vitejs/plugin-vue-jsx'
+import Components from 'unplugin-vue-components/vite';
+import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers';
+import getPublicPath from './getPublicPath';
+import path from 'node:path';
 
-import getPublicPath from './webpack/getPublicPath';
+import commonjs from 'vite-plugin-commonjs';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
-
+    vueJsx(),
+    commonjs(),
     Components({
       resolvers: [
         AntDesignVueResolver({
@@ -20,19 +21,19 @@ export default defineConfig({
         }),
       ],
     }),
-    commonjs(),
   ],
+  base: getPublicPath(),
   define: {
     local: true,
   },
-  base: getPublicPath(),
-  build: {
-    outDir: './dist',
-  },
   resolve: {
-    extensions: ['.js', '.ts', '.d.ts', '.tsx'],
+    extensions: ['.js', '.ts', '.d.ts', '.tsx', '.vue'],
     alias: {
-      '@src': path.resolve(__dirname, 'src'),
+      '~': path.join(__dirname, 'src'),
     },
+  },
+  server: {
+    open: true,
+    cors: true,
   },
 });

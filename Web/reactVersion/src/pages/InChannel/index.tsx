@@ -45,19 +45,18 @@ const Index = memo(() => {
   const { subscribe, unsubscribe, subscribeAllVideo } = useRemoteChannel();
   const resetLocalChannelInfo = useResetRecoilState(localChannelInfo);
   const resetMainViewPrefer = useResetRecoilState(mainViewPrefer);
+  const setMainProfile = useSetRecoilState(mainViewPrefer);
   const resetRemoteChannelInfo = useResetRecoilState(remoteChannelInfo);
   const [{ remoteUsers, mcuAudioTrack }, setRemoteChannelInfo] = useRecoilState(remoteChannelInfo);
-  const { getRtcStats } = useNetworkStats();
+  const { getRtcStats, getRemoteUserNetworkStats } = useNetworkStats();
 
   const onFullScreen = useCallback(() => {
     if (!document.fullscreenElement) {
       setFullScreen(true);
       document.documentElement.requestFullscreen();
-    } else {
-      if (document.exitFullscreen) {
-        setFullScreen(false);
-        document.exitFullscreen();
-      }
+    } else if (document.exitFullscreen) {
+      setFullScreen(false);
+      document.exitFullscreen();
     }
   }, [])
 
@@ -96,7 +95,7 @@ const Index = memo(() => {
   }, [mcuAudioTrack, remoteUsers, micTrack, cameraTrack, screenTrack, screenTrack, rtcClient]);
   useEffect(() => {
     rtcClient.on('user-joined', (user: RemoteUser) => {
-      print(`user ${user.userId} joined`);
+      print(`user ${user.userId} joined`, user);
       setRemoteChannelInfo((prev) => ({ ...prev, remoteUsers: [...rtcClient.remoteUsers] }));
     });
     rtcClient.on('stream-type-changed', (uid: string, streamType: RemoteStreamType) => {
@@ -113,7 +112,7 @@ const Index = memo(() => {
       }
     });
     rtcClient.on('network-quality', (uplink: NetworkQuality, downlink: NetworkQuality) => {
-      setLocalChannelInfo((prev) => ({ ...prev, networkQuality: uplink > downlink ? uplink : downlink }));
+      setLocalChannelInfo((prev) => ({ ...prev, networkQuality: Math.max(uplink, downlink) as NetworkQuality }));
     });
     rtcClient.on('volume-indicator', (uids: string[]) => {
       if (uids.length) {
@@ -127,7 +126,30 @@ const Index = memo(() => {
     });
     rtcClient.on('user-left', (user: RemoteUser) => {
       print(`user ${user.userId} left`);
+      setMainProfile(prev => {
+        if (prev.userId === user.userId) {
+          return ({ userId: '', prefer: 'auxiliary' })
+        }
+        return prev;
+      });
       setRemoteChannelInfo((prev) => ({ ...prev, remoteUsers: [...rtcClient.remoteUsers] }));
+    });
+    rtcClient.on('group-add', (group: any) => {
+      print(`group add`, group);
+      setRemoteChannelInfo((prev) => ({ ...prev, groups: [...rtcClient.groups] }));
+    });
+    rtcClient.on('group-remove', (group: any) => {
+      print(`group remove`, group);
+      setRemoteChannelInfo((prev) => ({ ...prev, groups: [...rtcClient.groups] }));
+    });
+    rtcClient.on('group-user-join', (groupId: any, user: any) => {
+      print(`group-user-join`, groupId, user);
+      setRemoteChannelInfo((prev) => ({ ...prev, groups: [...rtcClient.groups] }));
+    });
+    rtcClient.on('group-user-leave', (groupId: any, user: any) => {
+      print(`group-user-leave`, groupId, user);
+      console.log(rtcClient.groups);
+      setRemoteChannelInfo((prev) => ({ ...prev, groups: [...rtcClient.groups] }));
     });
     const onExitFullScreen = () => {
       if (!document.fullscreenElement) setFullScreen(false);
@@ -141,7 +163,7 @@ const Index = memo(() => {
 
   useEffect(() => {
     const onUserPublished = (user: RemoteUser, mediaType: TrackMediaType, auxiliary: boolean) => {
-      print(`user ${user.userId} published ${mediaType === 'audio' ? 'audio' : auxiliary ? 'screenShare' : mediaType}}`);
+      print(`user ${user.userId} ${user.id} published ${mediaType === 'audio' ? 'audio' : auxiliary ? 'screenShare' : mediaType}}`);
       setRemoteChannelInfo((prev) => ({ ...prev, remoteUsers: [...rtcClient.remoteUsers] }));
       if (mediaType !== 'video') {
         return;
@@ -152,6 +174,16 @@ const Index = memo(() => {
     };
     const onUserUnpublished = (user: RemoteUser, mediaType: TrackMediaType, auxiliary: boolean) => {
       print(`user ${user.userId} unpublished ${mediaType === 'audio' ? 'audio' : auxiliary ? 'screenShare' : mediaType}}`);
+      if (mediaType === 'video') {
+        setMainProfile((prev) => {
+          if (prev.userId === user.userId) {
+            if ((auxiliary && prev.prefer === 'auxiliary') || (!auxiliary && prev.prefer === 'camera')) {
+              return ({ userId: '', prefer: 'auxiliary' })
+            }
+          }
+          return prev;
+        })
+      }
       setRemoteChannelInfo((prev) => ({ ...prev, remoteUsers: [...rtcClient.remoteUsers] }));
     };
     rtcClient.on('user-unpublished', onUserUnpublished);
@@ -177,8 +209,10 @@ const Index = memo(() => {
 
   useEffect(() => {
     getRtcStats();
+    getRemoteUserNetworkStats();
     const timer = setInterval(() => {
       getRtcStats();
+      getRemoteUserNetworkStats();
     }, 2000);
     return () => {
       clearInterval(timer);

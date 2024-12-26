@@ -1,25 +1,27 @@
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Avatar, Col, Tooltip, List, Modal } from 'dingtalk-design-desktop';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Avatar, Col, Tooltip, List } from 'dingtalk-design-desktop';
 import Icon from '~/components/Icon';
 import { RemoteUser } from 'dingrtc';
-import { downloadFileByBase64, isIOS, isWeixin } from '~/utils/tools';
+import { downloadFileByBase64 } from '~/utils/tools';
 import styles from '../index.module.less';
 import classNames from 'classnames';
 import { useRemoteChannel } from '~/hooks/channel';
 import { useDevice } from '~/hooks/device';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { client, mainViewPrefer } from '~/store';
-
+import { client, mainViewPrefer, remoteUserNetworks } from '~/store';
+import { ScoreMap } from './NetWorkBar/Networks';
+// import PlayResumer from '~/components/PlayResumer';
 
 interface UserItemProps {
   user: RemoteUser;
   isLocal: boolean;
 }
 
-const SmallView = memo((props: UserItemProps) => {
+const SmallView = (props: UserItemProps) => {
   const { user, isLocal } = props;
-  const { speakers } = useRemoteChannel();
+  const { speakers, subscribe, unsubscribe } = useRemoteChannel();
   const rtcClient = useRecoilValue(client);
+  const remoteUserNetwork = useRecoilValue(remoteUserNetworks);
   const [showActions, setShowActions] = useState(false);
   const [mainPrefer, setMainPrefer] = useRecoilState(mainViewPrefer);
   const { cameraEnabled, micEnabled } = useDevice();
@@ -53,20 +55,6 @@ const SmallView = memo((props: UserItemProps) => {
     user?.auxiliaryMuted,
   ]);
 
-  const playTrack = useCallback((track: any) => {
-    Modal.centerConfirm({
-      title: '提示',
-      content: 'iOS微信浏览器需要在回调内播放',
-      okText: '确认',
-      onOk() {
-        track.play(ref.current, { fit: 'cover' });
-      },
-      onCancel() {
-        track.play(ref.current, { fit: 'cover' });
-      }
-    })
-  }, []);
-
   const currentTrack = useMemo(() => {
     if (mainPrefer.userId === user.userId) {
       return mainPrefer.prefer === 'camera' ? user.auxiliaryTrack : user.videoTrack;
@@ -76,32 +64,18 @@ const SmallView = memo((props: UserItemProps) => {
 
   useEffect(() => {
     if (!currentTrack) return;
-    if (isIOS() && isWeixin()) {
-      playTrack(currentTrack);
-    } else {
-      currentTrack.play(ref.current, { fit: 'cover' });
-    }
+    currentTrack.play(ref.current, { fit: 'cover' });
   }, [currentTrack]);
-
-  const isCamera = useMemo(() => {
-    const base = currentTrack && currentTrack === user.videoTrack;
-    if (isLocal) return base && cameraEnabled;
-    return base;
-  }, [currentTrack, user.videoTrack, isLocal, cameraEnabled]);
-  const isScreen = useMemo(
-    () => currentTrack && currentTrack === user.auxiliaryTrack,
-    [currentTrack, user.auxiliaryTrack],
-  );
 
   const viewBigger = useCallback(() => {
     setMainPrefer((prev) => {
       if (prev.userId === user.userId) {
-        return ({ userId: user.userId, prefer: prev.prefer === 'camera' ? 'auxiliary' : 'camera'})
+        return ({ userId: user.userId, prefer: prev.prefer === 'camera' ? 'auxiliary' : 'camera' })
       } else {
         return ({ userId: user.userId, prefer: 'camera' })
       }
     })
-  }, [user, isScreen]);
+  }, [user]);
 
   const wrapClass = classNames({
     [styles.smallVideoItem]: true,
@@ -113,18 +87,50 @@ const SmallView = memo((props: UserItemProps) => {
   const Actions = useMemo(() => {
     const buttons = [
       {
-        text: '截图',
-        show: isCamera || isScreen,
+        text: '摄像头截图',
+        show: user.videoTrack,
         onClick: () => {
-          let dataURL = '';
-          if (isCamera) dataURL = user.videoTrack.getCurrentFrameData();
-          if (isScreen) dataURL = user.auxiliaryTrack.getCurrentFrameData();
-          downloadFileByBase64(dataURL, user.userId);
+          downloadFileByBase64(user.videoTrack.getCurrentFrameData(), user.userId);
+        },
+      },
+      {
+        text: '共享截图',
+        show: user.auxiliaryTrack,
+        onClick: () => {
+          downloadFileByBase64(user.auxiliaryTrack.getCurrentFrameData(), user.userId);
+        },
+      },
+      {
+        text: '订阅摄像头',
+        show: !isLocal && !user.videoTrack && user.hasVideo,
+        onClick: () => {
+          subscribe(user, 'video')
+        },
+      },
+      {
+        text: '取消订阅摄像头',
+        show: !isLocal && user.videoTrack,
+        onClick: () => {
+          unsubscribe(user, 'video')
+        },
+      },
+      {
+        text: '订阅共享',
+        show: !isLocal && !user.auxiliaryTrack && user.hasAuxiliary,
+        onClick: () => {
+          subscribe(user, 'video', true)
+        },
+      },
+      {
+        text: '取消订阅共享',
+        show: !isLocal && user.auxiliaryTrack,
+        onClick: () => {
+          unsubscribe(user, 'video', true)
         },
       },
       {
         text: '切大流',
-        show: !isLocal && isCamera && streamType === 'low',
+        show: !isLocal && user.videoTrack && streamType === 'low',
         onClick: () => {
           rtcClient.setRemoteVideoStreamType(user.userId, 'high').then(() => {
             setStreamType('high');
@@ -133,7 +139,7 @@ const SmallView = memo((props: UserItemProps) => {
       },
       {
         text: '切小流',
-        show: !isLocal && isCamera && streamType === 'high',
+        show: !isLocal && user.videoTrack && streamType === 'high',
         onClick: () => {
           rtcClient.setRemoteVideoStreamType(user.userId, 'low').then(() => {
             setStreamType('low');
@@ -173,8 +179,6 @@ const SmallView = memo((props: UserItemProps) => {
       </Tooltip>
     );
   }, [
-    isCamera,
-    isScreen,
     isLocal,
     showActions,
     user?.videoTrack,
@@ -186,9 +190,11 @@ const SmallView = memo((props: UserItemProps) => {
 
   return (
     <Col ref={ref} onDoubleClick={viewBigger} className={wrapClass}>
+      {/* <PlayResumer track={currentTrack} container={ref.current} /> */}
       <span className={styles.userId} onClick={(e) => e.stopPropagation()}>
         uid:{user.userId}
       </span>
+      {isLocal ? null : ScoreMap(remoteUserNetwork[user.userId] || 0)?.icon}
       <Avatar size="large">{user.userName}</Avatar>
       <div className={styles.smallViewStatus}>
         {user?.auxiliaryTrack ? (
@@ -201,6 +207,6 @@ const SmallView = memo((props: UserItemProps) => {
       {Actions}
     </Col>
   );
-});
+};
 
 export default SmallView;

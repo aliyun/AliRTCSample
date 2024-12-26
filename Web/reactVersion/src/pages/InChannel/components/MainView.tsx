@@ -22,7 +22,6 @@ const Index = () => {
   }, [mainPrefer, mainViewUserInfo]);
 
   const micIconEnable = useMemo(() => mainViewUserInfo?.hasAudio && !mainViewUserInfo?.audioMuted, [mainViewUserInfo]);
-
   useEffect(() => {
     if (mainViewTrack) {
       mainViewTrack?.play(ref.current, {
@@ -41,7 +40,7 @@ const Index = () => {
           <span>{mainViewUserInfo.userName}</span>
         </Tooltip>
       </div> : null}
-    </Row>    
+    </Row>
   )
 }
 

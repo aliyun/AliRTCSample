@@ -1,15 +1,11 @@
 // 获取DEF云构建publicPath，多用于dynamic import需要指定输出publicPath
-const yargsParser = require('yargs-parser');
+import yargsParser from 'yargs-parser';
 
 function getPublicPath() {
   let publicPath = '/';
 
-  const {
-    BUILD_ARGV_STR,
-    BUILD_GIT_GROUP,
-    BUILD_GIT_PROJECT,
-    BUILD_GIT_BRANCH,
-  } = process.env;
+  const { BUILD_ARGV_STR, BUILD_GIT_GROUP, BUILD_GIT_PROJECT, BUILD_GIT_BRANCH } = process.env;
+
 
   let publishType;
   let publishEnv;
@@ -23,9 +19,11 @@ function getPublicPath() {
       const cdnHost = publishEnv === 'daily' ? '//dev.g.alicdn.com' : '//g.alicdn.com';
       publicPath = `${cdnHost}/${BUILD_GIT_GROUP}/${BUILD_GIT_PROJECT}/${BUILD_GIT_BRANCH.split('/')[1]}/`;
     }
+  } else {
+    return '/';
   }
 
   return publicPath;
 }
 
-module.exports = getPublicPath;
+export default getPublicPath;

@@ -113,9 +113,9 @@ export const useDevice = (scene?: 'pre' | 'in') => {
     }).then((track) => {
       setLoading(false);
       print('got camera track');
-      getDeviceList(cameraTrack, null);
+      getDeviceList(track, null);
       if (!cameraId) {
-        const currentCameraId = micTrack.getMediaStreamTrack()?.getCapabilities?.()?.deviceId;
+        const currentCameraId = track.getMediaStreamTrack()?.getCapabilities?.()?.deviceId;
         setDeviceInfo((prev) => ({
           ...prev,
           cameraId: currentCameraId,
@@ -132,9 +132,9 @@ export const useDevice = (scene?: 'pre' | 'in') => {
   const openMic = useCallback(() => {
     return DingRTC.createMicrophoneAudioTrack({ deviceId: micId }).then((track) => {
       setLoading(false);
-      getDeviceList(null, micTrack);
+      getDeviceList(null, track);
       if (!micId) {
-        const currentMicId = micTrack.getMediaStreamTrack()?.getCapabilities()?.deviceId;
+        const currentMicId = track.getMediaStreamTrack()?.getCapabilities()?.deviceId;
         setDeviceInfo((prev) => ({
           ...prev,
           micId: currentMicId,

@@ -1,44 +1,51 @@
-<script setup lang="ts">
-import Background from '@src/components/Background.vue';
-
-import JoinForm from './JoinForm/index.vue';
-import Preview from './Preview/index.vue';
-</script>
-
 <template>
-  <Background>
-    <div class="main-container">
+  <div class="wrap">
+    <Title :level="5" class="demoTitle">DingRTC Demo</Title>
+    <Button 
+      :disabled="testing" 
+      class="testNetwork" 
+      @click="onTestNetwork"
+    >
+      {{ testing ? `请等待${ticktok}s` : '测试网络' }}
+    </Button>
+    <div class="main">
       <Preview />
-      <JoinForm />
+      <Join />
     </div>
-  </Background>
+  </div>
 </template>
 
-<style scoped>
-.main-container {
-  width: 100%;
-  max-height: 800px;
-  height: 60vh;
-  opacity: 1;
-  /* 自动布局 */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0px;
-  gap: 20px;
-  width: 90vw;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-}
-@media (max-width: 768px) {
-  /* 当屏幕宽度小于或等于 768px 时，改为上下布局 */
-  .main-container {
-    flex-direction: column; /* 切换 flex 方向为垂直堆叠 */
-    height: 85vh;
+<script setup lang="ts">
+import { ref } from "vue";
+import { Typography, Button } from 'ant-design-vue';
+import Preview from "./components/Preview.vue";
+import Join from "./components/Join.vue";
+import { startTestNetworkQuality } from "~/utils/networkQuality";
+
+const { Title } = Typography;
+
+// 状态管理
+const testing = ref(false);
+const ticktok = ref(15);
+
+// 方法
+const onTestNetwork = async () => {
+  if (!testing.value) {
+    testing.value = true;
+    ticktok.value = 15;
+
+    const intervalId = setInterval(() => {
+      ticktok.value = Math.max(0, ticktok.value - 1);
+    }, 1000);
+
+    await startTestNetworkQuality();
+
+    testing.value = false;
+    clearInterval(intervalId);
   }
-}
+};
+</script>
+
+<style lang="less" scoped>
+@import url('./index.module.less');
 </style>

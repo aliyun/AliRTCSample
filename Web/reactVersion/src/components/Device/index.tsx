@@ -99,7 +99,13 @@ export const Camera = memo((props: DeviceProps) => {
     const onCameraClick = (deviceId: string) => {
       setDeviceInfo((prev) => ({ ...prev, cameraId: deviceId }));
       print(`camera changeTo ${deviceId}`);
-      cameraTrack.setDevice(deviceId);
+      let newDeviceId = deviceId;
+      if (deviceId === '0') {
+        newDeviceId = 'environment'
+      } else if (deviceId === '1') {
+        newDeviceId = 'user'
+      }
+      cameraTrack.setDevice(newDeviceId)
       setShowPannel(false);
     };
     return (
@@ -131,7 +137,7 @@ export const Mic = memo((props: DeviceProps) => {
   const { publishedTracks, micTrack, client } = useLocalChannel();
   const [{ micList, speakerList, micId, speakerId }, setDeviceInfo] = useRecoilState(deviceInfo);
   const { subscribeMCUAudio, unsubscribeMCUAudio, mcuAudioTrack } = useRemoteChannel();
-  const { getNode, setShowPannel, showPanel } = useBase();
+  const { getNode, setShowPannel } = useBase();
 
   const iconType = useMemo(() => {
     return !micEnabled ? 'iconXDS_UnMute2Fill' : 'iconXDS_Mute2';
@@ -173,7 +179,6 @@ export const Mic = memo((props: DeviceProps) => {
     micId,
     speakerId,
     micTrack,
-    showPanel,
     publishedTracks,
     client?.channelName,
     subscribeMCUAudio,

@@ -2,10 +2,6 @@
   "name": "dingrtc-sdk-demo",
   "version": "0.0.1",
   "description": "oneRTC web端 sdk demo",
-  "tnpm": {
-    "mode": "yarn",
-    "lockfile": "enable"
-  },
   "files": [
     "esm",
     "es2017",
@@ -37,7 +33,7 @@
   "dependencies": {
     "classnames": "^2.5.1",
     "dd-icons": "^1.6.10",
-    "dingrtc": "^3.2.0",
+    "dingrtc": "^3.4.0",
     "dingtalk-design-desktop": "^2.3.3",
     "dingtalk-theme": "^6.0.11",
     "react": "^18.2.0",
@@ -102,7 +98,7 @@
     "react-dom": "^18.2.0",
     "sinon": "^7.5.0",
     "stylelint": "^15.0.0",
-    "typescript": "^5.0.2",
+    "typescript": "5.1.6",
     "url-loader": "^4.1.1",
     "vite": "^4.4.5",
     "vite-plugin-commonjs": "^0.10.1",

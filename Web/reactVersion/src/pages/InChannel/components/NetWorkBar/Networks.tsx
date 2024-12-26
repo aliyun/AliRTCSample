@@ -11,7 +11,7 @@ const NetworkCardContent = () => {
       <div className={styles.labelWrap}>
         <span className={styles.label}>{'码率'}</span>
         <span className={styles.label}>{'延迟'}</span>
-        <span className={styles.label}>{'丢包率'}</span>
+        {/* <span className={styles.label}>{'丢包率'}</span> */}
       </div>
       <div className={styles.valueWrapper}>
         <div className={styles.value}>
@@ -23,9 +23,9 @@ const NetworkCardContent = () => {
         <div className={styles.value}>
           {rtcStats.rtt ? `${Math.round(rtcStats.rtt)} ms` : '--'}
         </div>
-        <div className={styles.value}>
+        {/* <div className={styles.value}>
           {`${Math.round(rtcStats.loss)} %`}
-        </div>
+        </div> */}
       </div>
     </div>
   );
@@ -33,7 +33,7 @@ const NetworkCardContent = () => {
 
 NetworkCardContent.displayName = 'NetworkCardContent';
 
-const ScoreMap = (score: number): { text: string; icon: any } => {
+export const ScoreMap = (score: number): { text: string; icon: any } => {
   const scoreMap: { [key: number]: any } = {
     0: {
       text: '网络状态未知',
@@ -45,15 +45,15 @@ const ScoreMap = (score: number): { text: string; icon: any } => {
     },
     2: {
       text: '网络较好',
-      icon: <NetworkScore signalNumber={2} className={styles.networkIcon} />,
+      icon: <NetworkScore signalNumber={3} className={styles.networkIcon} />,
     },
     3: {
       text: '网络一般',
       icon: <NetworkScore signalNumber={2} className={styles.networkIcon} />,
     },
     4: {
-      text: '网络极差',
-      icon: <NetworkScore signalNumber={1} className={styles.networkIcon} />,
+      text: '网络较差',
+      icon: <NetworkScore signalNumber={2} className={styles.networkIcon} />,
     },
     5: {
       text: '网络极差',

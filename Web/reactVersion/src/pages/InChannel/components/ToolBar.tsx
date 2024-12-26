@@ -21,10 +21,11 @@ const Index = (props: IProps) => {
   const [showSetting, setShowSetting] = useState(false);
   const { isMobile } = useRecoilValue(constantConfig);
   const { channel, appId } = useRecoilValue(currentUserInfo);
+  // const { rtcStats } = useNetworkStats()
   const { operateCamera, operateMic, operateScreen, cameraEnabled, micEnabled } = useDevice('in');
-  const onLeave = useCallback(() => {
-    _onLeave();
+  const onLeave = useCallback(async () => {
     rtcClient.leave();
+    _onLeave();
   }, [rtcClient, _onLeave]);
 
   useEffect(() => {
