@@ -50,20 +50,3 @@ class AppTokenOptions:
             engine_options[key] = value
 
         return AppTokenOptions(engine_options)
-
-
-if __name__ == '__main__':
-    options = AppTokenOptions()
-    optionsPack = options.pack()
-
-    optionsUnpack = AppTokenOptions.unpack(io.BytesIO(optionsPack))
-
-    assert optionsUnpack.engine_options == options.engine_options
-
-    options.set_engine_options({'k1': 'v1', 'k2': 'v2'})
-
-    optionsPack = options.pack()
-
-    optionsUnpack = AppTokenOptions.unpack(io.BytesIO(optionsPack))
-
-    assert optionsUnpack.engine_options == options.engine_options

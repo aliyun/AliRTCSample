@@ -51,6 +51,16 @@ namespace AppToken.Model
             this.privilege |= PrivilegeEnum.ENABLE_VIDEO_PUBLISH;
         }
 
+        public void AddScreenPublishPrivilege()
+        {
+            if (!this.privilege.HasValue)
+            {
+                this.privilege = 0;
+                this.privilege |= PrivilegeEnum.ENABLE_PRIVILEGE;
+            }
+            this.privilege |= PrivilegeEnum.ENABLE_SCREEN_PUBLISH;
+        }
+
         public void Pack(MemoryStream buf)
         {
             using (var writer = new BinaryWriter(buf, Encoding.UTF8, true))
@@ -97,5 +107,6 @@ namespace AppToken.Model
         public const int ENABLE_PRIVILEGE = 1;
         public const int ENABLE_AUDIO_PUBLISH = 2;
         public const int ENABLE_VIDEO_PUBLISH = 4;
+        public const int ENABLE_SCREEN_PUBLISH = 8;
     }
 }

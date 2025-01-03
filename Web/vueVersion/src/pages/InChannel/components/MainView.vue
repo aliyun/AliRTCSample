@@ -15,14 +15,14 @@ const currentUserInfo = useCurrentUserInfo();
 const micIconEnable = computed(() => {
   const isLocal = channelInfo.mainViewUserId === currentUserInfo.userId;
   if (isLocal) return deviceInfo.micEnable;
-  return channelInfo.trackStatsMap.get(channelInfo.mainViewUserId).mic;
+  return channelInfo.trackStatsMap.get(channelInfo.mainViewUserId)?.mic;
 })
 
 
 const videoIsPlay = computed(() => {
   const trackStats = channelInfo.trackStatsMap.get(channelInfo.mainViewUserId);
   console.log(trackStats, channelInfo.mainViewPreferType)
-  return channelInfo.mainViewPreferType === 'auxiliary' ? trackStats.screen : trackStats.camera;
+  return channelInfo.mainViewPreferType === 'auxiliary' ? trackStats?.screen : trackStats?.camera;
 });
 
 watch(() => [viewRef.value, channelInfo.mainViewTrack], (newValue) => {

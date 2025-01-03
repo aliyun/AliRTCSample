@@ -240,29 +240,3 @@ func Parse(tokenStr string) (AppToken, error) {
 
 	return appToken, nil
 }
-
-func (token *AppToken) Validate(appKey string) bool {
-	if appKey == "" {
-		return false
-	}
-
-	generateSign, err := utils.GenerateSign(appKey, token.IssueTimestamp, token.Salt)
-
-	if err != nil {
-		return false
-	}
-
-	buf, err := token.buildSignBody()
-	if buf == nil || err != nil {
-		return false
-	}
-
-	// sign
-	sign, err := utils.Sign(generateSign, buf)
-
-	if err != nil {
-		return false
-	}
-
-	return bytes.Equal(sign, token.Signature)
-}

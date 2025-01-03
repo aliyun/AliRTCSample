@@ -45,6 +45,15 @@ public class Service {
         this.privilege = this.privilege | PrivilegeEnum.ENABLE_VIDEO_PUBLISH.getPrivilege();
     }
 
+    public void addScreenPublishPrivilege() {
+        if (Objects.isNull(this.privilege)) {
+            this.privilege = 0;
+            this.privilege = this.privilege | PrivilegeEnum.ENABLE_PRIVILEGE.getPrivilege();
+        }
+        this.privilege = this.privilege | PrivilegeEnum.ENABLE_SCREEN_PUBLISH.getPrivilege();
+    }
+
+
     public void pack(@NonNull ByteBuf buf) {
         final byte[] channelId = this.channelId.getBytes();
         buf.writeInt(channelId.length);

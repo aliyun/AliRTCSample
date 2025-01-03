@@ -4,6 +4,7 @@ WILDCARD_CHARACTERS = "*";
 ENABLE_PRIVILEGE = 1;
 ENABLE_AUDIO_PRIVILEGE = 2;
 ENABLE_VIDEO_PRIVILEGE = 4;
+ENABLE_SCREEN_PRIVILEGE = 8;
 
 class Service {
 
@@ -30,6 +31,11 @@ class Service {
     addVideoPublishPrivilege() {
         this.privilege = this.privilege || 0 | ENABLE_PRIVILEGE;
         this.privilege |= ENABLE_VIDEO_PRIVILEGE;
+    }
+
+    addScreenPublishPrivilege() {
+        this.privilege = this.privilege || 0 | ENABLE_PRIVILEGE;
+        this.privilege |= ENABLE_SCREEN_PRIVILEGE;
     }
 
     pack() {

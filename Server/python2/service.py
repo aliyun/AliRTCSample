@@ -7,6 +7,7 @@ class Service:
     ENABLE_PRIVILEGE = 1
     ENABLE_AUDIO_PRIVILEGE = 2
     ENABLE_VIDEO_PRIVILEGE = 4
+    ENABLE_SCREEN_PRIVILEGE = 8
 
     def __init__(self, channel_id, user_id, privilege=None):
         self.channel_id = channel_id
@@ -33,6 +34,12 @@ class Service:
 
         self.privilege |= self.ENABLE_VIDEO_PRIVILEGE
 
+    def add_screen_publish_privilege(self):
+        if self.privilege is None:
+            self.privilege = 0 | self.ENABLE_PRIVILEGE
+
+        self.privilege |= self.ENABLE_SCREEN_PRIVILEGE
+
     def pack(self):
         buf = io.BytesIO()
 
@@ -52,7 +59,6 @@ class Service:
 
     @staticmethod
     def unpack(buf):
-
         channel_id_length = struct.unpack('>I', buf.read(4))[0]
         channel_id = buf.read(channel_id_length).decode('utf-8')
 
@@ -62,24 +68,3 @@ class Service:
         has_privilege = struct.unpack('>?', buf.read(1))[0]
         privilege = struct.unpack('>I', buf.read(4))[0] if has_privilege else None
         return Service(channel_id, user_id, privilege)
-
-
-if __name__ == '__main__':
-    channel_id = 'channel_id'
-    user_id = 'user_id'
-    service = Service(channel_id, user_id)
-
-    servicePack = service.pack()
-    serviceUnpack = Service.unpack(io.BytesIO(servicePack))
-
-    assert serviceUnpack.privilege == service.privilege
-    assert serviceUnpack.channel_id == service.channel_id
-    assert serviceUnpack.user_id == service.user_id
-
-    service.add_video_publish_privilege()
-    servicePack = service.pack()
-    serviceUnpack = Service.unpack(io.BytesIO(servicePack))
-
-    assert serviceUnpack.privilege == service.privilege
-    assert serviceUnpack.channel_id == service.channel_id
-    assert serviceUnpack.user_id == service.user_id

@@ -7,6 +7,7 @@ class Service:
     ENABLE_PRIVILEGE = 1
     ENABLE_AUDIO_PRIVILEGE = 2
     ENABLE_VIDEO_PRIVILEGE = 4
+    ENABLE_SCREEN_PRIVILEGE = 8
 
     def __init__(self, channel_id: str, user_id: str, privilege=None):
         self.channel_id = channel_id
@@ -20,7 +21,7 @@ class Service:
     @classmethod
     def create_service_only_with_channel_id(cls, channel_id: str):
         return cls(channel_id, cls.WILDCARD_CHARACTERS)
-
+    
     def add_audio_publish_privilege(self):
         if self.privilege is None:
             self.privilege = 0 | self.ENABLE_PRIVILEGE
@@ -32,6 +33,12 @@ class Service:
             self.privilege = 0 | self.ENABLE_PRIVILEGE
 
         self.privilege |= self.ENABLE_VIDEO_PRIVILEGE
+    
+    def add_screen_publish_privilege(self):
+        if self.privilege is None:
+            self.privilege = 0 | self.ENABLE_PRIVILEGE
+
+        self.privilege |= self.ENABLE_SCREEN_PRIVILEGE
 
     def pack(self) -> bytes:
         buf = io.BytesIO()

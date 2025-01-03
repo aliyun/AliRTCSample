@@ -83,10 +83,38 @@ public class AppToken {
     }
 
     public static void main(String[] args) throws Throwable {
-        final AppToken appToken = new AppToken("appId", "appKey",(int) (System.currentTimeMillis() / 1000) + 12 * 60 * 60);
-        final Service service = new Service("channelId", "userId");
+        // find appId in your RTC console (https://rtc.console.aliyun.com/#/manage/list)
+        String appId = "replace_your_appId";
+        // find appKey in your RTC console
+        String appKey = "replace_your_appKey";
+        // Token is valid for a maximum of 24 hours. This example uses 12 hours, adjust according to your needs.
+        int expiredTs = (int) (System.currentTimeMillis() / 1000) + 12 * 60 * 60;
+        String channelId = "replace_your_channelId";
+        String userId = "replace_your_userId";
+
+        final AppToken appToken = new AppToken(appId, appKey, expiredTs);
+
+        // By default, all privileges are allowed. You can control audio/video/screen privileges individually as shown in the example below.
+        // Please check(https://help.aliyun.com/document_detail/2689025.html) for more detail privilege informations.
+        // Example0: full privileges as default
+        final Service service = new Service(channelId, userId);
         appToken.addService(service);
         final String appTokenStr = appToken.buildTokenString();
         System.out.println(appTokenStr);
+
+//         Example1: only allow audio
+//        final Service service = new Service(channelId, userId);
+//        service.addAudioPublishPrivilege();
+//        appToken.addService(service);
+//        final String appTokenStr = appToken.buildTokenString();
+//        System.out.println(appTokenStr);
+
+//         Example2: only allow audio and video
+//        final Service service = new Service(channelId, userId);
+//        service.addAudioPublishPrivilege();
+//        service.addVideoPublishPrivilege();
+//        appToken.addService(service);
+//        final String appTokenStr = appToken.buildTokenString();
+//        System.out.println(appTokenStr);
     }
 }

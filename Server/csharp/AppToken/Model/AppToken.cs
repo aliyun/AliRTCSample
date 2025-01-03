@@ -110,32 +110,5 @@ namespace AppToken.Model
                 return new AppToken(appId, issueTimestamp, salt, timestamp, service, options, byteSignature);
             }
         }
-
-        public bool Validate(string appKey)
-        {
-            appKey = appKey ?? throw new ArgumentNullException("missing appKey");
-
-            using var buf = new MemoryStream();
-            using (var writer = new BinaryWriter(buf, Encoding.UTF8, true))
-            {
-                var appIdBytes = Encoding.UTF8.GetBytes(this.appId);
-                writer.Write(BigEndianUtils.GetBytesBigEndian(appIdBytes.Length));
-                writer.Write(appIdBytes);
-                writer.Write(BigEndianUtils.GetBytesBigEndian(this.issueTimestamp));
-                writer.Write(BigEndianUtils.GetBytesBigEndian(this.salt));
-                writer.Write(BigEndianUtils.GetBytesBigEndian(this.timestamp));
-
-                this.service.Pack(buf);
-
-                this.options = this.options ?? new AppTokenOptions();
-                this.options.Pack(buf);
-
-                byte[] signKey = SignatureUtils.GenerateSign(appKey, this.issueTimestamp, this.salt);
-
-                byte[] signature = SignatureUtils.Sign(signKey, BytesUtils.GetFixedLengthByteArray(buf));
-
-                return signature.SequenceEqual(this.signature);
-            }
-        }
     }
 }

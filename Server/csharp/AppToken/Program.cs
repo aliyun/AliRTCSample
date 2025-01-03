@@ -8,26 +8,39 @@ namespace Program
     {
         public static void Main()
         {
-            string appId = "appId";
-            string appKey = "appKey";
-            int expiredTs = (int)(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() / 1000) + 12 * 60 * 60; // expired after 12h
-
-            Service service = new Service("channelId", "userId");
-            service.AddAudioPublishPrivilege();
-
-            AppTokenOptions options = new AppTokenOptions();
+            // find appId in your RTC console (https://rtc.console.aliyun.com/#/manage/list)
+            string appId = "replace_your_appId";
+            // find appKey in your RTC console
+            string appKey = "replace_your_appKey";
+            // Token is valid for a maximum of 24 hours. This example uses 12 hours, adjust according to your needs.
+            int expiredTs = (int)(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() / 1000) + 12 * 60 * 60;
+            string channelId = "replace_your_channelId";
+            string userId = "replace_your_userId";
 
             AppToken.Model.AppToken appTokenBuilder = new AppToken.Model.AppToken(appId, appKey, expiredTs);
-            appTokenBuilder.SetOptions(options);
+           
+            // By default, all privileges are allowed. You can control audio/video/screen privileges individually as shown in the example below.
+            // Please check(https://help.aliyun.com/document_detail/2689025.html) for more detail privilege informations.
+            // Example0: full privileges as default
+            Service service = new Service(channelId, userId);
             appTokenBuilder.SetService(service);
-
             var token = appTokenBuilder.Build();
-
             Console.WriteLine(token);
 
-            AppToken.Model.AppToken appToken = AppToken.Model.AppToken.Parse(token);
+            // Example1: only allow audio
+            // Service service = new Service(channelId, userId);
+            // service.AddAudioPublishPrivilege();
+            // appTokenBuilder.SetService(service);
+            // var token = appTokenBuilder.Build();
+            // Console.WriteLine(token);
 
-            Console.WriteLine(appToken.Validate(appKey));
+            // Example2: only allow audio and video
+            // Service service = new Service(channelId, userId);
+            // service.AddAudioPublishPrivilege();
+            // service.AddVideoPublishPrivilege();
+            // appTokenBuilder.SetService(service);
+            // var token = appTokenBuilder.Build();
+            // Console.WriteLine(token);
         }
     }
 }

@@ -97,51 +97,37 @@ class AppToken:
 
         return AppToken(app_id, None, timestamp, issue_timestamp, salt, service, options, signature)
 
-    def validate(self, app_key: str) -> bool:
-        if app_key is None:
-            raise ValueError('missing appKey')
-
-        signKey = util.sign_utils.generate_sign(app_key, self.issue_timestamp, self.salt)
-
-        buf = io.BytesIO()
-
-        app_id_bytes = self.app_id.encode('utf-8')
-        buf.write(struct.pack('>I', len(app_id_bytes)))
-        buf.write(app_id_bytes)
-        buf.write(struct.pack('>I', self.issue_timestamp))
-        buf.write(struct.pack('>I', self.salt))
-        buf.write(struct.pack('>I', self.timestamp))
-
-        buf.write(self.service.pack())
-
-        if self.options is None:
-            self.options = AppTokenOptions()
-        buf.write(self.options.pack())
-
-        signature = util.sign_utils.sign(signKey, util.bytes_utils.get_fixed_length_bytes(buf.getvalue()))
-
-        return signature == self.signature
-
-
 if __name__ == "__main__":
-    app_id = "appId"
-    app_key = "appKey"
-    expired_ts = int(time.time()) + 12 * 60 * 60 # expired after 12h
+    # find appId in your RTC console (https://rtc.console.aliyun.com/#/manage/list)
+    app_id = "replace_your_appId"
+    # find appKey in your RTC console 
+    app_key = "replace_your_appKey"
+    # Token is valid for a maximum of 24 hours. This example uses 12 hours, adjust according to your needs.
+    expired_ts = int(time.time()) + 12 * 60 * 60 
+    channel_id = 'replace_your_channelId'
+    user_id = 'replace_your_userId'
 
     appToken = AppToken(app_id, app_key, expired_ts)
 
-    channel_id = 'channelId'
-    user_id = 'userId'
+    # By default, all privileges are allowed. You can control audio/video/screen privileges individually as shown in the example below.
+    # Please check(https://help.aliyun.com/document_detail/2689025.html) for more detail privilege informations. 
+
+    # Example0: full privileges as default
     service = Service(channel_id, user_id)
-    service.add_audio_publish_privilege()
     appToken.set_service(service)
-
-    options = AppTokenOptions()
-    options.set_engine_options({'k1': 'v1', 'k2': 'v2'})
-    appToken.set_options(options)
-
     token = appToken.build()
+    print(token)
 
-    appToken = AppToken.parse(token)
-
-    print(appToken.validate(app_key))
+    # Example1: only allow audio
+    # service = Service(channel_id, user_id)
+    # service.add_audio_publish_privilege()
+    # appToken.set_service(service)
+    # token = appToken.build()
+    # print(token)
+    # Example2: only allow audio and video
+    # service = Service(channel_id, user_id)
+    # service.add_audio_publish_privilege()
+    # service.add_video_publish_privilege()
+    # appToken.set_service(service)
+    # token = appToken.build()
+    # print(token)

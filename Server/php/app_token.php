@@ -112,31 +112,4 @@ class AppToken
 
         return new self($app_id, null, $timestamp, $issue_timestamp, $salt, $service, $options, $signature);
     }
-
-    public function validate($app_key): bool
-    {
-        if ($app_key === null) {
-            throw new ValueError('missing appKey');
-        }
-
-        $signKey = generate_sign($app_key, $this->issue_timestamp, $this->salt);
-
-        $buf = '';
-        $app_id_bytes = $this->app_id;
-        $buf .= pack('N', strlen($app_id_bytes));
-        $buf .= $app_id_bytes;
-        $buf .= pack('N', $this->issue_timestamp);
-        $buf .= pack('N', $this->salt);
-        $buf .= pack('N', $this->timestamp);
-        $buf .= $this->service->pack();
-        if ($this->options === null) {
-            $this->options = new AppTokenOptions();
-        }
-        $buf .= $this->options->pack();
-
-        $fix_length_buf = getFixedLengthBytesAuto($buf);
-
-        $signature = sign($signKey, $fix_length_buf);
-        return $this->signature === $signature;
-    }
 }

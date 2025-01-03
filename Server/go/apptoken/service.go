@@ -7,9 +7,10 @@ import (
 )
 
 const (
-	PRIVILEGE_ENABLED       int32 = 1
-	PRIVILEGE_AUDIO_PUBLISH int32 = 2
-	PRIVILEGE_VIDEO_PUBLISH int32 = 4
+	PRIVILEGE_ENABLED        int32 = 1
+	PRIVILEGE_AUDIO_PUBLISH  int32 = 2
+	PRIVILEGE_VIDEO_PUBLISH  int32 = 4
+	PRIVILEGE_SCREEN_PUBLISH int32 = 8
 )
 
 const WILDCARD_CHARACTERS = "*"
@@ -61,6 +62,14 @@ func (service *Service) AddVideoPublishPrivilege() {
 		*service.Privilege = PRIVILEGE_ENABLED
 	}
 	*service.Privilege = *service.Privilege | PRIVILEGE_VIDEO_PUBLISH
+}
+
+func (service *Service) AddScreenPublishPrivilege() {
+	if service.Privilege == nil {
+		service.Privilege = new(int32)
+		*service.Privilege = PRIVILEGE_ENABLED
+	}
+	*service.Privilege = *service.Privilege | PRIVILEGE_SCREEN_PUBLISH
 }
 
 func (service *Service) Pack() ([]byte, error) {

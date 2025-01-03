@@ -71,15 +71,15 @@ const isLocal = computed(() => props.user.userId === currentUserInfo.userId);
 
 const micIconEnable = computed(() => {
   if (isLocal.value) return deviceInfo.micEnable;
-  return channelInfo.trackStatsMap.get(props.user.userId).mic;
+  return channelInfo.trackStatsMap.get(props.user.userId)?.mic;
 })
 
 const videoIsPlay = computed(() => {
   let track = props.track;
   const trackStats = channelInfo.trackStatsMap.get(props.user.userId);
   if (!track) return false;
-  if (track === props.user.videoTrack) return trackStats.camera;
-  if (track === props.user.auxiliaryTrack) return trackStats.screen;
+  if (track === props.user.videoTrack) return trackStats?.camera;
+  if (track === props.user.auxiliaryTrack) return trackStats?.screen;
   return false;
 });
 
@@ -118,28 +118,28 @@ const actions = computed(() => {
     },
     {
       text: '订阅摄像头',
-      show: !isLocal.value && channelInfo.trackStatsMap.get(uid).hasCamera && !channelInfo.trackStatsMap.get(uid).subscribedCamera,
+      show: !isLocal.value && channelInfo.trackStatsMap.get(uid)?.hasCamera && !channelInfo.trackStatsMap.get(uid)?.subscribedCamera,
       onClick: () => {
         subscribe(props.user, 'video');
       },
     },
     {
       text: '取消订阅摄像头',
-      show: !isLocal.value && channelInfo.trackStatsMap.get(uid).subscribedCamera,
+      show: !isLocal.value && channelInfo.trackStatsMap.get(uid)?.subscribedCamera,
       onClick: () => {
         unsubscribe(props.user, 'video');
       },
     },
     {
       text: '订阅共享',
-      show: !isLocal.value && channelInfo.trackStatsMap.get(uid).hasScreen && !channelInfo.trackStatsMap.get(uid).subscribedScreen,
+      show: !isLocal.value && channelInfo.trackStatsMap.get(uid)?.hasScreen && !channelInfo.trackStatsMap.get(uid)?.subscribedScreen,
       onClick: () => {
         subscribe(props.user, 'video', true);
       },
     },
     {
       text: '取消订阅共享',
-      show: !isLocal.value && channelInfo.trackStatsMap.get(uid).subscribedScreen,
+      show: !isLocal.value && channelInfo.trackStatsMap.get(uid)?.subscribedScreen,
       onClick: () => {
         unsubscribe(props.user, 'video', true);
       },

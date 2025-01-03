@@ -5,12 +5,10 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import lombok.NonNull;
 
-import javax.annotation.Nonnull;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 public class SignatureUtils {
-    @Nonnull
     public static byte[] sign(@NonNull String secretKey, int timestamp, int salt) throws Throwable {
         final Mac mac = Mac.getInstance(SecurityConstants.ALGORITHM_HMAC_SHA256);
 

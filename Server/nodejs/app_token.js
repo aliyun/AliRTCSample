@@ -54,25 +54,6 @@ class AppToken {
         return VERSION_0 + compress_utils.compress(buf.getvalue()).toString('base64');
     }
 
-    validate(appKey) {
-        if (!appKey) throw new Error('missing secretKey');
-
-        const signKey = sign_utils.generateSign(appKey, this.issueTimestamp, this.salt);
-
-        let bufBody = new bytes_utils.ByteBuffer(0)
-        bufBody.writeString(this.appId)
-
-        bufBody.writeInt32(this.issueTimestamp)
-        bufBody.writeInt32(this.salt)
-        bufBody.writeInt32(this.timestamp)
-        bufBody.writeBytes(this.service.pack())
-        bufBody.writeBytes(this.options.pack())
-
-        const signature = sign_utils.sign(signKey, bufBody.getvalue());
-
-        return Buffer.compare(this.signature,signature) == 0
-    }
-
     static parse(token) {
         if (!token) throw new Error('empty token');
         if (!token.startsWith(VERSION_0)) throw new Error('unsupported version');

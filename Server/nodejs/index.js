@@ -3,33 +3,37 @@ const { Service } = require('./service');
 const { AppTokenOptions } = require('./app_token_options');
 const { ReadonlyByteBuffer } = require('./util/bytes_utils');
 
-const channelId = 'channelId';
-const userId = 'userId';
-let service = new Service(channelId, userId);
-service.addVideoPublishPrivilege();
 
-// let servicePack = service.pack()
-// service = Service.unpack(new ReadonlyByteBuffer(servicePack))
 
-let options = new AppTokenOptions();
-options.setEngineOptions({ k1: 'v1', k2: 'v2' });
-// let optionsPack = options.pack()
-// options = AppTokenOptions.unpack(new ReadonlyByteBuffer(optionsPack))
+// find appId in your RTC console (https://rtc.console.aliyun.com/#/manage/list)
+const appId = 'replace_your_appId';
+// find appKey in your RTC console
+const appKey = 'replace_your_appKey';
+// Token is valid for a maximum of 24 hours. This example uses 12 hours, adjust according to your needs.
+const expiredTs = Math.floor(Date.now() / 1000) + 12 * 60 * 60;
+const channelId = 'replace_your_channelId';
+const userId = 'replace_your_userId';
 
-const appId = 'appId';
-const appKey = 'appKey';
-const expiredTs = Math.floor(Date.now() / 1000) + 12 * 60 * 60; // expired after 12h
 let appToken = new AppToken(appId, appKey, expiredTs);
 
-appToken.setOptions(options);
+// By default, all privileges are allowed. You can control audio/video/screen privileges individually as shown in the example below.
+// Please check(https://help.aliyun.com/document_detail/2689025.html) for more detail privilege informations.
+// Example0: full privileges as default
+let service = new Service(channelId, userId);
 appToken.setService(service);
-
 token = appToken.build();
-
 console.log(token)
+// Example1: only allow audio
+// let service = new Service(channelId, userId);
+// service.addAudioPublishPrivilege();
+// appToken.setService(service);
+// token = appToken.build();
+// console.log(token)
 
-// token = '000eJxjYGBQuLFA92RB7WvHmxoN/526bRvnnN/kIPEogzHRkLf1yNUiLQYGBtbEggLPlDQx9uMwDBTkTM5IzMtLzfFMAXLYSotTizxTGIFMZhDBBMLZhiCyDExmG4HZIHIUDBoAAItnHjU='
-
-appToken = AppToken.parse(token)
-
-console.log(appToken.validate(appKey));
+// Example2: only allow audio and video
+// let service = new Service(channelId, userId);
+// service.addAudioPublishPrivilege();
+// service.addVideoPublishPrivilege();
+// appToken.setService(service);
+// token = appToken.build();
+// console.log(token)
