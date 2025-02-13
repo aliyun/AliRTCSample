@@ -184,11 +184,6 @@ public class DingEngineCallback extends DingRtcEngineEventListener {
     }
 
     @Override
-    public void onFirstRemoteAudioDecoded(String uid, int elapsed) {
-
-    }
-
-    @Override
     public void onBye(int code) {
 
     }

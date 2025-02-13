@@ -33,6 +33,7 @@
         <activity
             android:name="com.ding.rtc.demo.basicvideocall.MainActivity"
             android:label="@string/app_name"
+            android:exported="true"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

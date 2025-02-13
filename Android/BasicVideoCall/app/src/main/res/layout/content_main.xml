@@ -29,7 +29,7 @@
         android:layout_marginTop="15dp"
         android:ems="10"
         android:hint="User ID"
-        android:inputType="number"
+        android:inputType="text"
         app:layout_constraintEnd_toEndOf="@+id/editChannelID"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/editChannelID"

@@ -2,7 +2,6 @@ package com.ding.rtc.demo.basicvideocall;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -15,7 +14,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.preference.PreferenceManager;
 
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -36,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
     private EditText mUserName;
 
     private Switch mLoudspeaker;
-    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,10 +66,6 @@ public class MainActivity extends AppCompatActivity {
         mLoudspeaker.setChecked(enabled);
 
         mChannelId.requestFocus();
-
-        mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setMessage("正在登录");
-        mProgressDialog.setCancelable(false);
     }
 
     @Override
@@ -122,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(kChannelID, channelId);
-        editor.putLong(kUserID, Long.parseLong(userId));
+        editor.putString(kUserID, userId);
         editor.putString(kUserName, userName);
         editor.apply();
 
@@ -160,7 +153,6 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<String> needPermissions = new ArrayList<>(16);
         needPermissions.add(Manifest.permission.CAMERA);
         needPermissions.add(Manifest.permission.RECORD_AUDIO);
-        needPermissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         List<String> missedList = new ArrayList<>();
         for (String permission : needPermissions) {
             if (!checkPermission(permission)) {
@@ -178,7 +170,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startCall(String channelId, String userId, String userName) {
-        mProgressDialog.show();
         CallActivity.launch(MainActivity.this,
                 userId, userName, DingApplication.TOKEN, DingApplication.APP_ID,
                 channelId, DingApplication.GSLB_SERVER);
