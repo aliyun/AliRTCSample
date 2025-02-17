@@ -1,0 +1,16 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "模块描述"
+    },
+    {
+      "name": "DemoAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "DemoAbility_label",
+      "value": "BasicVideoCall"
+    }
+  ]
+}

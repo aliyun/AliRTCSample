@@ -1,0 +1,24 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "module description"
+    },
+    {
+      "name": "DemoAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "DemoAbility_label",
+      "value": "BasicVideoCall"
+    },
+    {
+      "name": "microphone",
+      "value": "request microphone permission"
+    },
+    {
+      "name": "camera",
+      "value": "request camera permission"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "demo",
+  "version": "1.0.0",
+  "description": "Please describe the basic information.",
+  "main": "",
+  "author": "",
+  "license": "",
+  "dependencies": {
+    "@dingrtc/dingrtc": "3.5.0",
+//    "@dingrtc/dingrtc": "file:./src/main/libs/dingrtc.har",
+  }
+}
+

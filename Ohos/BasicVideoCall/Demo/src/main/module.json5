@@ -1,0 +1,78 @@
+{
+  "module": {
+    "name": "Demo",
+    "type": "entry",
+    "description": "$string:module_desc",
+    "mainElement": "DemoAbility",
+    "deviceTypes": [
+      "phone",
+      "tablet",
+      "2in1"
+    ],
+    "deliveryWithInstall": true,
+    "installationFree": false,
+    "pages": "$profile:main_pages",
+    "abilities": [
+      {
+        "name": "DemoAbility",
+        "srcEntry": "./ets/demoability/DemoAbility.ets",
+        "description": "$string:DemoAbility_desc",
+        "icon": "$media:layered_image",
+        "label": "$string:DemoAbility_label",
+        "startWindowIcon": "$media:startIcon",
+        "startWindowBackground": "$color:start_window_background",
+        "exported": true,
+        "backgroundModes": [
+          "audioRecording",
+          "audioPlayback",
+          "dataTransfer"
+        ],
+        "skills": [
+          {
+            "entities": [
+              "entity.system.home"
+            ],
+            "actions": [
+              "action.system.home"
+            ]
+          }
+        ]
+      }
+    ],
+    "requestPermissions": [
+      {
+        "name": "ohos.permission.INTERNET" // 使用网络权限
+      },
+      {
+        "name": "ohos.permission.GET_WIFI_INFO" // 获取WLAN信息权限
+      },
+      {
+        "name": "ohos.permission.GET_NETWORK_INFO" // 获取网络状态权限
+      },
+      {
+        "name": "ohos.permission.KEEP_BACKGROUND_RUNNING" // Demo 长时任务权限，用于后台音频采集和播放
+      },
+      {
+        "name": "ohos.permission.MICROPHONE",
+        "reason": "$string:microphone",
+        "usedScene": {
+          "abilities": [
+            "DemoAbility"
+          ],
+          "when": "inuse"
+        }
+      },
+      {
+        "name": "ohos.permission.CAMERA",
+        "reason": "$string:camera",
+        "usedScene": {
+          "abilities": [
+            "DemoAbility"
+          ],
+          "when": "inuse"
+        }
+      },
+    ],
+
+  }
+}
