@@ -11,7 +11,7 @@
       </Col>
     </Row>
     <Space :size="[0, 8]">
-      <Row class="toolBtn" @click="operateCamera">
+      <Row class="toolBtn" @click="onClickCamera">
         <Camera />
         <span>{{ deviceInfo.cameraEnable ? '关摄像头' : '开摄像头' }}</span>
       </Row>
@@ -27,14 +27,18 @@
         <Screen />
         <span>{{ channelInfo.screenTrack ? '结束共享' : '共享' }}</span>
       </Row>
+      <Row class="toolBtn" @click="toggleWhiteboard">
+        <Icon type="icon-whiteboard" />
+        <span style="margin-top: 4px">{{
+          channelInfo.isWhiteboardOpen ? '关闭白板' : '白板'
+        }}</span>
+      </Row>
       <Row class="toolBtn" @click="toggleShowSettings">
         <Icon type="icon-icon_x_Settings" />
         <span style="margin-top: 4px">设置</span>
       </Row>
     </Space>
-    <Button type="primary" danger @click="onLeave">
-      离开
-    </Button>
+    <Button type="primary" danger @click="onLeave"> 离开 </Button>
     <Settings v-if="showSetting" :close="toggleShowSettings" />
   </Row>
 </template>
@@ -52,6 +56,7 @@ import { useDevice } from '~/hooks/device';
 import Icon from '~/components/Icon';
 import Settings from './Settings/index.vue';
 import { ref } from 'vue';
+import { useWhiteboardHooks } from '~/hooks/channel';
 
 interface IProps {
   onLeave: () => void;
@@ -63,7 +68,24 @@ const globalFlag = useGlobalFlag();
 const client = useClient();
 const currentUserInfo = useCurrentUserInfo();
 const showSetting = ref(false);
+const { openWhiteboard, closeWhiteboard } = useWhiteboardHooks();
 const { operateCamera, operateMic, operateScreen } = useDevice('in');
+
+const onClickCamera = () => {
+  const noCamera = !channelInfo.cameraTrack;
+  if (globalFlag.isMobile) {
+    operateCamera().then(() => {
+      if (!noCamera) return;
+      channelInfo.updateTrackStats(currentUserInfo.userId);
+      if (!channelInfo.mainViewUserId) {
+        channelInfo.mainViewUserId = currentUserInfo.userId;
+        channelInfo.mainViewPreferType = 'camera';
+      }
+    });
+  } else {
+    operateCamera();
+  }
+};
 
 const onLeave = async () => {
   client.leave();
@@ -72,6 +94,14 @@ const onLeave = async () => {
 
 const toggleShowSettings = () => {
   showSetting.value = !showSetting.value;
+};
+
+const toggleWhiteboard = () => {
+  if (channelInfo.isWhiteboardOpen) {
+    closeWhiteboard();
+  } else {
+    openWhiteboard();
+  }
 };
 </script>
 <style lang="less" scoped>

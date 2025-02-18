@@ -157,16 +157,14 @@ export const useDevice = (scene?: 'pre' | 'in') => {
 
   const operateCamera = () => {
     if (!channelInfo.cameraTrack) {
-      openCamera().then((track) => {
-        if (scene !== 'pre') {
-          publish([track]);
-        }
+      return openCamera().then((track) => {
+        if (scene !== 'pre') publish([track]);
         DingRTC.getCameras().then((list) => {
           setDeviceInfo({ cameraList: list.filter((item) => item.deviceId) });
         });
       });
     } else {
-      channelInfo.cameraTrack.setEnabled(!channelInfo.cameraTrack.enabled).then(() => {
+      return channelInfo.cameraTrack.setEnabled(!channelInfo.cameraTrack.enabled).then(() => {
         print(`cameraTrack change to ${!channelInfo.cameraTrack.enabled ? 'disbaled' : 'enabled'}`);
         channelInfo.$patch({ cameraTrack: channelInfo.cameraTrack });
       });
@@ -175,7 +173,7 @@ export const useDevice = (scene?: 'pre' | 'in') => {
 
   const operateMic = () => {
     if (!channelInfo.micTrack) {
-      openMic().then((track) => {
+      return openMic().then((track) => {
         const inPre = scene === 'pre';
         if (!inPre) publish([track]);
         DingRTC.getMicrophones().then((list) => {
@@ -186,7 +184,7 @@ export const useDevice = (scene?: 'pre' | 'in') => {
         });
       });
     } else {
-      channelInfo.micTrack.setEnabled(!channelInfo.micTrack.enabled).then(() => {
+      return channelInfo.micTrack.setEnabled(!channelInfo.micTrack.enabled).then(() => {
         print(`micTrack change to ${!channelInfo.micTrack.enabled ? 'disbaled' : 'enabled'}`);
       });
     }

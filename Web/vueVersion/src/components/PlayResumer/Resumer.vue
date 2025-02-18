@@ -25,6 +25,7 @@ watchEffect(() => {
   if (!track) played.value = false;
 });
 const needResume = computed(() => {
+  return false
   if (!track || !(globalFlag.isIOS && globalFlag.isWeixin) || played.value) return false;
   return track;
 });

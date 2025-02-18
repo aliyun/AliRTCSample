@@ -36,7 +36,6 @@ import { useClient, useGlobalFlag, useChannelInfo, useCurrentUserInfo } from '~/
 
 const joining = ref(false);
 
-
 const channelInfo = useChannelInfo();
 const globalFlag = useGlobalFlag();
 
@@ -59,10 +58,6 @@ const onJoin = async () => {
     appId: app,
     channelName,
     userName: name,
-    // duration: newDuration,
-    // delay: newDelay,
-    // gslb,
-    // token,
   } = formData;
 
   if (!uid || !app || !channelName || !name) {
@@ -125,7 +120,7 @@ const onJoin = async () => {
             channelInfo.$patch({ mcuAudioTrack: audioTrack, subscribeAudio: 'mcu' });
             audioTrack.play();
           } else {
-            if (!channelInfo.mainViewUserId) {
+            if (!channelInfo.mainViewUserId && !channelInfo.isWhiteboardOpen) {
               channelInfo.$patch({
                 mainViewUserId: usrId,
                 mainViewPreferType: auxiliary ? 'auxiliary' : 'camera',
@@ -135,7 +130,7 @@ const onJoin = async () => {
             channelInfo.$patch({ remoteUsers: [...client.remoteUsers] });
           }
         }
-        if (channelInfo.cameraTrack && !channelInfo.mainViewUserId) {
+        if (channelInfo.cameraTrack && !channelInfo.mainViewUserId && !channelInfo.isWhiteboardOpen) {
           channelInfo.$patch({
             mainViewUserId: uid,
             mainViewPreferType: 'camera',

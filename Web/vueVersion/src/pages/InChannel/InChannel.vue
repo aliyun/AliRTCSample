@@ -2,15 +2,28 @@
 import { ref, onMounted, onUnmounted, computed, watch, watchEffect } from 'vue';
 import SmallView from './components/SmallView.vue';
 import MainView from './components/MainView.vue';
+import Whiteboard from './components/Whiteboard.vue';
 import ToolBar from './components/ToolBar.vue';
 import { NetworkDetector } from './components/NetworkBar';
 import Icon from '~/components/Icon';
-import { useClient, useGlobalFlag, useChannelInfo, useCurrentUserInfo, useDeviceInfo } from '~/store';
+import {
+  useClient,
+  useGlobalFlag,
+  useChannelInfo,
+  useCurrentUserInfo,
+  useDeviceInfo,
+} from '~/store';
 
 import { useChannel, useNetworkStats } from '~/hooks/channel';
 import { parseTime, print } from '~/utils/tools';
 import { Divider, Col, message, Radio, RadioGroup, Row, Space, Tooltip } from 'ant-design-vue';
-import { Group, GroupPropertyUpdateTypes, GroupUser, LocalVideoTrack, NetworkQuality } from 'dingrtc';
+import {
+  Group,
+  GroupPropertyUpdateTypes,
+  GroupUser,
+  LocalVideoTrack,
+  NetworkQuality,
+} from 'dingrtc';
 
 const rtcStatsTimer = ref(0);
 const wrapRef = ref(null);
@@ -171,18 +184,25 @@ onMounted(() => {
     print(`group-user-leave`, groupId, user);
     channelInfo.$patch({ groups: client.groups });
   });
-  client.on('group-info-updated', (groupId: string, event: GroupPropertyUpdateTypes, value?: string) => {
-    print(`group-info-updated`, groupId, event, value);
-    channelInfo.$patch({ groups: client.groups });
-  });
+  client.on(
+    'group-info-updated',
+    (groupId: string, event: GroupPropertyUpdateTypes, value?: string) => {
+      print(`group-info-updated`, groupId, event, value);
+      channelInfo.$patch({ groups: client.groups });
+    },
+  );
   document.addEventListener('mousemove', hideAfterStill);
 });
 
-watch(() => channelInfo.screenTrack, () => {
-  channelInfo.updateTrackStats(currentUserInfo.userId);
-}, {
-  immediate: true
-})
+watch(
+  () => channelInfo.screenTrack,
+  () => {
+    channelInfo.updateTrackStats(currentUserInfo.userId);
+  },
+  {
+    immediate: true,
+  },
+);
 
 watchEffect((cleanUp) => {
   if (!channelInfo.screenTrack) return;
@@ -240,7 +260,10 @@ watch(
           </Col>
           <template #title>
             <Row class="viewConfig">
-              <RadioGroup v-model:value="channelInfo.mode">
+              <RadioGroup
+                v-model:value="channelInfo.mode"
+                :disabled="channelInfo.isWhiteboardOpen"
+              >
                 <Radio value="standard">
                   <Icon type="icon-speaker_top_20" />
                   标准
@@ -257,12 +280,22 @@ watch(
             </Row>
           </template>
         </Tooltip>
-        <Divider type="vertical" v-if="fullscreen"/>
-        <Icon class="viewConfigHot" v-if="fullscreen" @click="onFullScreen" type="icon-XDS_Minimize" />
+        <Divider type="vertical" v-if="fullscreen" />
+        <Icon
+          class="viewConfigHot"
+          v-if="fullscreen"
+          @click="onFullScreen"
+          type="icon-XDS_Minimize"
+        />
       </Row>
     </Row>
     <Space v-if="channelInfo.mode === 'standard'" :class="['smallVideoItems', channelInfo.mode]">
-      <SmallView v-for="user in channelInfo.allUsers" :key="user.userId" :user="user" :track="channelInfo.getTrack(user)" />
+      <SmallView
+        v-for="user in channelInfo.allUsers"
+        :key="user.userId"
+        :user="user"
+        :track="channelInfo.getTrack(user)"
+      />
     </Space>
     <Row v-else :class="['smallVideoItems', channelInfo.mode]">
       <SmallView
@@ -274,7 +307,8 @@ watch(
         :track="channelInfo.getTrack(user)"
       />
     </Row>
-    <MainView v-if="channelInfo.mode === 'standard'" />
+    <MainView v-if="channelInfo.mode === 'standard' && !channelInfo.isWhiteboardOpen" />
+    <Whiteboard v-if="channelInfo.mode === 'standard' && channelInfo.isWhiteboardOpen" />
     <ToolBar @leave="clearRoom" />
   </Row>
 </template>

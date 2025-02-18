@@ -37,3 +37,17 @@ console.log(token)
 // appToken.setService(service);
 // token = appToken.build();
 // console.log(token)
+
+// By default, no more additional options are set. You can set more options individually as shown in the example below.
+// Please check(https://help.aliyun.com/document_detail/2689025.html) for more detail options informations.
+// Example1: add more options
+// let service = new Service(channelId, userId);
+// appToken.setService(service);
+// let options = {
+//     "duration_per_channel": "86400",
+//     "delay_close_per_channel": "60"
+// };
+// let tokenOptions = new AppTokenOptions(options);
+// appToken.setOptions(tokenOptions);
+// token = appToken.build();
+// console.log(token)

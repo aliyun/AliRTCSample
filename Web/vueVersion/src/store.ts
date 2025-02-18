@@ -1,6 +1,7 @@
 import DingRTC, {
   CameraVideoTrack,
   LocalAudioTrack,
+  // LocalTrack,
   LocalVideoTrack,
   MicrophoneAudioTrack,
   RemoteAudioTrack,
@@ -15,6 +16,8 @@ import DingRTC, {
 import { defineStore } from 'pinia';
 import { isIOS, isMobile, isWeixin, logLevel, parseSearch } from './utils/tools';
 import configJson from '~/config.json';
+import {  RtcWhiteboard, WhiteboardManager } from '@dingrtc/whiteboard'
+import { defaultWhiteboardId } from '~/constants/index';
 
 DingRTC.setLogLevel(logLevel);
 
@@ -45,12 +48,6 @@ export interface RTCStats {
   remoteAudioLevel?: number;
   loss?: number;
   rtt?: number;
-  // encodeCameraLayers?: number;
-  // encodeScreenLayers?: number;
-  sendCameraLayers?: number;
-  sendScreenLayers?: number;
-  uplinkProfile?: string;
-  downlinkProfile?: string;
 }
 
 interface IDeviceInfo {
@@ -62,6 +59,7 @@ interface IDeviceInfo {
   cameraFrameRate: number;
   cameraDimension: VideoDimension;
   screenMaxBitrate: number;
+  cameraMirror: boolean;
   cameraMaxBitrate: number;
   cameraList: MediaDeviceInfo[];
   speakerList: MediaDeviceInfo[];
@@ -95,6 +93,9 @@ export interface IChannelInfo {
   customAudioTrack?: LocalAudioTrack;
   publishedTracks?: Set<string>;
   timeLeft?: number;
+  isWhiteboardOpen: boolean;
+  whiteboard: RtcWhiteboard;
+  whiteboardManager: WhiteboardManager;
   networkQuality: NetworkQuality;
   rtcStats: RTCStats;
   defaultRemoteStreamType: string;
@@ -115,6 +116,12 @@ interface IGlobalFlag {
 }
 
 const client = DingRTC.createClient();
+
+const whiteboardManager = new WhiteboardManager();
+// 白板和 rtc 共享同一个入会连接
+client.register(whiteboardManager);
+
+const whiteboard = whiteboardManager.getWhiteboard(defaultWhiteboardId)
 
 export const useClient = (): DingRTCClient => {
   const store = useInnerClientStore();
@@ -138,7 +145,7 @@ export const useCurrentUserInfo = defineStore('ICurrentUserInfo', {
   }),
 });
 
-let defaultCameraDimension: VideoDimension = !isMobile() ? 'VD_1920x1080' : 'VD_640x480';
+let defaultCameraDimension: VideoDimension = 'VD_1920x1080';
 if (isIOS()) {
   defaultCameraDimension = 'VD_1280x720';
 }
@@ -151,6 +158,7 @@ export const useDeviceInfo = defineStore('IDeviceInfo', {
     cameraList: [],
     speakerList: [],
     micList: [],
+    cameraMirror: false,
     cameraFrameRate: 15,
     cameraMaxBitrate: undefined,
     screenOptimization: 'detail',
@@ -186,6 +194,7 @@ export const useChannelInfo = defineStore('IChannelInfo', {
     publishedTracks: new Set(),
     rtcStats: {},
     mode: 'grid',
+    isWhiteboardOpen: false,
     mcuAudioTrack: null,
     remoteUsers: [],
     groups: [],
@@ -195,6 +204,8 @@ export const useChannelInfo = defineStore('IChannelInfo', {
     remoteUserNetworkQualitys: {},
     mainViewPreferType: 'auxiliary',
     mainViewUserId: '',
+    whiteboard,
+    whiteboardManager,
     trackStatsMap: new Map(),
   }),
   getters: {

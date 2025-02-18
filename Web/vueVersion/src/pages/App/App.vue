@@ -11,17 +11,21 @@
 import { onMounted, onUnmounted, ref } from "vue";
 import InChannel from "../InChannel/InChannel.vue";
 import Welcome from "~/pages/Welcome/index.vue";
-import { useGlobalFlag } from "~/store";
+import { useChannelInfo, useGlobalFlag } from "~/store";
 import { message, Modal } from 'ant-design-vue';
 import DingRTC from "dingrtc";
 import VConsole from "vconsole";
 import { useDevice } from "~/hooks/device";
 import 'ant-design-vue/dist/reset.css';
+import { defaultWhiteboardId } from "~/constants/index";
+import { useWhiteboardHooks } from "~/hooks/channel";
 
 
 const globalFlag = useGlobalFlag();
 const { updateDeviceList } = useDevice();
+const channelInfo = useChannelInfo();
 const supported = ref(false);
+const { openWhiteboard } = useWhiteboardHooks();
 
 
 // 生命周期钩子
@@ -35,6 +39,12 @@ onMounted(() => {
   if (!supported) {
     message.error("当前浏览器不支持通话");
   }
+
+  channelInfo.whiteboardManager.on('whiteboard-start', (id) => {
+    if (id === defaultWhiteboardId) {
+      openWhiteboard();
+    }
+  })
 
   DingRTC.on("camera-changed", (info) => {
     updateDeviceList("camera", info);

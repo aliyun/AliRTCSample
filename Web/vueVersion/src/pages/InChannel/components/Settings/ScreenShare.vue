@@ -1,13 +1,14 @@
 <template>
   <Row>
-    <Form :model="formData" style="width: 100%" :label-col="{span: 4 }" label-align="left">
+    <Form :model="formData" style="width: 100%" label-align="left">
       <Divider orientation="left" plain>
         <Text>视频编码设置</Text>
       </Divider>
       <Form.Item label="分辨率" name="dimension">
         <Select v-model:value="formData.dimension" :options="videoDimensions.map((item)=> ({ label: item, value: item }))" />
       </Form.Item>
-      <Form.Item label="帧率" name="frameRate">
+      <Row justify="space-between">
+      <Form.Item label="帧&nbsp&nbsp&nbsp&nbsp率" name="frameRate">
         <Select v-model:value="formData.frameRate" :options="frameRates.map((item)=> ({ label: item, value: item }))" />
       </Form.Item>
       <Form.Item label="优化模式" name="optimizationMode">
@@ -17,6 +18,7 @@
           :options="optionzationModeList"
         />
       </Form.Item>
+      </Row>
       <Form.Item label="最大码率" name="maxBitrate">
         <InputNumber v-model:value="formData.maxBitrate" placeholder="默认用分辨率、帧率计算" addon-after="Kbps" />
       </Form.Item>
@@ -66,7 +68,7 @@ const onModeChange = (value) => {
 }
 
 const updateEncoder = () => {
-  const { dimension, frameRate, maxBitrate } = formData;
+  const { dimension, frameRate, maxBitrate, optimizationMode } = formData;
   const isScreenPublish = channelInfo.publishedTracks.has(channelInfo.screenTrack.getTrackId());
 
   const fn = () => {
@@ -79,7 +81,7 @@ const updateEncoder = () => {
         frameRate,
         dimension,
         maxBitrate,
-        optimizationMode: formData.optimizationMode,
+        optimizationMode,
       })
       .then(() => {
         deviceInfo.$patch({
@@ -102,6 +104,7 @@ const updateEncoder = () => {
     screenDimension: dimension,
     screenMaxBitrate: maxBitrate,
     screenFrameRate: frameRate,
+    screenOptimization: optimizationMode,
   });
 }
 </script>

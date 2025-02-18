@@ -21,9 +21,10 @@ const micIconEnable = computed(() => {
 
 const videoIsPlay = computed(() => {
   const trackStats = channelInfo.trackStatsMap.get(channelInfo.mainViewUserId);
-  console.log(trackStats, channelInfo.mainViewPreferType)
   return channelInfo.mainViewPreferType === 'auxiliary' ? trackStats?.screen : trackStats?.camera;
 });
+
+const showName = computed(() => channelInfo.mainViewUserInfo?.userName || currentUserInfo.userName)
 
 watch(() => [viewRef.value, channelInfo.mainViewTrack], (newValue) => {
   if (newValue[1]) {
@@ -38,12 +39,12 @@ watch(() => [viewRef.value, channelInfo.mainViewTrack], (newValue) => {
     <div v-if="channelInfo.mainViewTrack" :class="['smallViewStatus', { higherMainUserInfo: !globalFlag.immersive }]">
       <Icon v-if="channelInfo.trackStatsMap.get(channelInfo.mainViewUserId)?.screen" style="color: limegreen;" type="icon-XDS_share_screen1" />
       <Icon v-if="!micIconEnable" type="icon-XDS_UnMute2Fill" />
-      <Tooltip :title="channelInfo.mainViewUserInfo.userName">
-        <span>{{ channelInfo.mainViewUserInfo.userName }}</span>
+      <Tooltip :title="showName">
+        <span>{{ showName }}</span>
       </Tooltip>
     </div>
     <Avatar size="large">
-      {{ channelInfo.mainViewUserInfo.userName }}
+      {{ showName }}
     </Avatar>
   </Row>
 </template>

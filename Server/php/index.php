@@ -39,3 +39,17 @@ echo $token . PHP_EOL;
 // $token = $appToken->build();
 // echo $token . PHP_EOL;
 
+// By default, no more additional options are set. You can set more options individually as shown in the example below.
+// Please check(https://help.aliyun.com/document_detail/2689025.html) for more detail options informations.
+// Example1: add more options
+// $service = new Service($channel_id, $user_id);
+// $appToken->setService($service);
+// $options = [
+//     "duration_per_channel" => "86400",
+//     "delay_close_per_channel" => "60"
+// ];
+// $tokenOptions = new AppTokenOptions($options);
+// $appToken->setOptions($tokenOptions);
+// $token = $appToken->build();
+// echo $token . PHP_EOL;
+

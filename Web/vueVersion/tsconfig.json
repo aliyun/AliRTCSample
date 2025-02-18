@@ -13,7 +13,7 @@
     "jsx": "preserve",
     "jsxImportSource": "vue",
     // "esModuleInterop": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "forceConsistentCasingInFileNames": true,

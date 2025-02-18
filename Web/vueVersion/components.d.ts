@@ -7,6 +7,28 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AButton: typeof import('ant-design-vue/es')['Button']
+    ADivider: typeof import('ant-design-vue/es')['Divider']
+    AInput: typeof import('ant-design-vue/es')['Input']
+    AInputGroup: typeof import('ant-design-vue/es')['InputGroup']
+    APopover: typeof import('ant-design-vue/es')['Popover']
+    ARadio: typeof import('ant-design-vue/es')['Radio']
+    ARadioGroup: typeof import('ant-design-vue/es')['RadioGroup']
+    ASelect: typeof import('ant-design-vue/es')['Select']
+    ASelectOption: typeof import('ant-design-vue/es')['SelectOption']
+    ASlider: typeof import('ant-design-vue/es')['Slider']
+    ASwitch: typeof import('ant-design-vue/es')['Switch']
+    ATooltip: typeof import('ant-design-vue/es')['Tooltip']
+    ColorPicker: typeof import('./src/components/Whiteboard/ColorPicker.vue')['default']
+    DocTool: typeof import('./src/components/Whiteboard/DocTool.vue')['default']
+    ImageTool: typeof import('./src/components/Whiteboard/ImageTool.vue')['default']
+    Pagination: typeof import('./src/components/Whiteboard/Pagination.vue')['default']
     Resumer: typeof import('./src/components/PlayResumer/Resumer.vue')['default']
+    RoomInfo: typeof import('./src/components/Whiteboard/RoomInfo.vue')['default']
+    Settings: typeof import('./src/components/Whiteboard/Settings.vue')['default']
+    Stamps: typeof import('./src/components/Whiteboard/Stamps.vue')['default']
+    Toolbar: typeof import('./src/components/Whiteboard/Toolbar.vue')['default']
+    VisionShare: typeof import('./src/components/Whiteboard/VisionShare.vue')['default']
+    WBToolbar: typeof import('./src/components/Whiteboard/WBToolbar.vue')['default']
   }
 }

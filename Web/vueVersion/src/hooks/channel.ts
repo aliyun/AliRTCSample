@@ -348,8 +348,6 @@ export const useNetworkStats = () => {
           }
         }
         const newRtcStats: RTCStats = {
-          uplinkProfile: (localVideoStats.uplinkProfile || []).join(';'),
-          downlinkProfile: (localVideoStats.downlinkProfile || []).join(';'),
           localCameraFPS: camera?.sendFrameRate,
           localCameraBitrate: camera?.sendBitrate,
           localCameraResolution: camera?.sendResolution,
@@ -410,3 +408,29 @@ export const useNetworkStats = () => {
     getRemoteUserNetworkStats,
   };
 };
+
+export const useWhiteboardHooks = () => {
+  const channelInfo = useChannelInfo();
+  let preMode = channelInfo.mode;
+
+
+  const openWhiteboard = () => {
+    preMode = channelInfo.mode;
+    channelInfo.$patch({
+      mainViewUserId: '',
+      isWhiteboardOpen: true,
+      mode: 'standard',
+      mainViewPreferType: 'auxiliary',
+    });
+  };
+  
+  const closeWhiteboard = () => {
+    channelInfo.isWhiteboardOpen = false;
+    channelInfo.mode = preMode;
+  };
+
+  return {
+    openWhiteboard,
+    closeWhiteboard,
+  }
+}

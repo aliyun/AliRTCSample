@@ -1,6 +1,5 @@
 package com.company.apptoken.model;
 
-import com.alibaba.fastjson.JSON;
 import com.company.apptoken.constant.AppTokenConstants;
 import com.company.apptoken.constant.SecurityConstants;
 import com.company.apptoken.util.CompressUtils;
@@ -15,7 +14,9 @@ import org.apache.commons.lang3.StringUtils;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.SecureRandom;
+import java.util.Map;
 import java.util.Objects;
+import java.util.TreeMap;
 
 @Getter
 public class AppToken {
@@ -114,6 +115,22 @@ public class AppToken {
 //        service.addAudioPublishPrivilege();
 //        service.addVideoPublishPrivilege();
 //        appToken.addService(service);
+//        final String appTokenStr = appToken.buildTokenString();
+//        System.out.println(appTokenStr);
+
+        // By default, no more additional options are set. You can set more options individually as shown in the example below.
+        // Please check(https://help.aliyun.com/document_detail/2689025.html) for more detail options informations.
+        //Example1: add more options
+//        final Service service = new Service(channelId, userId);
+//        appToken.addService(service);
+//        final AppTokenOptions appTokenOptions = new AppTokenOptions();
+//        Map<String, String> engineOptions = new TreeMap<>();
+//        // set duration per channel to 86400s as example, please set by yourself
+//        engineOptions.put("duration_per_channel","86400");
+//        // set delay close per channel to 60s  as example, please set by yourself
+//        engineOptions.put("delay_close_per_channel","60");
+//        appTokenOptions.addEngineOptions(engineOptions);
+//        appToken.addOptions(appTokenOptions);
 //        final String appTokenStr = appToken.buildTokenString();
 //        System.out.println(appTokenStr);
     }

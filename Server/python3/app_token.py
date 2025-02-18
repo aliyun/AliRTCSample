@@ -131,3 +131,17 @@ if __name__ == "__main__":
     # appToken.set_service(service)
     # token = appToken.build()
     # print(token)
+
+    # By default, no more additional options are set. You can set more options individually as shown in the example below.
+    # Please check(https://help.aliyun.com/document_detail/2689025.html) for more detail options informations.
+    # Example1: add more options
+    # service = Service(channel_id, user_id)
+    # appToken.set_service(service)
+    # engine_options={
+    #     "duration_per_channel": "86400",
+    #     "delay_close_per_channel": "60"
+    # }
+    # token_options = AppTokenOptions(engine_options)
+    # appToken.set_options(token_options)
+    # token = appToken.build()
+    # print(token)

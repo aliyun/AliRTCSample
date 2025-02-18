@@ -41,6 +41,22 @@ namespace Program
             // appTokenBuilder.SetService(service);
             // var token = appTokenBuilder.Build();
             // Console.WriteLine(token);
+
+            // By default, no more additional options are set. You can set more options individually as shown in the example below.
+            // Please check(https://help.aliyun.com/document_detail/2689025.html) for more detail options informations.
+            //Example1: add more options
+            // Service service = new Service(channelId, userId);
+            // appTokenBuilder.SetService(service);
+            
+            // AppTokenOptions appTokenOptions = new AppTokenOptions();
+            // Dictionary<string, string> engineOptions = new Dictionary<string, string>();
+            // engineOptions.Add("duration_per_channel", "86400");
+            // engineOptions.Add("delay_close_per_channel", "60");
+            // appTokenOptions.SetEngineOptions(engineOptions);
+            // appTokenBuilder.SetOptions(appTokenOptions);
+
+            // var token = appTokenBuilder.Build();
+            // Console.WriteLine(token);
         }
     }
 }

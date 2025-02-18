@@ -1,16 +1,15 @@
 <template>
   <Row class="previewWrap">
-    <PlayResumer v-if="cameraTrack" :track="cameraTrack" :container="refContainer.$el" />
     <Col ref="refContainer" :class="!deviceInfo.cameraEnable ? 'avatar' : 'camera'">
       <Avatar size="large">{{ userName }}</Avatar>
     </Col>
     <Row class="devices">
       <Col class="deviceColumn">
-        <Camera :click="operateCamera" />
+        <Camera :click="onClickCamera" />
       </Col>
       <Divider type="vertical" />
       <Col class="deviceColumn">
-        <Mic :click="operateMic" />
+        <Mic :click="onClickMic" />
       </Col>
     </Row>
   </Row>
@@ -20,29 +19,44 @@
 import { ref, onMounted } from 'vue';
 import { Mic, Camera } from '~/components/Device';
 import { Row, Col, Divider, Avatar } from 'ant-design-vue';
-import PlayResumer from '~/components/PlayResumer/Resumer.vue';
 import { useDevice } from '~/hooks/device';
-import { useGlobalFlag, useCurrentUserInfo, useDeviceInfo } from '~/store';
+import { useCurrentUserInfo, useDeviceInfo, useGlobalFlag } from '~/store';
 
 const refContainer = ref(null);
 
 // 状态管理
 const cameraTrack = ref(null);
 
-
-const { userName } = useCurrentUserInfo();
 const globalFlag = useGlobalFlag()
+const { userName } = useCurrentUserInfo();
 const deviceInfo = useDeviceInfo()
 
 // 设备操作
-const { openMicAndCameraSameTime, operateCamera, operateMic } = useDevice('pre');
+const { openMicAndCameraSameTime, operateCamera, operateMic, openCamera, openMic } = useDevice('pre');
 onMounted(async () => {
+  if (globalFlag.isMobile) return;
   const [track] = await openMicAndCameraSameTime();
   cameraTrack.value = track;
-  if (cameraTrack.value && !(globalFlag.isIOS && globalFlag.isWeixin)) {
-    cameraTrack.value.play(refContainer.value.$el, { fit: 'cover' });
-  }
+  track?.play(refContainer.value.$el, { fit: 'cover' });
 });
+
+const onClickCamera = () => {
+  if (globalFlag.isMobile) {
+    openCamera().then((track) => {
+      track?.play(refContainer.value.$el, { fit: 'cover' });
+    })
+  } else {
+    operateCamera()
+  }
+}
+
+const onClickMic = () => {
+  if (globalFlag.isMobile) {
+    openMic()
+  } else {
+    operateMic()
+  }
+}
 </script>
 
 <style lang="less" scoped>

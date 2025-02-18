@@ -39,4 +39,20 @@ func main() {
 	// appTokenX.SetService(&service)
 	// appTokenStr, _ := appTokenX.Build()
 	// println(appTokenStr)
+
+	// By default, no more additional options are set. You can set more options individually as shown in the example below.
+	// Please check(https://help.aliyun.com/document_detail/2689025.html) for more detail options informations.
+	// Example1: add more options
+	// service := apptoken.CreateService(channelId, userId)
+	// appTokenX.SetService(&service)
+
+	// tokenOptions := apptoken.CreateAppTokenOptions()
+	// options := make(map[string]string)
+	// options["duration_per_channel"] = "86400"
+	// options["delay_close_per_channel"] = "60"
+	// tokenOptions.SetEngineOptions(options)
+	// appTokenX.SetOptions(&tokenOptions)
+
+	// appTokenStr, _ := appTokenX.Build()
+	// println(appTokenStr)
 }

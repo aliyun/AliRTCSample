@@ -93,6 +93,7 @@ watch(() => [containerRef.value, props.track], (newValue) => {
 })
 
 const viewBigger = () => {
+  if (channelInfo.isWhiteboardOpen) return;
   if (channelInfo.mode === 'grid') {
     channelInfo.mode = 'standard';
   }

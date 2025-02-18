@@ -4,16 +4,16 @@ import io.netty.buffer.ByteBuf;
 import lombok.Getter;
 import lombok.NonNull;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.TreeMap;
 
 @Getter
 public class AppTokenOptions {
     private Map<String, String> engineOptions;
 
     public void addEngineOptions(@NonNull Map<String, String> engineOptions) {
-        this.engineOptions = engineOptions;
+        this.engineOptions = engineOptions == null ? new TreeMap<>() : engineOptions;
     }
 
     public void pack(@NonNull ByteBuf buf) {
@@ -40,7 +40,7 @@ public class AppTokenOptions {
             return new AppTokenOptions();
         }
 
-        final Map<String, String> engineOptions = new HashMap<>();
+        final Map<String, String> engineOptions = new TreeMap<>();
         final int size = buf.readInt();
         for (int i = 0; i < size; i++) {
             final byte[] key = new byte[buf.readInt()];
@@ -51,10 +51,10 @@ public class AppTokenOptions {
     }
 
     private AppTokenOptions(Map<String, String> engineOptions) {
-        this.engineOptions = engineOptions;
+        this.engineOptions = engineOptions == null ? new TreeMap<>() : engineOptions;
     }
 
     public AppTokenOptions() {
-        this.engineOptions = new HashMap<>();
+        this.engineOptions = new TreeMap<>();
     }
 }

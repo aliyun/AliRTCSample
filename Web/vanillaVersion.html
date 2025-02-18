@@ -1,0 +1,859 @@
+<!doctype html>
+<html>
+  <head>
+    <title>DingRTC WebRTC Demo</title>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"
+    />
+    <!-- cdn jquery版本为1.10.2 -->
+    <script src="https://dingrtc.oss-cn-zhangjiakou.aliyuncs.com/sdk/web/jquery.min.js"></script>
+    <style>
+      body {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      ul,
+      li {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+      }
+
+      .login {
+        min-height: 100vh;
+        position: relative;
+        background-color: #006eff;
+      }
+
+      .login .main {
+        width: 420px;
+        background-color: #fff;
+        padding: 30px 26px 24px 26px;
+        box-sizing: border-box;
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -60%);
+        transform: translate(-50%, -50%);
+        font-size: 14px;
+      }
+
+      .main .main-title {
+        font-size: 30px;
+        text-align: center;
+        color: #333;
+        letter-spacing: 1px;
+      }
+
+      .main .main-input {
+        margin: 33px 0 13px 0;
+      }
+
+      .main-input input {
+        padding: 0 14px;
+        width: 100%;
+        box-sizing: border-box;
+        line-height: 38.5px;
+        height: 38.5px;
+        color: #888;
+        border: solid 1px #ddd;
+        position: relative;
+        margin-bottom: 10px;
+        touch-action: none;
+      }
+
+      .main .main-button button {
+        padding: 0 14px;
+        width: 100%;
+        box-sizing: border-box;
+        line-height: 38.5px;
+        height: 38.5px;
+        background-color: #006eff;
+        border: solid 1px #006eff;
+        color: white;
+        letter-spacing: 1px;
+      }
+
+      .container-box {
+        margin-left: 200px;
+        margin-right: 300px;
+        position: relative;
+      }
+
+      .local-video {
+        margin: 0 calc(50 / 1080 * 100vh);
+        position: relative;
+        max-width: 50vw;
+      }
+
+      .remote-user-list {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 200px;
+        height: 100%;
+        background: #333;
+        color: #fff;
+      }
+
+      .remote-user-list h2 {
+        font-size: 20px;
+        line-height: 36px;
+        font-weight: weight;
+        text-align: center;
+      }
+
+      .remote-user-list .user-ul {
+        display: block;
+      }
+
+      .remote-user-list .user-ul .user-ul-li {
+        position: relative;
+        font-size: 20px;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+      }
+
+      .remote-user-list .user-ul .user-ul-li:hover {
+        background: #666;
+      }
+
+      .remote-user-list .menu {
+        position: absolute;
+        z-index: 100;
+        left: 200px;
+        text-align: left;
+        top: 1px;
+        background-color: #333333;
+        border-radius: 8px;
+      }
+
+      .remote-user-list .menu li {
+        padding: 0 10px;
+        min-width: 165px;
+        height: 40px;
+        line-height: 40px;
+        color: #ddd;
+        text-indent: 10px;
+        cursor: pointer;
+      }
+
+      .remote-user-list .menu li span {
+        cursor: pointer;
+      }
+
+      .remote-user-list .menu li span:hover {
+        color: #38f;
+      }
+
+      .local-display-name {
+        height: 50px;
+        background: #333;
+        width: 100%;
+        /* position: absolute; */
+        color: #fff;
+        font-weight: normal;
+      }
+
+      .local-display-name span {
+        margin: 0 30px;
+        line-height: 50px;
+        font-size: 15px;
+      }
+
+      .publisher {
+        margin: 20px 0 20px calc(50 / 1080 * 100vh);
+      }
+
+      .publisher input[type='text'] {
+        border: 2px solid #456879;
+        border-radius: 10px;
+        height: 40px;
+        width: 95px;
+      }
+
+      .publisher button {
+        font-family: arial;
+        color: #ffffff !important;
+        font-size: 12px;
+        width: 68px;
+        height: 26px;
+        background: deepskyblue;
+        border: none;
+        outline: none;
+      }
+      .publisher button:hover {
+        background: #006eff;
+        cursor: pointer;
+      }
+      .streamType label {
+        font-family: arial;
+        font-size: 16px;
+      }
+      .deviceState {
+        margin-left: 20px;
+      }
+      .deviceState label {
+        font-family: arial;
+        font-size: 16px;
+      }
+
+      .video-container {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        bottom: 0px;
+        width: 260px;
+        background-color: #eee;
+        color: #fff;
+        padding: 20px;
+        overflow-y: scroll;
+      }
+      .video-container::-webkit-scrollbar {
+        display: none;
+      }
+
+      .video-container .remote-subscriber {
+        margin: 10px 0;
+        position: relative;
+      }
+      .video-container video {
+        background: #000;
+        width: 100%;
+        height: 195px;
+      }
+
+      .video-container .display-name {
+        position: absolute;
+        top: 35px;
+        left: 30px;
+        padding: 5px;
+        background: rgba(0, 0, 0, 0.1);
+        color: white;
+      }
+
+      .alert {
+        display: none;
+        position: fixed;
+        top: 8%;
+        left: 50%;
+        min-width: 300px;
+        max-width: 600px;
+        transform: translateX(-50%);
+        z-index: 99999;
+        text-align: center;
+        padding: 10px 15px;
+        border-radius: 3px;
+      }
+
+      .alert-success {
+        color: #3c763d;
+        background-color: #dff0d8;
+        border-color: #d6e9c6;
+      }
+
+      .alert-info {
+        color: #31708f;
+        background-color: #d9edf7;
+        border-color: #bce8f1;
+      }
+
+      .alert-warning {
+        color: #8a6d3b;
+        background-color: #fcf8e3;
+        border-color: #faebcc;
+      }
+
+      .alert-danger {
+        color: #a94442;
+        background-color: #f2dede;
+        border-color: #ebccd1;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="login">
+      <div class="main">
+        <div class="main-title">
+          <span>音视频通信</span>
+        </div>
+        <div class="main-input">
+          <input type="text" placeholder="请输入房间号" />
+        </div>
+        <div class="main-button">
+          <button>进入房间</button>
+        </div>
+      </div>
+    </div>
+    <div class="main-web" style="display: none">
+      <div class="remote-user-list">
+        <h2>房间成员</h2>
+        <ul class="user-ul"></ul>
+      </div>
+      <div class="container-box">
+        <div class="local-display-name">
+          <span class="username">User: <b></b></span>
+          <span class="channelid">Channel Id: <b></b></span>
+          <span class="streamstate">推流状态：<b></b></span>
+          <button class="leave-room">离开房间</button>
+        </div>
+        <div class="publisher">
+          <button class="select-preview">关闭预览</button>
+          <span class="streamType" style="display: none">
+            <label for="cameraPublish">推视频流</label>
+            <input id="cameraPublish" value="cameraPublish" type="checkbox" name="streamType" />
+            <label for="screenPublish">推共享流</label>
+            <input id="screenPublish" value="screenPublish" type="checkbox" name="streamType" />
+            <label for="audioPublish">推音频流</label>
+            <input id="audioPublish" value="audioPublish" type="checkbox" name="streamType" />
+          </span>
+
+          <span class="deviceState" style="display: none">
+            <label for="cameraOpen">开摄像头</label>
+            <input id="cameraOpen" value="cameraOpen" type="checkbox" name="deviceState" />
+            <label for="micOpen">开麦克风</label>
+            <input id="micOpen" value="micOpen" type="checkbox" name="deviceState" />
+          </span>
+        </div>
+        <div class="local-video"></div>
+      </div>
+      <div class="video-container"></div>
+    </div>
+    <div class="alert"></div>
+  </body>
+</html>
+<!-- 请使用官网最新sdk在线地址，或者从官网下载最新sdk文件，添加到同层目录来本地引用 -->
+<script src="https://dingrtc.oss-cn-zhangjiakou.aliyuncs.com/sdk/web/index.umd.3.6.0.js"></script>
+<script>
+  /**
+   * 请找到 generateAuthInfo方法，配置业务服务请求域名获取token，appId，userId等
+   */
+  var channelId;
+  var userName;
+  var subscribedMap = {};
+  var RtcEngine = DingRTC.default;
+  var client;
+  var cameraTrack = null;
+  var micTrack = null;
+  var screenTrack = null;
+
+  try {
+    client = RtcEngine.createClient();
+  } catch (error) {
+    console.log(error);
+    alert('请使用官网最新Web SDK文件');
+  }
+
+  if (!RtcEngine.checkSystemRequirements()) {
+    alert('当前环境不支持RTC通信，请检查URL协议是否为https或使用最新版Chrome浏览器');
+  }
+
+  RtcEngine.createMicrophoneAndCameraTracks({ dimension: 'VD_640x480', frameRate: 15 }, {}).then(
+    ([videoTrack, audioTrack]) => {
+      cameraTrack = videoTrack;
+      micTrack = audioTrack;
+    },
+  );
+
+  function request(api, params) {
+    var res;
+    // const APP_SERVER_DOMAIN = 'http://localhost:3001'; 请修改为真实使用的业务服务器域名
+    const url = `${APP_SERVER_DOMAIN}${api}?${Object.keys(params)
+      .map((key) => `${key}=${params[key]}`)
+      .join('&')}`;
+    return new Promise((resolve, reject) => {
+      fetch(url)
+        .then((response) => {
+          res = response;
+          if (response.ok) {
+            return response.json();
+          } else {
+            return response.text();
+          }
+        })
+        .then((data) => {
+          if (res?.ok) {
+            if (data.code && data.code !== 200) {
+              reject(data);
+            } else {
+              resolve(data.data);
+            }
+          } else {
+            reject(data);
+          }
+        })
+        .catch(reject);
+    });
+  }
+
+  // 从业务服务器获取生成的token
+  function getAppToken(userId, appId, channelId) {
+    // 请修改为真实使用的参数
+    const loginParam = {
+      
+    };
+    return request('login', loginParam);
+  }
+
+  /**
+   * 显示提示信息，并打印
+   * @param {String} text 要显示的信息
+   * @param {String} type 信息类型(默认成功)
+   * @param {Number} delay 延迟时间(默认2s)
+   */
+  function showAlert(text, type, delay) {
+    if (!text) return;
+    var _type = type ? 'alert-' + type : 'alert-success';
+    var _delay = delay || 2000;
+    $('.alert')
+      .html(text)
+      .addClass(_type)
+      .show()
+      .delay(_delay)
+      .fadeOut('normal', () => {
+        $('.alert').removeClass(_type);
+      });
+    if (_type === 'warning') {
+      console.warn(text);
+    } else if (_type === 'danger') {
+      console.error(text);
+    } else {
+      console.log(text);
+    }
+  }
+
+  function initEvents() {
+    /**
+     * remote用户加入房间 user-joined
+     * 更新在线用户列表
+     */
+    client.on('user-joined', (user) => {
+      updateUserList();
+      showAlert(user.userName + '加入房间', 'success');
+    });
+    // 设备状态变化
+    client.on('user-info-updated', (uid, msg) => {
+      showAlert(`uid: ${uid}: 设备状态变化 ${msg} `);
+    });
+    /**
+     * 远端用户推流推发布事件 user-published，仅处理视频流发布
+     * 音频合流订阅在入会时进行订阅后无须再处理个人的音频流发布
+     */
+    client.on('user-published', (user, mediaType, auxiliary) => {
+      showAlert(`${user.userName} 发布 ${auxiliary ? 'screen' : mediaType}`, 'success');
+      if (mediaType === 'video') {
+        client.subscribe(user.userId, 'video', auxiliary).then((track) => {
+          subscribedMap[user.userId] = Object.assign(subscribedMap[user.userId] || {}, {
+            [auxiliary ? 'screen' : 'camera']: true,
+          });
+          const dom = getDisplayRemoteContainer(user.userId, auxiliary ? 'screen' : 'camera');
+          track.play(dom);
+        });
+      }
+    });
+
+    /**
+     * 远端用户推流结束事件 user-unpublished，仅处理视频流发布
+     * 远端用户取消音频推流时会自动从房间音频合流内移除
+     * 视频推流列表删除该用户对应类型视频
+     * 移除用户视图
+     * 初始化订阅状态
+     */
+    client.on('user-unpublished', (user, mediaType, auxiliary) => {
+      showAlert(`${user.userName} 取消发布 ${auxiliary ? 'screen' : mediaType}`, 'success');
+      if (mediaType === 'video') {
+        removeDom(user.userId, auxiliary ? 'screen' : 'camera');
+        delete subscribedMap[user.userId][auxiliary ? 'screen' : 'camera'];
+      }
+    });
+
+    /**
+     * 链接状态变化时回调，disconnected 时代表离会
+     */
+    client.on('connection-state-changed', (current, prev, reason) => {
+      console.log(`connection-state-change ${current} ${reason || ''}`);
+      if (current === 'disconnected') {
+        if (reason !== 'leave') {
+          showAlert(msg, 'danger');
+          clearRoom();
+        }
+      }
+    });
+
+    /**
+     * 检测到用户离开频道
+     * 更新用户列表
+     * 移除用户视图
+     */
+    client.on('user-left', (user) => {
+      delete subscribedMap[userId];
+      updateUserList();
+      removeDom(user.userId);
+      showAlert(user.userName + '离开房间', 'success');
+    });
+  }
+
+  /**
+   * 加入房间
+   * 触发：输入房间号、单击加入房间按钮
+   * 获取鉴权信息
+   * 更新页面信息
+   * 默认开启预览
+   * 加入房间
+   * 添加事件监听
+   * 本地默认自动推视频流（视频流 + 音频流）
+   * 发布本地流
+   * 订阅已发布到会中的视频流和 房间音频合流
+   */
+  async function joinRoom() {
+    //1. 获取频道鉴权令牌参数 为了防止被盗用建议该方法在服务端获取
+    var authInfo = await generateAuthInfo(channelId);
+    $('.local-display-name .username b').text(userName);
+    $('.local-display-name .channelid b').text(channelId);
+    $('.local-display-name .streamstate b').text('当前未推流');
+    //2.本地摄像头预览
+    cameraTrack.play($('.local-video')[0]);
+    //3. 加入房间 默认推音频视频流
+    client
+      .join(authInfo)
+      .then(
+        () => {
+          updateUserList();
+          showAlert('加入房间成功', 'success');
+          initEvents();
+        },
+        (error) => {
+          showAlert('[加入房间失败]' + error.message, 'danger');
+          throw error;
+        },
+      )
+      .then(() => {
+        // 4. 发布本地流
+        client.publish([cameraTrack, micTrack]).then(
+          (res) => {
+            getPublishState('success');
+            $('#cameraOpen').attr('checked', !cameraTrack?.muted);
+            $('#micOpen').attr('checked', !micTrack?.muted);
+            $('.streamType').show();
+            $('.deviceState').show();
+          },
+          (error) => {
+            getPublishState('danger');
+            showAlert('[推流失败]' + error.message, 'danger');
+          },
+        );
+        // 5.订阅已发布到房间的远端流, 其中mcu 代表 房间音频合流，订阅mcu音频流后无须再单独订阅个人音频
+        const subParams = [{ uid: 'mcu', mediaType: 'audio', auxiliary: false }];
+        for (const user of client.remoteUsers) {
+          if (user.hasAuxiliary) {
+            subParams.push({ uid: user.userId, mediaType: 'video', auxiliary: true });
+          }
+          if (user.hasVideo) {
+            subParams.push({ uid: user.userId, mediaType: 'video', auxiliary: false });
+          }
+        }
+        const subTask = client.batchSubscribe(subParams).then((batchSubscribeResult) => {
+          for (const { error, track, uid, auxiliary } of batchSubscribeResult) {
+            if (error) {
+              showAlert(
+                `[订阅${uid} ${auxiliary ? 'screenShare' : 'camera'} 失败]` + error.message,
+                'danger',
+              );
+              continue;
+            }
+            if (track.trackMediaType === 'audio') {
+              const audioTrack = track;
+              audioTrack.play();
+            } else {
+              subscribedMap[uid] = Object.assign(subscribedMap[uid] || {}, {
+                [auxiliary ? 'screen' : 'camera']: true,
+              });
+              const dom = getDisplayRemoteContainer(uid, auxiliary ? 'screen' : 'camera');
+              track.play(dom);
+            }
+          }
+        });
+      });
+  }
+
+  /**
+   * 更新远端在线用户列表
+   */
+  function updateUserList() {
+    $('.user-ul').empty();
+    let userList = client.remoteUsers;
+    let frg = document.createDocumentFragment();
+    userList.map((user) => {
+      let html = $("<li class='user-ul-li'>" + user.userName + "<ul class='menu'></ul></li>");
+      $(html)
+        .bind('mouseover', user.userId, showUserMenu)
+        .bind('mouseleave', () => {
+          $(event.currentTarget).find('.menu').hide();
+        });
+      frg.append(html[0]);
+    });
+    $('.user-ul').append($(frg));
+  }
+
+  /*
+   * 获取测试token
+   * @param {*} channelId 频道号
+   * @return {object} authinfo
+   */
+  async function generateAuthInfo(channelId) {
+    var appId = 'xxxxxx'; // 修改为自己的appid 该方案仅为开发测试使用，正式上线需要使用服务端的AppServer
+    userId = 'xxxxx4xxxyxxx'.replace(/[xy]/g, (c) => {
+      var r = (Math.random() * 16) | 0,
+        v = c == 'x' ? r : (r & 0x3) | 0x8;
+      return v.toString(16);
+    }); // 可以自定义
+    userName = 'web_' + userId.substr(0, 4);
+    const { token } = await getAppToken(userId, appId, channelId);
+    return {
+      appId,
+      uid: userId,
+      token,
+      userName,
+      channel: channelId,
+    };
+  }
+
+  /**
+   * 获取当前远端用户的视频流菜单
+   */
+  function showUserMenu(evt) {
+    let userId = evt.data;
+    if (!$(event.target).eq(0).hasClass('user-ul-li')) {
+      return;
+    }
+    $('.menu').hide();
+    $(event.target).find('.menu').empty().show();
+    let userInfo = client.remoteUsers.find((item) => item.userId === userId);
+    var html = '';
+    if (!userInfo.hasAuxiliary && !userInfo.hasVideo) {
+      html = $('<li>该用户未推流</li>');
+      $(event.target).find('.menu').append(html[0]);
+    } else {
+      var frg = document.createDocumentFragment();
+      if (userInfo.hasVideo) {
+        let subState = subscribedMap[userId].camera ? '取消订阅' : '订阅';
+        html = $('<li>' + '视频流' + '&nbsp;<span>' + subState + '</span></li>');
+        $(html).find('span').off('click').on('click', { userId, label: 'camera' }, toggleSub);
+        frg.append(html[0]);
+      }
+      if (userInfo.hasAuxiliary) {
+        let subState = subscribedMap[userId].screen ? '取消订阅' : '订阅';
+        html = $('<li>' + '共享流' + '&nbsp;<span>' + subState + '</span></li>');
+        $(html).find('span').off('click').on('click', { userId, label: 'screen' }, toggleSub);
+        frg.append(html[0]);
+      }
+      $(event.target).find('.menu').append($(frg));
+    }
+  }
+
+  /**
+   * 订阅&取消订阅
+   */
+  function toggleSub(evt) {
+    var v = evt.data;
+    if (subscribedMap[v.userId][v.label]) {
+      client.unsubscribe(v.userId, 'video', v.label === 'screen').then(() => {
+        removeDom(v.userId, v.label);
+        subscribedMap[v.userId][v.label] = false;
+        console.log('取消订阅');
+      });
+    } else {
+      client.subscribe(v.userId, 'video', v.label === 'screen').then((track) => {
+        const dom = getDisplayRemoteContainer(v.userId, v.label);
+        subscribedMap[v.userId][v.label] = true;
+        track.play(dom);
+        console.log('订阅成功');
+      });
+    }
+    $('.menu').hide();
+  }
+
+  /**
+   * 创建获取订阅的远端视频流的容器标签
+   */
+  function getDisplayRemoteContainer(userId, label) {
+    var label = label === 'camera' ? 'camera' : 'screen';
+    var id = userId + '_' + label;
+    var videoWrapper = $('#' + id);
+    var userInfo = client.remoteUsers.filter((item) => item.userId === userId);
+    if (videoWrapper.length == 0) {
+      videoWrapper = $(
+        "<div class='remote-subscriber' id=" + id + "><div class='display-name'></div></div>",
+      );
+      $('.video-container').append(videoWrapper);
+    }
+    const displayName = userInfo[0].userName + '_' + label;
+    videoWrapper.find('.display-name').text(displayName);
+    return videoWrapper[0];
+  }
+
+  /**
+   * 移除视频容器dom
+   */
+  function removeDom(userId, label) {
+    if (userId) {
+      if (!label) {
+        $('#' + userId + '_camera').remove();
+        $('#' + userId + '_screen').remove();
+      } else {
+        label = label === 'camera' ? 'camera' : 'screen';
+        $('#' + userId + '_' + label).remove();
+      }
+    }
+  }
+
+  /**
+   * 根据推流状态设置当前推流UI
+   */
+  var getPublishState = (type) => {
+    var streamstate = $('.streamstate b').text();
+    const isCameraPublished = client.localTracks.includes(cameraTrack);
+    const isScreenPublished = client.localTracks.includes(screenTrack);
+    const isMicPublished = client.localTracks.includes(micTrack);
+    const streamStateBoxes = $('.publisher .streamType input');
+    const streamStates = [];
+    if (isCameraPublished) {
+      streamStates.push('视频流');
+    }
+    $('#cameraPublish').attr('checked', isCameraPublished);
+    if (isScreenPublished) {
+      streamStates.push('共享流');
+    }
+    $('#screenPublish').attr('checked', isScreenPublished);
+    if (isMicPublished) {
+      streamStates.push('音频流');
+    }
+    $('#audioPublish').attr('checked', isMicPublished);
+    const streamState = streamStates.join('+') || '当前未推流';
+    showAlert('推流状态：' + streamState, type);
+    $('.streamstate b').text(streamState);
+    $('.streamType').show();
+  };
+
+  /**
+   * 进入房间
+   */
+  $('.main-button button').click(() => {
+    var value = $('.main-input input').val();
+    if (!value) {
+      showAlert('请输入房间号', 'danger');
+      return;
+    }
+    channelId = value;
+    joinRoom();
+    $('.login').hide();
+    $('.main-web').show();
+  });
+
+  /**
+   * 控制预览
+   */
+  $('.publisher .select-preview').click(function (e) {
+    var localVideo = $('.local-video');
+    if ($(this).text() === '开启预览') {
+      $(this).text('处理中...');
+      cameraTrack.play(localVideo[0]);
+      $(this).text('关闭预览');
+    } else if ($(this).text() === '关闭预览') {
+      $(this).text('处理中...');
+      cameraTrack.stop();
+      $(this).text('开启预览');
+    }
+  });
+  /**
+   * 清理本地事件
+   */
+  function clearRoom() {
+    client.leave();
+    client.removeAllListeners();
+    subscribedMap = {};
+    $('.user-ul').empty();
+    $('.video-container').empty();
+    $('.main-web').hide();
+    $('.login').show();
+  }
+  // 离开房间
+  $('.leave-room').click(clearRoom);
+
+  /**
+   * 控制推流选项
+   */
+  $('.publisher .streamType input').click(async function (e) {
+    var config = $(this).val();
+    var isChecked = $(this).prop('checked');
+    var track;
+    if (config === 'cameraPublish') {
+      track = cameraTrack;
+    } else if (config === 'screenPublish') {
+      if (!screenTrack) {
+        try {
+          const [videoTrack] = await RtcEngine.createScreenVideoTrack({
+            dimension: 'VD_1280x720',
+            frameRate: 15,
+          });
+          screenTrack = videoTrack;
+          // 处理用户停止共享视频
+          screenTrack.on('track-ended', () => {
+            client.unpublish(screenTrack);
+            screenTrack = null;
+            getPublishState('success');
+          });
+        } catch (e) {
+          throw e;
+        }
+      }
+      track = screenTrack;
+    } else if (config === 'audioPublish') {
+      track = micTrack;
+    }
+    if (isChecked) {
+      $('.streamType').hide();
+      client
+        .publish(track)
+        .then(() => {
+          getPublishState('success');
+        })
+        .catch((error) => {
+          getPublishState('danger');
+        });
+    } else {
+      client.unpublish(track).then(() => {
+        getPublishState('success');
+      });
+    }
+  });
+
+  /**
+   * 控制设备静音选项
+   */
+  $('.publisher .deviceState input').click(async function (e) {
+    var config = $(this).val();
+    var isChecked = $(this).prop('checked');
+    var track;
+    if (config === 'cameraOpen') {
+      track = cameraTrack;
+    } else if (config === 'micOpen') {
+      track = micTrack;
+    }
+    await track.setMuted(!track.muted);
+  });
+
+  /**
+   * 页面刷新时调用离会
+   */
+  window.onbeforeunload = function (e) {
+    clent.leave();
+  };
+</script>
