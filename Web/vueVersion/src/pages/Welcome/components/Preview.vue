@@ -20,7 +20,7 @@ import { ref, onMounted } from 'vue';
 import { Mic, Camera } from '~/components/Device';
 import { Row, Col, Divider, Avatar } from 'ant-design-vue';
 import { useDevice } from '~/hooks/device';
-import { useCurrentUserInfo, useDeviceInfo, useGlobalFlag } from '~/store';
+import { useChannelInfo, useCurrentUserInfo, useDeviceInfo, useGlobalFlag } from '~/store';
 
 const refContainer = ref(null);
 
@@ -30,6 +30,7 @@ const cameraTrack = ref(null);
 const globalFlag = useGlobalFlag()
 const { userName } = useCurrentUserInfo();
 const deviceInfo = useDeviceInfo()
+const channelInfo = useChannelInfo();
 
 // 设备操作
 const { openMicAndCameraSameTime, operateCamera, operateMic, openCamera, openMic } = useDevice('pre');
@@ -41,7 +42,7 @@ onMounted(async () => {
 });
 
 const onClickCamera = () => {
-  if (globalFlag.isMobile) {
+  if (globalFlag.isMobile && !channelInfo.cameraTrack) {
     openCamera().then((track) => {
       track?.play(refContainer.value.$el, { fit: 'cover' });
     })
@@ -51,7 +52,7 @@ const onClickCamera = () => {
 }
 
 const onClickMic = () => {
-  if (globalFlag.isMobile) {
+  if (globalFlag.isMobile && !channelInfo.micTrack) {
     openMic()
   } else {
     operateMic()

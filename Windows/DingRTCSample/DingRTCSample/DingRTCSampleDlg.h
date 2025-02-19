@@ -41,12 +41,15 @@ public:
 
 #define WM_UPDATE_UI        (WM_USER + 3006)
 
+class WhiteboardDlg;
+
 // CDingRTCSampleDlg dialog
 class CDingRTCSampleDlg : public CDialogEx
 {
 // Construction
 public:
 	CDingRTCSampleDlg(CWnd* pParent = nullptr);	// standard constructor
+	virtual ~CDingRTCSampleDlg();
 
 	// 异步处理一个消息
 	void UpdateUIAsync(UpdateUIParam *param) {
@@ -78,12 +81,19 @@ private:
 protected:
 	HICON m_hIcon;
 
+	/* 白板对话框 */
+	WhiteboardDlg *whiteboard_dlg_;
+
 	// Generated message map functions
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	afx_msg LRESULT OnUpdateUI(WPARAM wParam, LPARAM lParam);
+	/* 按钮消息：开启白板对话框 */
+	afx_msg void OnClickedBtnOpenWhiteboard();
+	/* 监听白板对话框退出时发出的消息，释放对话框资源 */
+	afx_msg LRESULT onWhiteboardClosed(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
 	virtual void OnOK();
 	virtual void OnCancel();

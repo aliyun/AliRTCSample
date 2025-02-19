@@ -8,6 +8,7 @@
 #include "DingRTCSampleDlg.h"
 #include "afxdialogex.h"
 #include "engine_interface.h"
+#include "WhiteboardDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -95,6 +96,11 @@ static MyEngineEventListerner *listener_ = NULL;
 
 // CAboutDlg dialog used for App About
 
+ding::rtc::RtcEngine *GetEngine()
+{
+	return engine_;
+}
+
 class CAboutDlg : public CDialogEx
 {
 public:
@@ -134,6 +140,34 @@ CDingRTCSampleDlg::CDingRTCSampleDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_DINGRTCSAMPLE_DIALOG, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+	whiteboard_dlg_ = NULL;
+}
+
+CDingRTCSampleDlg::~CDingRTCSampleDlg()
+{
+	if(whiteboard_dlg_) {
+		delete whiteboard_dlg_;
+		whiteboard_dlg_ = NULL;
+	}
+}
+
+void CDingRTCSampleDlg::OnClickedBtnOpenWhiteboard()
+{
+	// if whiteboard dialog exists, then close it; otherwise, create and show it
+	if (whiteboard_dlg_) {
+		whiteboard_dlg_->ShowWindow(SW_SHOW);
+		return;
+	}
+
+	whiteboard_dlg_ = new WhiteboardDlg(this);
+	whiteboard_dlg_->Create(IDD_DIALOG_WHITEBOARD);
+	whiteboard_dlg_->ShowWindow(SW_SHOW);
+}
+
+LRESULT CDingRTCSampleDlg::onWhiteboardClosed(WPARAM wParam, LPARAM lParam)
+{
+	whiteboard_dlg_ = NULL;
+	return 0;
 }
 
 void CDingRTCSampleDlg::DoDataExchange(CDataExchange* pDX)
@@ -141,11 +175,16 @@ void CDingRTCSampleDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 }
 
+
 BEGIN_MESSAGE_MAP(CDingRTCSampleDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_MESSAGE(WM_UPDATE_UI, &OnUpdateUI)
+	/* 打开白板对话框 */
+	ON_BN_CLICKED(ID_BTN_OPEN_WHITEBOARD, OnClickedBtnOpenWhiteboard)
+	/* 当白板对话框关闭时，发送WM_WHITEBOARD_CLOSED消息给主对话框 */
+	ON_MESSAGE(WM_WHITEBOARD_CLOSED, onWhiteboardClosed)
 END_MESSAGE_MAP()
 
 

@@ -149,8 +149,8 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>..\DingRTCSdk\lib\windows\x86;..\jsoncpp;..\tinyhttp\lib\windows\Win32\Release</AdditionalLibraryDirectories>
-      <AdditionalDependencies>DingRTC.lib;TinyHttp.lib;jsoncpp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\DingRTCSdk\lib\x86;..\jsoncpp;..\tinyhttp\lib\windows\Win32\Release</AdditionalLibraryDirectories>
+      <AdditionalDependencies>DingRTC.lib</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -173,11 +173,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>..\DingRTCSdk\api</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>..\DingRTCSdk\lib\x64</AdditionalLibraryDirectories>
+      <AdditionalDependencies>DingRTC.lib</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -197,6 +200,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="WhiteboardDlg.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DingRTCSample.cpp" />
@@ -207,6 +211,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="WhiteboardDlg.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DingRTCSample.rc" />
