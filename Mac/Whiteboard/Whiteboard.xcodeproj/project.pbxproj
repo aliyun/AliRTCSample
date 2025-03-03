@@ -1,0 +1,415 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4D8856012D62D8DD00B0440A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D8856002D62D8DD00B0440A /* AppDelegate.m */; };
+		4D8856062D62D8DF00B0440A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4D8856052D62D8DF00B0440A /* Assets.xcassets */; };
+		4D8856092D62D8DF00B0440A /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 4D8856082D62D8DF00B0440A /* Base */; };
+		4D88560B2D62D8DF00B0440A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D88560A2D62D8DF00B0440A /* main.m */; };
+		4D8856212D62DA7B00B0440A /* ChannelInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D88561D2D62DA7B00B0440A /* ChannelInfo.m */; };
+		4D8856222D62DA7B00B0440A /* JoinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D88561E2D62DA7B00B0440A /* JoinViewController.m */; };
+		4D8856232D62DA7B00B0440A /* UserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D88561F2D62DA7B00B0440A /* UserInfo.m */; };
+		4D8856262D62E4D900B0440A /* WhiteboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D8856252D62E4D900B0440A /* WhiteboardViewController.m */; };
+		4D88562A2D63067D00B0440A /* libffmpeg.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D8856282D63067D00B0440A /* libffmpeg.dylib */; };
+		4D88562B2D63067D00B0440A /* libffmpeg.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 4D8856282D63067D00B0440A /* libffmpeg.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		4D88562C2D63067D00B0440A /* DingRTC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D8856292D63067D00B0440A /* DingRTC.framework */; };
+		4D88562D2D63067D00B0440A /* DingRTC.framework in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 4D8856292D63067D00B0440A /* DingRTC.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4D8856302D632FAA00B0440A /* MoziWhiteboard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D88562F2D632FAA00B0440A /* MoziWhiteboard.framework */; };
+		4D8856312D632FAA00B0440A /* MoziWhiteboard.framework in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 4D88562F2D632FAA00B0440A /* MoziWhiteboard.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4D88562E2D63067D00B0440A /* Embed Libraries */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				4D8856312D632FAA00B0440A /* MoziWhiteboard.framework in Embed Libraries */,
+				4D88562D2D63067D00B0440A /* DingRTC.framework in Embed Libraries */,
+				4D88562B2D63067D00B0440A /* libffmpeg.dylib in Embed Libraries */,
+			);
+			name = "Embed Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		4D8855FC2D62D8DD00B0440A /* Whiteboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Whiteboard.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4D8855FF2D62D8DD00B0440A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		4D8856002D62D8DD00B0440A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		4D8856052D62D8DF00B0440A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4D8856082D62D8DF00B0440A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		4D88560A2D62D8DF00B0440A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		4D88560C2D62D8DF00B0440A /* Whiteboard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Whiteboard.entitlements; sourceTree = "<group>"; };
+		4D88561B2D62DA7B00B0440A /* JoinViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JoinViewController.h; sourceTree = "<group>"; };
+		4D88561C2D62DA7B00B0440A /* UserInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserInfo.h; sourceTree = "<group>"; };
+		4D88561D2D62DA7B00B0440A /* ChannelInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelInfo.m; sourceTree = "<group>"; };
+		4D88561E2D62DA7B00B0440A /* JoinViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JoinViewController.m; sourceTree = "<group>"; };
+		4D88561F2D62DA7B00B0440A /* UserInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserInfo.m; sourceTree = "<group>"; };
+		4D8856202D62DA7B00B0440A /* ChannelInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelInfo.h; sourceTree = "<group>"; };
+		4D8856242D62E4D900B0440A /* WhiteboardViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WhiteboardViewController.h; sourceTree = "<group>"; };
+		4D8856252D62E4D900B0440A /* WhiteboardViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WhiteboardViewController.m; sourceTree = "<group>"; };
+		4D8856282D63067D00B0440A /* libffmpeg.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libffmpeg.dylib; path = ../SDK/libffmpeg.dylib; sourceTree = "<group>"; };
+		4D8856292D63067D00B0440A /* DingRTC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DingRTC.framework; path = ../SDK/DingRTC.framework; sourceTree = "<group>"; };
+		4D88562F2D632FAA00B0440A /* MoziWhiteboard.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MoziWhiteboard.framework; path = ../SDK/MoziWhiteboard.framework; sourceTree = "<group>"; };
+		4D8856322D63360F00B0440A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4D8855F92D62D8DD00B0440A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4D8856302D632FAA00B0440A /* MoziWhiteboard.framework in Frameworks */,
+				4D88562C2D63067D00B0440A /* DingRTC.framework in Frameworks */,
+				4D88562A2D63067D00B0440A /* libffmpeg.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4D8855F32D62D8DD00B0440A = {
+			isa = PBXGroup;
+			children = (
+				4D8855FE2D62D8DD00B0440A /* Whiteboard */,
+				4D8855FD2D62D8DD00B0440A /* Products */,
+				4D8856272D63067D00B0440A /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		4D8855FD2D62D8DD00B0440A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4D8855FC2D62D8DD00B0440A /* Whiteboard.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4D8855FE2D62D8DD00B0440A /* Whiteboard */ = {
+			isa = PBXGroup;
+			children = (
+				4D8856322D63360F00B0440A /* Info.plist */,
+				4D8856202D62DA7B00B0440A /* ChannelInfo.h */,
+				4D88561D2D62DA7B00B0440A /* ChannelInfo.m */,
+				4D88561B2D62DA7B00B0440A /* JoinViewController.h */,
+				4D88561E2D62DA7B00B0440A /* JoinViewController.m */,
+				4D88561C2D62DA7B00B0440A /* UserInfo.h */,
+				4D88561F2D62DA7B00B0440A /* UserInfo.m */,
+				4D8855FF2D62D8DD00B0440A /* AppDelegate.h */,
+				4D8856002D62D8DD00B0440A /* AppDelegate.m */,
+				4D8856052D62D8DF00B0440A /* Assets.xcassets */,
+				4D8856072D62D8DF00B0440A /* Main.storyboard */,
+				4D88560A2D62D8DF00B0440A /* main.m */,
+				4D88560C2D62D8DF00B0440A /* Whiteboard.entitlements */,
+				4D8856242D62E4D900B0440A /* WhiteboardViewController.h */,
+				4D8856252D62E4D900B0440A /* WhiteboardViewController.m */,
+			);
+			path = Whiteboard;
+			sourceTree = "<group>";
+		};
+		4D8856272D63067D00B0440A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4D88562F2D632FAA00B0440A /* MoziWhiteboard.framework */,
+				4D8856292D63067D00B0440A /* DingRTC.framework */,
+				4D8856282D63067D00B0440A /* libffmpeg.dylib */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4D8855FB2D62D8DD00B0440A /* Whiteboard */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4D88560F2D62D8DF00B0440A /* Build configuration list for PBXNativeTarget "Whiteboard" */;
+			buildPhases = (
+				4D8855F82D62D8DD00B0440A /* Sources */,
+				4D8855F92D62D8DD00B0440A /* Frameworks */,
+				4D8855FA2D62D8DD00B0440A /* Resources */,
+				4D88562E2D63067D00B0440A /* Embed Libraries */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Whiteboard;
+			productName = Whiteboard;
+			productReference = 4D8855FC2D62D8DD00B0440A /* Whiteboard.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4D8855F42D62D8DD00B0440A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1530;
+				TargetAttributes = {
+					4D8855FB2D62D8DD00B0440A = {
+						CreatedOnToolsVersion = 15.3;
+					};
+				};
+			};
+			buildConfigurationList = 4D8855F72D62D8DD00B0440A /* Build configuration list for PBXProject "Whiteboard" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 4D8855F32D62D8DD00B0440A;
+			productRefGroup = 4D8855FD2D62D8DD00B0440A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4D8855FB2D62D8DD00B0440A /* Whiteboard */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4D8855FA2D62D8DD00B0440A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4D8856062D62D8DF00B0440A /* Assets.xcassets in Resources */,
+				4D8856092D62D8DF00B0440A /* Base in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4D8855F82D62D8DD00B0440A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4D8856212D62DA7B00B0440A /* ChannelInfo.m in Sources */,
+				4D8856262D62E4D900B0440A /* WhiteboardViewController.m in Sources */,
+				4D8856222D62DA7B00B0440A /* JoinViewController.m in Sources */,
+				4D88560B2D62D8DF00B0440A /* main.m in Sources */,
+				4D8856232D62DA7B00B0440A /* UserInfo.m in Sources */,
+				4D8856012D62D8DD00B0440A /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		4D8856072D62D8DF00B0440A /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4D8856082D62D8DF00B0440A /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		4D88560D2D62D8DF00B0440A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		4D88560E2D62D8DF00B0440A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		4D8856102D62D8DF00B0440A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Whiteboard/Whiteboard.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../SDK";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Whiteboard/Info.plist;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../SDK";
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dingtalk.Whiteboard;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+		4D8856112D62D8DF00B0440A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Whiteboard/Whiteboard.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../SDK";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Whiteboard/Info.plist;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../SDK";
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dingtalk.Whiteboard;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4D8855F72D62D8DD00B0440A /* Build configuration list for PBXProject "Whiteboard" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4D88560D2D62D8DF00B0440A /* Debug */,
+				4D88560E2D62D8DF00B0440A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4D88560F2D62D8DF00B0440A /* Build configuration list for PBXNativeTarget "Whiteboard" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4D8856102D62D8DF00B0440A /* Debug */,
+				4D8856112D62D8DF00B0440A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4D8855F42D62D8DD00B0440A /* Project object */;
+}
