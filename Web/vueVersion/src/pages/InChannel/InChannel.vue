@@ -6,14 +6,6 @@ import Whiteboard from './components/Whiteboard.vue';
 import ToolBar from './components/ToolBar.vue';
 import { NetworkDetector } from './components/NetworkBar';
 import Icon from '~/components/Icon';
-import {
-  useClient,
-  useGlobalFlag,
-  useChannelInfo,
-  useCurrentUserInfo,
-  useDeviceInfo,
-} from '~/store';
-
 import { useChannel, useNetworkStats } from '~/hooks/channel';
 import { parseTime, print } from '~/utils/tools';
 import { Divider, Col, message, Radio, RadioGroup, Row, Space, Tooltip } from 'ant-design-vue';
@@ -24,12 +16,15 @@ import {
   LocalVideoTrack,
   NetworkQuality,
 } from 'dingrtc';
+import { useClient, useGlobalFlag, useChannelInfo, useCurrentUserInfo, useDeviceInfo, useRTMInfo } from '~/store';
+import ChatRoom from './components/ChatRoom/index.vue';
 
 const rtcStatsTimer = ref(0);
 const wrapRef = ref(null);
 const timeLeftTimer = ref(0);
 const fullscreen = ref(false);
 const channelInfo = useChannelInfo();
+const rtmInfo = useRTMInfo();
 const client = useClient();
 const globalFlag = useGlobalFlag();
 const deviceInfo = useDeviceInfo();
@@ -94,9 +89,16 @@ const clearRoom = () => {
       user.videoTrack.stop();
     }
   });
+  rtmInfo.rtm.detach();
   deviceInfo.$reset();
+  channelInfo.whiteboardManager?.clear();
   channelInfo.$reset();
   globalFlag.$reset();
+  rtmInfo.$patch({
+    enabled: false,
+    sessions: [],
+    activeSessionId: '',
+  })
 };
 
 onMounted(() => {
@@ -174,6 +176,9 @@ onMounted(() => {
   });
   client.on('group-remove', (group: Group) => {
     print(`group remove`, group);
+    if (channelInfo.subscribeAudio === group.id) {
+      channelInfo.subscribeAudio = '';
+    }
     channelInfo.$patch({ groups: client.groups });
   });
   client.on('group-user-join', (groupId: string, user: GroupUser) => {
@@ -310,6 +315,7 @@ watch(
     <MainView v-if="channelInfo.mode === 'standard' && !channelInfo.isWhiteboardOpen" />
     <Whiteboard v-if="channelInfo.mode === 'standard' && channelInfo.isWhiteboardOpen" />
     <ToolBar @leave="clearRoom" />
+    <ChatRoom />
   </Row>
 </template>
 

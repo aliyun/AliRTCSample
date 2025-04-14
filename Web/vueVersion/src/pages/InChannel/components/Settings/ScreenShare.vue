@@ -69,7 +69,7 @@ const onModeChange = (value) => {
 
 const updateEncoder = () => {
   const { dimension, frameRate, maxBitrate, optimizationMode } = formData;
-  const isScreenPublish = channelInfo.publishedTracks.has(channelInfo.screenTrack.getTrackId());
+  const isScreenPublish = channelInfo.publishedTracks.has(channelInfo.screenTrack?.getTrackId());
 
   const fn = () => {
     if (!channelInfo.screenTrack) {

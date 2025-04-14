@@ -441,10 +441,9 @@ import Icon from '~/components/Icon';
 import ImageTool from './ImageTool.vue';
 import Settings from './Settings.vue';
 import Stamps from './Stamps.vue';
-import { ToolType, WBClearType, ShapeFillType } from '@dingrtc/whiteboard';
+import { ToolType, WBClearType, ShapeFillType, RtcWhiteboard } from '@dingrtc/whiteboard';
 import { randomWbColor } from '../../constants/index';
 import ToolColors from './ColorPicker.vue';
-import { RtcWhiteboard } from '@dingrtc/whiteboard';
 
 interface IProps {
   whiteboard: RtcWhiteboard;

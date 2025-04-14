@@ -1,15 +1,6 @@
 <template>
   <Row class="videoSetting">
-    <div class="videoWrapper">
-      <video
-        ref="videoSettingRef"
-        loop
-        autoPlay
-        playsInline
-        webkit-playsinline
-        :controls="false"
-        muted
-      />
+    <div class="videoWrapper" ref="refContainer">
     </div>
     <Form style="width: 100%" label-align="left" :model="formData">
       <Form.Item label="摄像头" name="cameraId">
@@ -71,14 +62,14 @@ import {
   message,
   Checkbox,
 } from 'ant-design-vue';
-import { reactive, ref, watchEffect } from 'vue';
+import { onBeforeUnmount, onMounted, reactive, ref } from 'vue';
 import { useDeviceInfo, useChannelInfo } from '~/store';
 import { videoDimensions, frameRates, optionzationModeList } from '~/constants';
 
 const { Text } = Typography;
 
-const videoSettingRef = ref<HTMLVideoElement>();
 const deviceInfo = useDeviceInfo();
+const refContainer = ref(null);
 
 const formData = reactive({
   cameraId: deviceInfo.cameraId,
@@ -97,21 +88,17 @@ const onModeChange = (value) => {
 };
 
 const onCameraIdChange = (value) => {
-  if (channelInfo.cameraTrack) {
-    channelInfo.cameraTrack.setDevice(value).then(() => {
-      const track = channelInfo.cameraTrack.getMediaStreamTrack();
-      videoSettingRef.value!.srcObject = new MediaStream([track]);
-      videoSettingRef.value!.play();
-    });
-  }
+  channelInfo.cameraTrack?.setDevice(value)
 };
 
-watchEffect(() => {
-  if (!channelInfo.cameraTrack || !videoSettingRef.value) return;
-  const track = channelInfo.cameraTrack.getMediaStreamTrack();
-  videoSettingRef.value.srcObject = new MediaStream([track]);
-  videoSettingRef.value.play();
-});
+onMounted(() => {
+  channelInfo.cameraTrack?.play(refContainer.value);
+})
+
+onBeforeUnmount(() => {
+    // @ts-ignore
+  channelInfo.cameraTrack?.stop(refContainer.value);
+})
 
 const updateEncoder = () => {
   if (!channelInfo.cameraTrack) {
@@ -127,7 +114,9 @@ const updateEncoder = () => {
       mirror: formData.mirror,
     })
     .then(() => {
-      deviceInfo.$patch({ cameraMaxBitrate: channelInfo.cameraTrack.getMaxBitrate() });
+      if (formData.maxBitrate) {
+        deviceInfo.$patch({ cameraMaxBitrate: formData.maxBitrate });
+      }
       message.info('调整编码参数成功');
     });
 

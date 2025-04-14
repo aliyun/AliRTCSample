@@ -36,8 +36,11 @@ export const videoDimensions = [
   'VD_960x720',
   'VD_1280x720',
   'VD_1920x1080',
+  'VD_2560x1440'
 ];
 
 if (isIOS()) {
   videoDimensions.pop();
 }
+
+export const DEFAULT_WHITEBOARD_ID = 'default';

@@ -1,37 +1,33 @@
 <template>
-  <div class="dingrtc-wb-wrapper">
-    <div class="dingrtc-wb" ref="wrapDomRef">
-      <div class="whiteboard-container" ref="domRef">
-        <Toolbar :whiteboard="whiteboard"  />
-        <VisionShare :whiteboard="whiteboard" />
-        <ToolPagination :activeDocId="activeDocId" :whiteboard="whiteboard"  />
+  <div class="annotation-wrapper">
+    <div class="annotation" ref="wrapDomRef">
+      <div class="annotation-container" ref="domRef">
+        <Toolbar :whiteboard="annotation" />
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, onBeforeUnmount, useTemplateRef, computed } from 'vue';
+import { ref, onMounted, onBeforeUnmount, useTemplateRef, computed, toRaw } from 'vue';
 import Toolbar from '../../../components/Whiteboard/WBToolbar.vue';
-import VisionShare from '../../../components/Whiteboard/VisionShare.vue';
-import ToolPagination from '../../../components/Whiteboard/Pagination.vue';
 import { useChannelInfo } from '~/store';
-import { defaultWhiteboardId } from '~/constants/index';
 import { RtcWhiteboard } from '@dingrtc/whiteboard';
 
-
-const channelInfo = useChannelInfo();
 const wrapDomRef = useTemplateRef<HTMLDivElement>('wrapDomRef');
 const domRef = useTemplateRef<HTMLDivElement>('domRef');
 
-const activeDocId = ref(defaultWhiteboardId);
+const channelInfo = useChannelInfo();
+
+const activeDocId = ref(channelInfo.annotation?.sessionId);
 const config = { width: 1280.0, height: 720.0, limit: true };
 
 function onDocChanged() {
-  activeDocId.value = channelInfo.whiteboard.activeDocId;
+  activeDocId.value = channelInfo.annotation.activeDocId;
 }
 
-const whiteboard = computed(() => channelInfo.whiteboard as RtcWhiteboard)
+const annotation = computed(() => toRaw(channelInfo.annotation) as RtcWhiteboard)
+
 
 function updateWbDomSize() {
   if (
@@ -50,51 +46,55 @@ function updateWbDomSize() {
       domRef.value.style.height = '100%';
       domRef.value.style.width = `${wrapDomHeight * defaultRadio}px`;
     }
-    channelInfo.whiteboard.updateCanvasSize(false);
-    channelInfo.whiteboard.center();
+    channelInfo.annotation.updateCanvasSize(false);
+    channelInfo.annotation.center();
   }
 }
 
-onMounted(async () => {
+onMounted(() => {
   const { width, height, limit } = config;
-  channelInfo.whiteboard.initVision(width, height, limit);
-  await channelInfo.whiteboard.open(domRef.value!);
-
+  channelInfo.annotation.initVision(width, height, limit);
+  channelInfo.annotation.open(domRef.value!);
+  channelInfo.annotation.setRoleType('Admin');
   updateWbDomSize();
   setTimeout(() => {
-    channelInfo.whiteboard.updateCanvasSize();
-    channelInfo.whiteboard.center();
+    channelInfo.annotation.updateCanvasSize();
+    channelInfo.annotation.center();
     updateWbDomSize();
   }, 1000);
   window.addEventListener('resize', updateWbDomSize);
-  channelInfo.whiteboard.on('doc-switched', onDocChanged);
+  channelInfo.annotation.on('doc-switched', onDocChanged);
 });
 
 onBeforeUnmount(() => {
   window.removeEventListener('resize', updateWbDomSize);
-  channelInfo.whiteboard?.off('doc-switched', onDocChanged);
-  channelInfo.whiteboard?.close();
+  channelInfo.annotation?.off('doc-switched', onDocChanged);
+  channelInfo.annotation?.close();
 });
 </script>
 
 <style lang="less" scoped>
-.dingrtc-wb-wrapper {
+.annotation-wrapper {
   flex: 1;
-  padding: 0 0 60px;
+  padding: 0;
+  z-index: 1;
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
-.dingrtc-wb {
+.annotation {
   width: 100%;
   height: 100%;
   display: flex;
-  background-color: #dce1e6;
-  position: relative;
+  background-color: transparent;
+  position: absolute;
   justify-content: center;
   align-items: center;
-  .whiteboard-container {
+  .annotation-container {
     width: 100%;
     height: 100%;
     position: relative;
-    background-color: rgba(255, 255, 255, 1);
+    background-color: transparent;
     overflow: hidden;
   }
 }

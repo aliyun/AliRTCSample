@@ -100,6 +100,7 @@ import { message } from 'ant-design-vue';
 import { onMounted, reactive, ref } from 'vue';
 import Icon from '~/components/Icon';
 import { RtcWhiteboard } from '@dingrtc/whiteboard';
+import { useChannelInfo } from '~/store';
 
 interface IProps {
   whiteboard: RtcWhiteboard
@@ -111,7 +112,7 @@ const isOthersSharing = ref(false); // 是否有人正在共享视角
 const isMeSharing = ref(false); // 我是否正在共享视角
 const sharingUser = reactive({ name: '', userId: '' });
 const role = ref<'Admin' | 'Attendee' | 'Viewer'>('Admin');
-
+const channelInfo = useChannelInfo();
 const center = () => props.whiteboard.center();
 
 const alignVision = () => {
@@ -155,21 +156,21 @@ const toggleFollow = () => {
 
 onMounted(() => {
   props.whiteboard.setRoleType('Admin');
-  props.whiteboard.on('user-vision-share-start', (userId, userName) => {
+  props.whiteboard.on('user-vision-share-start', (userId) => {
     isOthersSharing.value = true;
     message.info(
-      `${userName} 正在共享视角，已自动跟随，点击右上角按钮取消跟随`
+      `${userId} 正在共享视角，已自动跟随，点击右上角按钮取消跟随`
     );
-    sharingUser.name = userName;
+    sharingUser.name = channelInfo.allUsers.find(item => item.userId === userId)?.userName;
     sharingUser.userId = userId;
     props.whiteboard.startFollowVision();
     isFollowing.value = true;
   });
-  props.whiteboard.on('user-vision-share-stop', (userId, userName) => {
+  props.whiteboard.on('user-vision-share-stop', (userId) => {
     isOthersSharing.value = false;
     isFollowing.value = false;
     if (userId !== props.whiteboard.userId) {
-      message.info(`${userName} 已停止共享视角`);
+      message.info(`${userId} 已停止共享视角`);
     }
     sharingUser.userId = '';
     sharingUser.name = '';

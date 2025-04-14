@@ -14,18 +14,10 @@ type DeviceType = 'camera' | 'playback-device' | 'microphone';
 export const useDevice = (scene?: 'pre' | 'in') => {
   const loading = ref(false);
   const  channelInfo = useChannelInfo()
-  const {
-    cameraId,
-    micId,
-    cameraDimension,
-    cameraFrameRate,
-    screenDimension,
-    screenFrameRate,
-    $patch: setDeviceInfo,
-  } = useDeviceInfo();
+  const deviceInfo = useDeviceInfo();
   const { publish } = useChannel();
   const updateDeviceList = (deviceType: DeviceType, info: DeviceInfo) => {
-    setDeviceInfo((prev) => {
+    deviceInfo.$patch((prev) => {
       const { cameraList, micList, speakerList } = prev;
       const prevListMap: Record<DeviceType, any> = {
         camera: { key: 'cameraList', value: cameraList },
@@ -50,11 +42,11 @@ export const useDevice = (scene?: 'pre' | 'in') => {
   };
 
   const openMicAndCameraSameTime = async () => {
+    await getDeviceList(true, true);
     const [newCameraTrack, newMicTrack] = (await DingRTC.createMicrophoneAndCameraTracks(
-      { dimension: cameraDimension, frameRate: cameraFrameRate },
-      {},
+      { dimension: deviceInfo.cameraDimension, frameRate: deviceInfo.cameraFrameRate, deviceId: deviceInfo.cameraId },
+      { deviceId: deviceInfo.micId },
     )) as [CameraVideoTrack, MicrophoneAudioTrack];
-    getDeviceList(newCameraTrack, newMicTrack);
     print('got camera and mic tracks');
     newCameraTrack.on('track-ended', () => {
       channelInfo.$patch({ cameraTrack: null });
@@ -62,6 +54,11 @@ export const useDevice = (scene?: 'pre' | 'in') => {
     newMicTrack.on('track-ended', () => {
       channelInfo.$patch({ micTrack: null });
     });
+    deviceInfo.$patch({
+      cameraId: newCameraTrack?.getMediaStreamTrack()?.getSettings().deviceId,
+      micId: newMicTrack?.getMediaStreamTrack()?.getSettings().deviceId,
+      speakerId: deviceInfo.speakerList?.[0]?.deviceId,
+    })
     channelInfo.$patch({
       cameraTrack: newCameraTrack,
       micTrack: newMicTrack,
@@ -69,9 +66,9 @@ export const useDevice = (scene?: 'pre' | 'in') => {
     return [newCameraTrack, newMicTrack];
   };
 
-  const getDeviceList = (camera: CameraVideoTrack, mic: MicrophoneAudioTrack) => {
+  const getDeviceList = async (camera: boolean, mic: boolean) => {
     if (camera) {
-      DingRTC.getCameras().then((cameraList) => {
+      await DingRTC.getCameras().then((cameraList) => {
         const pattern = /\([0-9a-zA+Z:]+\)/i;
         const newCameraList = cameraList
           .filter((item) => item.deviceId)
@@ -79,23 +76,17 @@ export const useDevice = (scene?: 'pre' | 'in') => {
             ...item.toJSON(),
             label: item.label.replace(pattern, ''),
           }));
-        setDeviceInfo({
-          cameraList: newCameraList,
-          cameraId: camera.getMediaStreamTrack()?.getCapabilities?.()?.deviceId,
-        });
+        deviceInfo.cameraList = newCameraList;
       });
     }
     if (mic) {
-      Promise.all([DingRTC.getMicrophones(), DingRTC.getPlaybackDevices()]).then((result) => {
+      await Promise.all([DingRTC.getMicrophones(), DingRTC.getPlaybackDevices()]).then((result) => {
         const [micList, speakerList] = result;
         const newMicList = micList.filter((item) => item.deviceId);
         const newSpeakerList = speakerList.filter((item) => item.deviceId);
-        const currentMicId = mic.getMediaStreamTrack()?.getCapabilities?.()?.deviceId;
-        setDeviceInfo({
+        deviceInfo.$patch({
           micList: newMicList,
           speakerList: newSpeakerList,
-          micId: currentMicId,
-          speakerId: newSpeakerList?.[0]?.deviceId,
         });
       });
     }
@@ -103,16 +94,15 @@ export const useDevice = (scene?: 'pre' | 'in') => {
 
   const openCamera = () => {
     return DingRTC.createCameraVideoTrack({
-      deviceId: cameraId,
-      dimension: cameraDimension,
-      frameRate: cameraFrameRate,
+      deviceId: deviceInfo.cameraId,
+      dimension: deviceInfo.cameraDimension,
+      frameRate: deviceInfo.cameraFrameRate,
     }).then((track) => {
       loading.value = false;
       print('got camera track');
-      getDeviceList(track, null);
-      if (!cameraId) {
+      if (!deviceInfo.cameraId) {
         const currentCameraId = track.getMediaStreamTrack()?.getCapabilities?.()?.deviceId;
-        setDeviceInfo({
+        deviceInfo.$patch({
           cameraId: currentCameraId,
         });
       }
@@ -125,13 +115,13 @@ export const useDevice = (scene?: 'pre' | 'in') => {
   };
 
   const openMic = () => {
-    return DingRTC.createMicrophoneAudioTrack({ deviceId: micId }).then((track) => {
+    return DingRTC.createMicrophoneAudioTrack({ deviceId: deviceInfo.micId }).then((track) => {
       loading.value = false;
-      getDeviceList(null, track);
-      if (!micId) {
+      if (!deviceInfo.micId) {
         const currentMicId = track.getMediaStreamTrack()?.getCapabilities()?.deviceId;
-        setDeviceInfo({
+        deviceInfo.$patch({
           micId: currentMicId,
+          speakerId: deviceInfo.speakerList[0]?.deviceId,
         });
       }
       track.on('track-ended', () => {
@@ -146,8 +136,8 @@ export const useDevice = (scene?: 'pre' | 'in') => {
   const openScreen = () => {
     if (loading.value) return Promise.reject();
     return DingRTC.createScreenVideoTrack({
-      dimension: screenDimension,
-      frameRate: screenFrameRate,
+      dimension: deviceInfo.screenDimension,
+      frameRate: deviceInfo.screenFrameRate,
     }).then((track) => {
       loading.value = false;
       print('got screen track');
@@ -159,9 +149,6 @@ export const useDevice = (scene?: 'pre' | 'in') => {
     if (!channelInfo.cameraTrack) {
       return openCamera().then((track) => {
         if (scene !== 'pre') publish([track]);
-        DingRTC.getCameras().then((list) => {
-          setDeviceInfo({ cameraList: list.filter((item) => item.deviceId) });
-        });
       });
     } else {
       return channelInfo.cameraTrack.setEnabled(!channelInfo.cameraTrack.enabled).then(() => {
@@ -176,12 +163,6 @@ export const useDevice = (scene?: 'pre' | 'in') => {
       return openMic().then((track) => {
         const inPre = scene === 'pre';
         if (!inPre) publish([track]);
-        DingRTC.getMicrophones().then((list) => {
-          setDeviceInfo({ micList: list.filter((item) => item.deviceId) });
-        });
-        DingRTC.getPlaybackDevices().then((list) => {
-          setDeviceInfo({ speakerList: list.filter((item) => item.deviceId) });
-        });
       });
     } else {
       return channelInfo.micTrack.setEnabled(!channelInfo.micTrack.enabled).then(() => {
@@ -210,12 +191,9 @@ export const useDevice = (scene?: 'pre' | 'in') => {
     openMic,
     openCamera,
     operateMic,
-    cameraDimension,
-    cameraFrameRate,
-    screenDimension,
-    screenFrameRate,
     operateCamera,
     operateScreen,
+    getDeviceList,
     updateDeviceList,
     openMicAndCameraSameTime,
   };

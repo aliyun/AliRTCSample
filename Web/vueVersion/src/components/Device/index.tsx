@@ -102,7 +102,7 @@ export const Camera = (props: DeviceProps) => {
     } else if (deviceId === '1') {
       newDeviceId = 'user';
     }
-    channelInfo.cameraTrack.setDevice(newDeviceId);
+    channelInfo.cameraTrack?.setDevice(newDeviceId);
     setShowPannel(false);
   };
   const DevicePannel = (
@@ -131,7 +131,7 @@ export const Mic = (props: DeviceProps) => {
   const onMicClick = (deviceId: string) => {
     deviceInfo.$patch({ micId: deviceId });
     print(`mic changeTo ${deviceId}`);
-    channelInfo.micTrack.setDevice(deviceId);
+    channelInfo.micTrack?.setDevice(deviceId);
     setShowPannel(false);
   };
   const onSpeakerClick = (deviceId: string) => {

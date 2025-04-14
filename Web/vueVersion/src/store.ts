@@ -14,10 +14,11 @@ import DingRTC, {
   OptimizationMode,
 } from 'dingrtc';
 import { defineStore } from 'pinia';
-import { isIOS, isMobile, isWeixin, logLevel, parseSearch } from './utils/tools';
+import { isIOS, isMac, isMobile, isWeixin, logLevel, parseSearch } from './utils/tools';
 import configJson from '~/config.json';
 import {  RtcWhiteboard, WhiteboardManager } from '@dingrtc/whiteboard'
-import { defaultWhiteboardId } from '~/constants/index';
+import RTM, { RTMMessage, RTMSessionUser } from '@dingrtc/rtm';
+import { markRaw } from 'vue';
 
 DingRTC.setLogLevel(logLevel);
 
@@ -48,6 +49,12 @@ export interface RTCStats {
   remoteAudioLevel?: number;
   loss?: number;
   rtt?: number;
+  encodeCameraLayers?: number;
+  encodeScreenLayers?: number;
+  sendCameraLayers?: number;
+  sendScreenLayers?: number;
+  uplinkProfile?: string;
+  downlinkProfile?: string;
 }
 
 interface IDeviceInfo {
@@ -104,6 +111,9 @@ export interface IChannelInfo {
   mainViewPreferType: 'camera' | 'auxiliary';
   mode: 'grid' | 'standard';
   trackStatsMap: Map<string, TrackStats>;
+  annotation: RtcWhiteboard;
+  annotationId: string;
+  enableRTM: boolean;
 }
 
 interface IGlobalFlag {
@@ -111,17 +121,34 @@ interface IGlobalFlag {
   immersive: boolean;
   isMobile: boolean,
   hideLog: boolean,
+  env: string,
   isIOS: boolean,
   isWeixin: boolean,
+  isMac: boolean;
+}
+
+interface IRTMMessage extends RTMMessage {
+  timestamp: number;
+}
+
+export interface IRTMSession {
+  members: RTMSessionUser[];
+  sessionId: string;
+  messages: IRTMMessage[];
+}
+
+interface IRTMInfo {
+  enabled: boolean;
+  rtm: RTM;
+  sessions: IRTMSession[];
+  activeSessionId: string;
 }
 
 const client = DingRTC.createClient();
 
-const whiteboardManager = new WhiteboardManager();
+const whiteboardManager = markRaw(new WhiteboardManager());
 // 白板和 rtc 共享同一个入会连接
 client.register(whiteboardManager);
-
-const whiteboard = whiteboardManager.getWhiteboard(defaultWhiteboardId)
 
 export const useClient = (): DingRTCClient => {
   const store = useInnerClientStore();
@@ -142,10 +169,13 @@ export const useCurrentUserInfo = defineStore('ICurrentUserInfo', {
       parseSearch('userName') || configJson.userName || `Web-${Math.ceil(Math.random() * 100)}`,
     channel:
       parseSearch('channelId') || configJson.channelId || `${Math.ceil(Math.random() * 10000)}`,
+    duration: '',
+    delay: '',
+    token: configJson.token || '',
   }),
 });
 
-let defaultCameraDimension: VideoDimension = 'VD_1920x1080';
+let defaultCameraDimension: VideoDimension = 'VD_640x480';
 if (isIOS()) {
   defaultCameraDimension = 'VD_1280x720';
 }
@@ -204,9 +234,12 @@ export const useChannelInfo = defineStore('IChannelInfo', {
     remoteUserNetworkQualitys: {},
     mainViewPreferType: 'auxiliary',
     mainViewUserId: '',
-    whiteboard,
+    whiteboard: null,
     whiteboardManager,
     trackStatsMap: new Map(),
+    annotation: null,
+    annotationId: '',
+    enableRTM: false,
   }),
   getters: {
     allUsers(): RemoteUser[] {
@@ -233,7 +266,9 @@ export const useChannelInfo = defineStore('IChannelInfo', {
       return this.allUsers.find(user => user.userId === this.mainViewUserId)
     },
     mainViewTrack(): RemoteVideoTrack {
-      return this.mainViewPreferType === 'camera' ? this.mainViewUserInfo?.videoTrack : this.mainViewUserInfo?.auxiliaryTrack
+      const videoTrack = this.mainViewUserInfo?.videoTrack;
+      const auxiliaryTrack = this.mainViewUserInfo?.auxiliaryTrack;
+      return this.mainViewPreferType === 'camera' ? videoTrack || auxiliaryTrack : auxiliaryTrack || videoTrack;;
     },
     getTrack() {
       const self = this;
@@ -242,8 +277,8 @@ export const useChannelInfo = defineStore('IChannelInfo', {
         const auxiliaryTrack = user.auxiliaryTrack;
         if (self.mainViewUserId === user.userId && self.mode === 'standard') {
           return self.mainViewPreferType === 'camera'
-            ? auxiliaryTrack
-            : videoTrack;
+            ? auxiliaryTrack || videoTrack
+            : videoTrack || auxiliaryTrack;
         }
         return auxiliaryTrack || videoTrack;
       }
@@ -281,7 +316,18 @@ export const useGlobalFlag = defineStore('IGlobalFlag', {
     immersive: false,
     isMobile: !!isMobile(),
     hideLog: logLevel === 'none',
+    env: parseSearch('env') || configJson.env || '',
     isIOS: !!isIOS(),
+    isMac: isMac(),
     isWeixin: !!isWeixin(),
   }),
 });
+
+export const useRTMInfo = defineStore('IRTMInfo', {
+  state: (): IRTMInfo => ({
+    enabled: false,
+    rtm: new RTM({ logLevel: 'debug' }),
+    sessions: [],
+    activeSessionId: '',
+  }),
+})

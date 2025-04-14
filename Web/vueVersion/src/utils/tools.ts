@@ -3,7 +3,6 @@ export const genTraceId = () => {
   return `trace-${logTraceIdAcc++}`;
 };
 
-
 export const dataURLtoBlob = (dataurl: string) => {
   const arr = dataurl.split(',');
   const mime = arr[0].match(/:(.*?);/)[1];
@@ -36,11 +35,12 @@ export const parseSearch = (key: string) => {
   const url = new URL(location.href);
   const params = new URLSearchParams(url.search);
   return params.get(key);
-}
+};
 
-const mobileReg = /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i;
+const mobileReg =
+  /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i;
 const iOSReg = /(iPhone|iPad|iPod|iOS)/i;
-const weixinReg = /micromessenger.([\d.]+)/i
+const weixinReg = /micromessenger.([\d.]+)/i;
 
 export const isMobile = () => navigator.userAgent.match(mobileReg);
 
@@ -48,9 +48,11 @@ export const isIOS = () => navigator.userAgent.match(iOSReg);
 
 export const isWeixin = () => navigator.userAgent.match(weixinReg);
 
+export const isMac = () => navigator.platform.toLowerCase().includes('mac');
+
 export const logLevel = parseSearch('logLevel') === 'none' ? 'none' : 'debug';
 
-export const print = (...args: any) => {
+export const print = async (...args: any) => {
   if (logLevel === 'none') return;
   const outputArea = document.getElementById('logOutput');
   if (outputArea) {
@@ -63,7 +65,7 @@ export const print = (...args: any) => {
 
 export const parseTime = (baseTime: number) => {
   const seconds = Math.floor(baseTime % 60);
-  const minutes = Math.floor(baseTime % 3600 / 60);
-  const hours =  Math.floor(baseTime / 3600);
+  const minutes = Math.floor((baseTime % 3600) / 60);
+  const hours = Math.floor(baseTime / 3600);
   return `${hours}:${minutes >= 10 ? minutes : `0${minutes}`}:${seconds >= 10 ? seconds : `0${seconds}`}`;
 };

@@ -24,21 +24,23 @@
 import { ref, reactive } from 'vue';
 import { message, Form, Input, Button, Card, FormItem } from 'ant-design-vue';
 import { getAppToken } from '~/utils/request';
-import { print } from '~/utils/tools';
-import {
+import { print, parseSearch } from '~/utils/tools';
+import DingRTC, {
   CameraVideoTrack,
   LocalTrack,
   MicrophoneAudioTrack,
   RemoteAudioTrack,
   SubscribeParam,
 } from 'dingrtc';
-import { useClient, useGlobalFlag, useChannelInfo, useCurrentUserInfo } from '~/store';
+import { useClient, useGlobalFlag, useChannelInfo, useCurrentUserInfo, useRTMInfo } from '~/store';
+import { useRTMInfoHooks } from '~/hooks/channel';
 
 const joining = ref(false);
 
 const channelInfo = useChannelInfo();
 const globalFlag = useGlobalFlag();
-
+const rtmInfo = useRTMInfo();
+const { initSessions } = useRTMInfoHooks();
 const currentUserInfo = useCurrentUserInfo();
 
 const formData = reactive({
@@ -75,6 +77,9 @@ const onJoin = async () => {
       channelName,
       appToken: appTokenResult.token,
     };
+    if (appTokenResult.gslb.length) {
+        DingRTC.setClientConfig({ gslb: appTokenResult.gslb });
+    }
     try {
       const result = await client.join({
         appId: loginParam.appId,
@@ -89,6 +94,8 @@ const onJoin = async () => {
         appId: app,
         userName: name,
         channel: channelName,
+        // duration: newDuration,
+        // delay: newDelay,
       });
       channelInfo.$patch({ timeLeft: result.timeLeft });
       message.success('加入房间成功');
@@ -138,6 +145,8 @@ const onJoin = async () => {
         }
       });
       tasks.push(subTask);
+      client.register(rtmInfo.rtm);
+      initSessions();
       const localTracks: LocalTrack[] = [
         channelInfo.cameraTrack as CameraVideoTrack,
         channelInfo.micTrack as MicrophoneAudioTrack,

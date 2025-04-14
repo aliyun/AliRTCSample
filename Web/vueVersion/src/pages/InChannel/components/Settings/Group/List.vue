@@ -6,7 +6,7 @@
       </Button>
       <Button
         :disabled="channelInfo.groups.some((item) => item.joined)"
-        @click="client.mixAudioToGroup(channelInfo.micTrack as MicrophoneAudioTrack, true)"
+        @click="mixToChannel"
       >
         混音到大厅
       </Button>
@@ -68,6 +68,12 @@ const closeModal = () => {
   showModal.value = false;
 };
 
+const mixToChannel = () => {
+  client.mixAudioToGroup(channelInfo.micTrack as MicrophoneAudioTrack, true).then(() => {
+    message.info('混音到大厅成功')
+  })
+}
+
 const subChannel = async () => {
   if (channelInfo.subscribeAudio && channelInfo.subscribeAudio === 'mcu') {
     return;
@@ -75,8 +81,10 @@ const subChannel = async () => {
     await client.unsubscribeGroup(channelInfo.subscribeAudio);
   }
   const audioTrack = (await client.subscribe('mcu', 'audio')) as RemoteAudioTrack;
+  message.info('订阅成功');
   audioTrack.play();
   channelInfo.$patch({ subscribeAudio: 'mcu', mcuAudioTrack: audioTrack });
+
 };
 onMounted(() => {
   channelInfo.$patch({

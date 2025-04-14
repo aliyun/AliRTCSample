@@ -27,8 +27,16 @@
         <Screen />
         <span>{{ channelInfo.screenTrack ? '结束共享' : '共享' }}</span>
       </Row>
+      <Row
+        v-if="!globalFlag.isMobile"
+        class="toolBtn"
+        @click="toggleRTM"
+      >
+        <Icon type="icon-icon_XDS_FrameMessage" />
+        <span style="margin-top: 4px">聊天</span>
+      </Row>
       <Row class="toolBtn" @click="toggleWhiteboard">
-        <Icon type="icon-whiteboard" />
+        <Icon type="icon-whiteboard1" />
         <span style="margin-top: 4px">{{
           channelInfo.isWhiteboardOpen ? '关闭白板' : '白板'
         }}</span>
@@ -50,6 +58,7 @@ import {
   useGlobalFlag,
   useChannelInfo,
   useDeviceInfo,
+  useRTMInfo,
 } from '~/store';
 import { Camera, Mic, Screen } from '~/components/Device';
 import { useDevice } from '~/hooks/device';
@@ -57,6 +66,7 @@ import Icon from '~/components/Icon';
 import Settings from './Settings/index.vue';
 import { ref } from 'vue';
 import { useWhiteboardHooks } from '~/hooks/channel';
+import { DEFAULT_WHITEBOARD_ID } from '~/constants';
 
 interface IProps {
   onLeave: () => void;
@@ -70,6 +80,7 @@ const currentUserInfo = useCurrentUserInfo();
 const showSetting = ref(false);
 const { openWhiteboard, closeWhiteboard } = useWhiteboardHooks();
 const { operateCamera, operateMic, operateScreen } = useDevice('in');
+const rtmInfo = useRTMInfo();
 
 const onClickCamera = () => {
   const noCamera = !channelInfo.cameraTrack;
@@ -96,11 +107,15 @@ const toggleShowSettings = () => {
   showSetting.value = !showSetting.value;
 };
 
+const toggleRTM = () => {
+  rtmInfo.enabled = !rtmInfo.enabled
+}
+
 const toggleWhiteboard = () => {
   if (channelInfo.isWhiteboardOpen) {
-    closeWhiteboard();
+    closeWhiteboard(DEFAULT_WHITEBOARD_ID);
   } else {
-    openWhiteboard();
+    openWhiteboard(DEFAULT_WHITEBOARD_ID);
   }
 };
 </script>

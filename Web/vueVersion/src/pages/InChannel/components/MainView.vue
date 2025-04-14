@@ -3,6 +3,7 @@ import { computed, ref, watch } from 'vue';
 import { Tooltip, Row, Avatar } from 'ant-design-vue';
 import { useGlobalFlag, useChannelInfo, useDeviceInfo, useCurrentUserInfo } from '~/store';
 import Icon from '~/components/Icon';
+import Annotation from './Annotation.vue';
 
 const viewRef = ref(null);
 
@@ -18,12 +19,6 @@ const micIconEnable = computed(() => {
   return channelInfo.trackStatsMap.get(channelInfo.mainViewUserId)?.mic;
 })
 
-
-const videoIsPlay = computed(() => {
-  const trackStats = channelInfo.trackStatsMap.get(channelInfo.mainViewUserId);
-  return channelInfo.mainViewPreferType === 'auxiliary' ? trackStats?.screen : trackStats?.camera;
-});
-
 const showName = computed(() => channelInfo.mainViewUserInfo?.userName || currentUserInfo.userName)
 
 watch(() => [viewRef.value, channelInfo.mainViewTrack], (newValue) => {
@@ -35,7 +30,8 @@ watch(() => [viewRef.value, channelInfo.mainViewTrack], (newValue) => {
 })
 </script>
 <template>
-  <Row ref="viewRef" :class="['mainView', { avatar: !videoIsPlay }]">
+  <Row ref="viewRef" :class="['mainView', { avatar: !channelInfo.mainViewTrack }]">
+    <Annotation v-if="channelInfo.annotation" />
     <div v-if="channelInfo.mainViewTrack" :class="['smallViewStatus', { higherMainUserInfo: !globalFlag.immersive }]">
       <Icon v-if="channelInfo.trackStatsMap.get(channelInfo.mainViewUserId)?.screen" style="color: limegreen;" type="icon-XDS_share_screen1" />
       <Icon v-if="!micIconEnable" type="icon-XDS_UnMute2Fill" />

@@ -1,0 +1,146 @@
+.chatContainer {
+  & :global(.ant-drawer-wrapper-body .ant-drawer-body) {
+    padding: 8px 0px 8px 12px;
+  }
+  & :global(.ant-drawer-wrapper-body .ant-drawer-header) {
+    padding: 8px 12px;
+  }
+}
+
+.chatWrapper {
+  height: 100%;
+  & > div {
+    height: 100%;
+  }
+  & > div:last-of-type {
+    align-content: center;
+  }
+  & > div:first-of-type {
+    border-right: 1px solid rgba(5, 5, 5, 0.06);
+  }
+}
+
+.chatEditor {
+  height: 200px;
+  padding-right: 12px;
+  padding-left: 12px;
+  textarea {
+    height: 100%;
+    resize: none;
+    padding: 2px 6px;
+  }
+  &Input {
+    height: calc(100% - 48px);
+  }
+  &Button {
+    margin-top: 4px;
+    width: 100%;
+    height: 48px;
+    align-items: center;
+    justify-content: flex-end;
+    display: flex;
+    span {
+      font-size: 12px;
+      color: rgba(23,26,29,0.24);
+      margin-right: 10px;
+    }
+  }
+}
+
+.chatSessions {
+  width: 100%;
+  flex-direction: column;
+  &Header {
+    align-items: center;
+    justify-content: space-between;
+  }
+  &Item {
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    & > span:first-of-type {
+      max-width: 80%;
+      display: inline-block;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
+}
+
+.chatMessages {
+  height: calc(100% - 200px - 17px);
+  width: 100%;
+  flex-direction: column;
+  & > div {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex-flow: column nowrap;
+  }
+  :deep(.ant-comment-inner) {
+    padding: 4px 0;
+  }
+  :deep(.ant-comment-content) {
+    flex: none;
+  }
+  :deep(.ant-comment) {
+    margin-bottom: 6px;
+  }
+  :deep(.ant-comment-content-detail) {
+    background-color: #F0F1F2;
+    padding: 3px;
+    border-radius: 2px 6px 6px 6px;
+    padding: 6px 8px;
+    word-break: break-all;
+    max-width: 304px;
+    width: max-content;
+  }
+  .chatRight {
+    margin-right: 12px;
+    margin-left: 16px;
+    width: calc(100% - 28px);
+    text-align: justify;
+    display: flex;
+    justify-content: flex-end;
+    :deep(.ant-comment-inner) {
+      max-width: 304px;
+      padding: 0;
+      flex-direction: row-reverse;
+    }
+    :deep(.ant-comment-content-detail) {
+      background-color: #c9e7ff;
+      border-radius: 6px 2px 6px 6px;
+      float: right;
+      padding: 6px 8px;
+      word-break: break-all;
+      max-width: 304px;
+    }
+    :deep(.ant-comment-content-author) {
+      justify-content: flex-end;
+      > span {
+        padding-right: 0;
+      }
+    }
+    :deep(.ant-comment-avatar) {
+      margin-right: 0;
+      margin-left: 8px;
+      img {
+        border-radius: 4px;
+      }
+    }
+  }
+}
+
+.chatDivider {
+  margin: 8px 0;
+  width: calc(100% - 12px);
+  min-width: auto;
+}
+
+
+.actionsItem {
+  padding: 6px 12px;
+  cursor: pointer;
+}
+

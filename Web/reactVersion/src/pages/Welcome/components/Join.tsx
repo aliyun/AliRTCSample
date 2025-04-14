@@ -74,9 +74,6 @@ const Join = () => {
         channelName,
         appToken: appTokenResult.token,
       };
-      if (appTokenResult.gslb.length) {
-        DingRTC.setClientConfig({ gslb: appTokenResult.gslb });
-      }
       try {
         const result = await newClient.join({
           appId: loginParam.appId,

@@ -90,8 +90,8 @@ const activeTab = ref('general');
 const channelInfo = useChannelInfo();
 const { publish, unpublish } = useChannel();
 const publishStateSnapshot = ref({
-  camera: channelInfo.publishedTracks.has(channelInfo.cameraTrack.getTrackId()),
-  mic: channelInfo.publishedTracks.has(channelInfo.micTrack.getTrackId()),
+  camera: channelInfo.publishedTracks.has(channelInfo.cameraTrack?.getTrackId()),
+  mic: channelInfo.publishedTracks.has(channelInfo.micTrack?.getTrackId()),
 });
 const onUnloadExternal = async () => {
   const tracksToUnpublish: any[] = [

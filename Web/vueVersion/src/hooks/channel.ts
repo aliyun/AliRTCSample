@@ -7,9 +7,10 @@ import {
   TrackMediaType,
   VideoDimension,
 } from 'dingrtc';
+import { AnnotationSourceType } from '@dingrtc/whiteboard';
 import { message } from 'ant-design-vue';
-import { toRaw } from 'vue';
-import { RTCStats, useClient, useChannelInfo } from '~/store';
+import { markRaw, toRaw } from 'vue';
+import { RTCStats, useClient, useChannelInfo, useRTMInfo } from '~/store';
 import { print } from '~/utils/tools';
 
 interface EncoderConfig {
@@ -23,11 +24,14 @@ export const useChannel = () => {
   const channelInfo = useChannelInfo();
   const client = useClient();
   const publish = (tracks: LocalTrack[]) => {
-    const tempTracks = tracks.map(item => toRaw(item));
+    const tempTracks = tracks.map((item) => toRaw(item));
     return client
       .publish(tempTracks)
       .then(() => {
-        channelInfo.updatePublishedTracks(tempTracks.map(item => item.getTrackId()), 'add')
+        channelInfo.updatePublishedTracks(
+          tempTracks.map((item) => item.getTrackId()),
+          'add',
+        );
         print(`publish ${tracks.map((item) => item.trackMediaType)} tracks`);
       })
       .catch((e) => {
@@ -54,11 +58,14 @@ export const useChannel = () => {
   };
 
   const unpublish = (tracks: LocalTrack[]) => {
-    const tempTracks = tracks.map(item => toRaw(item));
+    const tempTracks = tracks.map((item) => toRaw(item));
     return client
       .unpublish(tempTracks)
       .then(() => {
-        channelInfo.updatePublishedTracks(tempTracks.map(item => item.getTrackId()), 'remove')
+        channelInfo.updatePublishedTracks(
+          tempTracks.map((item) => item.getTrackId()),
+          'remove',
+        );
         print(`unpublish ${tracks.map((item) => item.trackMediaType)} tracks`);
       })
       .catch((e) => {
@@ -348,6 +355,8 @@ export const useNetworkStats = () => {
           }
         }
         const newRtcStats: RTCStats = {
+          uplinkProfile: (localVideoStats.uplinkProfile || []).join(';'),
+          downlinkProfile: (localVideoStats.downlinkProfile || []).join(';'),
           localCameraFPS: camera?.sendFrameRate,
           localCameraBitrate: camera?.sendBitrate,
           localCameraResolution: camera?.sendResolution,
@@ -359,6 +368,8 @@ export const useNetworkStats = () => {
           localAudioBitrate: localAudioStats?.sendBitrate,
           remoteCameraFPS: maxCameraFps,
           remoteCameraBitrate: recvCameraBitrate,
+          encodeCameraLayers: camera?.encodeLayers,
+          encodeScreenLayers: auxiliary?.encodeLayers,
           sendCameraLayers: camera?.sendLayers,
           sendScreenLayers: auxiliary?.sendLayers,
           remoteScreenBitrate: recvScreenBitrate,
@@ -413,8 +424,10 @@ export const useWhiteboardHooks = () => {
   const channelInfo = useChannelInfo();
   let preMode = channelInfo.mode;
 
-
-  const openWhiteboard = () => {
+  const openWhiteboard = (id: string) => {
+    if (channelInfo.annotation || channelInfo.whiteboard) return;
+    const whiteboard = markRaw(channelInfo.whiteboardManager.getWhiteboard(id));
+    channelInfo.whiteboard = whiteboard;
     preMode = channelInfo.mode;
     channelInfo.$patch({
       mainViewUserId: '',
@@ -423,14 +436,111 @@ export const useWhiteboardHooks = () => {
       mainViewPreferType: 'auxiliary',
     });
   };
-  
-  const closeWhiteboard = () => {
-    channelInfo.isWhiteboardOpen = false;
-    channelInfo.mode = preMode;
+
+  const openAnnotation = (annotationId: string, sourceType: AnnotationSourceType) => {
+    console.log(annotationId, sourceType)
+    if (channelInfo.annotationId === `${annotationId}#${sourceType}`) return;
+    preMode = channelInfo.mode;
+    const annotation = channelInfo.whiteboardManager.getAnnotation(annotationId, sourceType);
+    const [_, trackUserId] = annotationId.split('_');
+    channelInfo.annotation = markRaw(annotation);
+    if (channelInfo.isWhiteboardOpen) channelInfo.whiteboard.close()
+    channelInfo.$patch({
+      isWhiteboardOpen: false,
+      mode: 'standard',
+      annotationId: `${annotationId}#${sourceType}`,
+      mainViewUserId: trackUserId,
+      mainViewPreferType: sourceType === 'share' ? 'auxiliary' : 'camera',
+    });
+  };
+
+  const closeAnnotation = (id: string, sourceType: AnnotationSourceType) => {
+    const annotation = channelInfo.whiteboardManager.getAnnotation(id, sourceType);
+    if (annotation === channelInfo.annotation) {
+      channelInfo.annotation?.close();
+      channelInfo.$patch({
+        mode: preMode,
+        annotation: null,
+        annotationId: '',
+      });
+    }
+  };
+
+  const closeWhiteboard = (id: string) => {
+    if (channelInfo.whiteboard?.sessionId === id) {
+      channelInfo.isWhiteboardOpen = false;
+      channelInfo.whiteboard.close();
+      channelInfo.whiteboard = null;
+      channelInfo.mode = preMode;
+    }
   };
 
   return {
+    openAnnotation,
     openWhiteboard,
+    closeAnnotation,
     closeWhiteboard,
-  }
-}
+  };
+};
+
+
+export const useRTMInfoHooks = () => {
+  const rtmInfo = useRTMInfo();
+
+  const initSessions = () => {
+    rtmInfo.sessions = rtmInfo.rtm.sessions.map((item) => ({
+      sessionId: item.id,
+      members: item.users,
+      messages: [],
+    }));
+  };
+
+  const joinSession = (sessionId: string) => {
+    rtmInfo.rtm
+      .joinSession(sessionId)
+      .then(() => {
+        const session = rtmInfo.sessions.find((item) => item.sessionId === sessionId);
+        if (session) {
+          const rtmSession = rtmInfo.rtm.sessions.find((item) => item.id === sessionId);
+          const existed = session.members.map((item) => item.userId);
+          rtmSession.users.forEach((item) => {
+            if (!existed.includes(item.userId)) {
+              session.members.push(item);
+            }
+          });
+        }
+      })
+      .catch((e) => message.error(`joinSession failed: ${JSON.stringify(e)}`));
+  };
+
+  const leaveSession = (sessionId: string) => {
+    rtmInfo.rtm
+      .leaveSession(sessionId)
+      .then(() => {
+        const session = rtmInfo.sessions.find((item) => item.sessionId === sessionId);
+        session?.members.splice(0);
+        session?.messages.splice(0);
+      })
+      .catch((e) => message.error(`leaveSession failed: ${JSON.stringify(e)}`));
+  };
+
+  const closeSession = (sessionId: string) => {
+    rtmInfo.rtm
+      .closeSession(sessionId)
+      .then(() => {
+        const session = rtmInfo.sessions.find((item) => item.sessionId === sessionId);
+        session?.members.splice(0);
+        session?.messages.splice(0);
+      })
+      .catch((e) => message.error(`closeSession failed: ${JSON.stringify(e)}`));
+  };
+
+  return {
+    leaveSession,
+    joinSession,
+    closeSession,
+    initSessions,
+  };
+};
+
+

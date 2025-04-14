@@ -10,7 +10,7 @@ export const colors = [
   'rgba(144, 222, 15, 1)',
   'rgba(1, 2, 4, 1)',
   'rgba(153, 153, 153, 1)',
-  'rgba(255, 255, 255, 1)',
+  // 'rgba(255, 255, 255, 1)',
 ];
 
 export function randomWbColor() {

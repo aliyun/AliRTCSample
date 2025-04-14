@@ -51,10 +51,12 @@
 import { Avatar, Col, Tooltip, List } from 'ant-design-vue';
 import Icon from '~/components/Icon';
 import { downloadFileByBase64 } from '~/utils/tools';
-import { useClient, useChannelInfo, useCurrentUserInfo, useDeviceInfo } from '~/store';
+import { useClient, useChannelInfo, useCurrentUserInfo, useDeviceInfo, useRTMInfo } from '~/store';
 import { ScoreMap } from './NetworkBar';
 import { computed, ref, watch } from 'vue';
-import { useChannel } from '~/hooks/channel';
+import { useChannel, useWhiteboardHooks } from '~/hooks/channel';
+import { VideoSourceInfo } from 'dingrtc';
+import { AnnotationSourceType } from '@dingrtc/whiteboard';
 
 
 const props = defineProps(['user', 'span', 'style', 'track']);
@@ -66,6 +68,7 @@ const currentUserInfo = useCurrentUserInfo();
 const client = useClient();
 const streamType = ref(channelInfo.defaultRemoteStreamType);
 const containerRef = ref(null);
+const { openAnnotation, closeAnnotation } = useWhiteboardHooks();
 
 const isLocal = computed(() => props.user.userId === currentUserInfo.userId);
 
@@ -107,6 +110,15 @@ const viewBigger = () => {
   });
 };
 
+const showStopAnnotation = computed(() => {
+  const annotationId = channelInfo.annotationId;
+  if (!annotationId) return false;
+  const [originAnnotataionId] = annotationId.split('#');
+  const [trackUserId, creator] = originAnnotataionId.split('_');
+  if (creator !== currentUserInfo.userId || trackUserId !== user.value.userId) return false;
+  return true;
+})
+
 const actions = computed(() => {
   const uid = props.user.userId;
   const buttons = [
@@ -115,6 +127,23 @@ const actions = computed(() => {
       show: props.track,
       onClick: () => {
         downloadFileByBase64(props.track.getCurrentFrameData(), props.user.userId);
+      },
+    },
+    {
+      text: '开启标注',
+      show: props.track && !channelInfo.annotation,
+      onClick: () => {
+        const sourceType = props.track === props.user.auxiliaryTrack ? 'share' : 'video'
+        openAnnotation(`${props.user?.userId}_${currentUserInfo.userId}`, sourceType);
+      },
+    },
+    {
+      text: '结束标注',
+      show: showStopAnnotation.value,
+      onClick: () => {
+        const [originAnnotataionId, sourceType] = channelInfo.annotationId.split('#');
+        channelInfo.annotation.stop();
+        closeAnnotation(originAnnotataionId, sourceType as AnnotationSourceType);
       },
     },
     {

@@ -13,7 +13,7 @@
 此 Demo 源代码托管在 [GitHub](https://github.com/aliyun/AliRTCSample) 上，开发者可以自行克隆或下载。
 
 ## 4. 下载 SDK
-音视频通信 SDK 可从 [下载页面](https://help.aliyun.com/document_detail/71770.html) 下载，并放置到 Demo 源码的 SDK 目录中。
+音视频通信 SDK 可从 [下载页面](https://help.aliyun.com/document_detail/2640158.html) 下载，并放置到 Demo 源码的 SDK 目录中。
 
 ## 5. 生成临时 Token
 用户在创建应用并且获取到应用ID后，还需要 Token 才可以使用音视频通信RTC服务。对于 Demo 用户可以参考 [接入工具](https://help.aliyun.com/document_detail/146833.html) 生成临时Token。

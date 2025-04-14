@@ -27,37 +27,42 @@ const refContainer = ref(null);
 // 状态管理
 const cameraTrack = ref(null);
 
-const globalFlag = useGlobalFlag()
+const globalFlag = useGlobalFlag();
 const { userName } = useCurrentUserInfo();
-const deviceInfo = useDeviceInfo()
+const deviceInfo = useDeviceInfo();
 const channelInfo = useChannelInfo();
 
 // 设备操作
-const { openMicAndCameraSameTime, operateCamera, operateMic, openCamera, openMic } = useDevice('pre');
+const { openMicAndCameraSameTime, operateCamera, operateMic, openCamera, openMic } =
+  useDevice('pre');
 onMounted(async () => {
-  if (globalFlag.isMobile) return;
+  if (globalFlag.isMobile) {
+    return
+  };
   const [track] = await openMicAndCameraSameTime();
   cameraTrack.value = track;
-  track?.play(refContainer.value.$el, { fit: 'cover' });
+  if (!globalFlag.joined) {
+    track?.play(refContainer.value.$el, { fit: 'cover' });
+  }
 });
 
 const onClickCamera = () => {
   if (globalFlag.isMobile && !channelInfo.cameraTrack) {
     openCamera().then((track) => {
       track?.play(refContainer.value.$el, { fit: 'cover' });
-    })
+    });
   } else {
-    operateCamera()
+    operateCamera();
   }
-}
+};
 
 const onClickMic = () => {
   if (globalFlag.isMobile && !channelInfo.micTrack) {
-    openMic()
+    openMic();
   } else {
-    operateMic()
+    operateMic();
   }
-}
+};
 </script>
 
 <style lang="less" scoped>
