@@ -22,6 +22,6 @@
 使用 Visual Studio 2017（或以上版本）打开源码工程 DingRTCSample.sln，然后将 AppID 和 Token 拷贝到 Demo 中相应位置，即可开始编译运行。
 
 ## 7. 更多帮助
-[集成客户端SDK](https://help.aliyun.com/document_detail/2640095.html?spm=a2c4g.2640115.0.0.29593e3eMg8kt2)
-[实现基本功能](https://help.aliyun.com/document_detail/2640104.html?spm=a2c4g.2640095.0.0.4df33e3e5tUtrE)
-[运行Demo示例](https://help.aliyun.com/document_detail/2640115.html?spm=a2c4g.2640158.0.0.74697bafZaaJrk)。
+[集成客户端SDK](https://help.aliyun.com/document_detail/2640095.html)
+[实现基本功能](https://help.aliyun.com/document_detail/2640104.html)
+[运行Demo示例](https://help.aliyun.com/document_detail/2640115.html)。
