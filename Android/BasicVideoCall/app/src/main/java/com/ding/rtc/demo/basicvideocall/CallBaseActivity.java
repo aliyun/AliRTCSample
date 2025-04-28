@@ -18,6 +18,8 @@ public abstract class CallBaseActivity extends AppCompatActivity implements Cont
     protected int mRemoteProfile = 5; // Max
 
     protected boolean mVideoMode = true;
+    
+    protected boolean mScreenMode = true;
 
     protected DingRtcEngine mRtcEngine = null;
     protected boolean mIsChannelJoined = false;

@@ -35,6 +35,7 @@ public class CallActivity extends CallBaseActivity implements EventHandler {
     private static final String INTENT_MEETING_APP_ID = "meeting_app_id";
     private static final String INTENT_MEETING_CHANNEL_ID = "meeting_channel_id";
     private static final String INTENT_MEETING_GSLB = "meeting_gslb";
+    private static final int SCREEN_CAPTURE_PERMISSION_CODE = 1002;
 
     private String mSelfUid = "";
     private Set<String> mSubedUids = new HashSet<>();
@@ -65,9 +66,27 @@ public class CallActivity extends CallBaseActivity implements EventHandler {
             }
             // 启动本地音频
             mRtcEngine.publishLocalAudioStream(true);
+            // 启动屏幕共享
+            if (mScreenMode) {
+                // 内部授权（推荐）
+                mRtcEngine.startScreenShare();
+                // 外部授权
+                // Intent intent = new Intent(this, ScreenCapturePermissionActivity.class);
+                // startActivityForResult(intent, SCREEN_CAPTURE_PERMISSION_CODE);
+            }
         } else {
             mIsChannelJoined = false;
             Toast.makeText(CallActivity.this, "onChannelJoinConfirm result=" + result, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == SCREEN_CAPTURE_PERMISSION_CODE) {
+            if (resultCode == RESULT_OK && data != null) {
+                mRtcEngine.startScreenShare(data, DingRtcEngine.DingRtcScreenShareMode.DingRtcScreenShareAllMode);
+            }
         }
     }
 
@@ -203,7 +222,7 @@ public class CallActivity extends CallBaseActivity implements EventHandler {
         if (cameraView == null) {
             Toast.makeText(getApplicationContext(), "创建画布失败", Toast.LENGTH_SHORT).show();
         } else {
-            cameraView.setZOrderMediaOverlay(true);
+            cameraView.setZOrderMediaOverlay(false);
             cameraCanvas.view = cameraView;
         }
 
@@ -283,14 +302,25 @@ public class CallActivity extends CallBaseActivity implements EventHandler {
                 findViewById(R.id.small_size_view_rightbottom),
                 findViewById(R.id.tv_small_view_rightbottom_user));
 
-        // 启动视频预览，并且显示到大图
-        if (mVideoMode) {
-            mUserViewArray[0].isFree = false;
-            mUserViewArray[0].setUser(mSelfUid);
-            updateLocalVideoRender(mUserViewArray[0].canvas);
-            int result = mRtcEngine.startPreview();
-            mUserViewArray[0].renderContainer.addView((SurfaceView) mUserViewArray[0].canvas.view);
-            Log.d(TAG, "startPreview result " + result);
+       // 启动视频预览，并且显示到大图
+       if (mVideoMode) {
+           mUserViewArray[0].isFree = false;
+           mUserViewArray[0].isScreen = false;
+           mUserViewArray[0].setUser(mSelfUid);
+           updateLocalVideoRender(mUserViewArray[0].canvas, false);
+           int result = mRtcEngine.startPreview();
+           mUserViewArray[0].renderContainer.addView((SurfaceView) mUserViewArray[0].canvas.view);
+           Log.d(TAG, "startPreview result " + result);
+       }
+
+        // 启动屏幕共享预览，并且显示到右下角小图
+        if (mScreenMode) {
+            mUserViewArray[4].isFree = false;
+            mUserViewArray[4].isScreen = true;
+            mUserViewArray[4].setUser(mSelfUid);
+            updateLocalVideoRender(mUserViewArray[4].canvas, true);
+            mUserViewArray[4].renderContainer.addView((SurfaceView) mUserViewArray[4].canvas.view);
+            mUserViewArray[4].setVisible(true);
         }
 
         joinChannel();
@@ -359,21 +389,28 @@ public class CallActivity extends CallBaseActivity implements EventHandler {
         if (!mVideoMode || userId.equals(mSelfUid) || mSubedUids.contains(userId)) {
             return;
         }
+
         int viewIndex = -1;
+        boolean localViewIsScreen = false;
+        int localViewIndex = -1;
         // 先检查大图是否空闲，如空闲则将此用户显示到大图
         if (mUserViewArray[0].isFree || mSelfUid.equals(mUserViewArray[0].userId)) {
             Log.d(TAG, "onUserVideoStart  userId " + userId);
             // large view is free or used by local user, then make this user to large view
             // 如果大图被本地用户占用，则将本地用户移到小图，如果没有空闲的小图，则不显示本地用户视频
             if (mSelfUid.equals(mUserViewArray[0].userId)) {
-                // move local user to last view
                 mLocalCanvas = null;
-                if (mUserViewArray[mUserViewCount - 1].isFree) {
-                    mLocalCanvas = mUserViewArray[mUserViewCount - 1].canvas;
-                    mUserViewArray[mUserViewCount - 1].setVisible(true);
-                    mUserViewArray[mUserViewCount - 1].isFree = false;
-                    mUserViewArray[mUserViewCount - 1].isScreen = false;
-                    mUserViewArray[mUserViewCount - 1].setUser(mSelfUid);
+                for (int i = 1; i < mUserViewCount; i++) {
+                    if (mUserViewArray[i].isFree) {
+                        mLocalCanvas = mUserViewArray[i].canvas;
+                        localViewIsScreen = mUserViewArray[0].isScreen;
+                        localViewIndex = i;
+                        mUserViewArray[i].setVisible(true);
+                        mUserViewArray[i].isFree = false;
+                        mUserViewArray[i].isScreen = mUserViewArray[0].isScreen;
+                        mUserViewArray[i].setUser(mSelfUid);
+                        break;
+                    }
                 }
             }
             mUserViewArray[0].renderContainer.removeAllViews();
@@ -412,10 +449,12 @@ public class CallActivity extends CallBaseActivity implements EventHandler {
                 mUserViewArray[viewIndex].isFree = true;
             }
 
-            updateLocalVideoRender(mLocalCanvas);
-            mUserViewArray[mUserViewCount - 1].renderContainer.removeAllViews();
-            mUserViewArray[mUserViewCount - 1].renderContainer.addView((SurfaceView) mLocalCanvas.view);
-            mUserViewArray[mUserViewCount - 1].setVisible(true);
+            if(localViewIndex != -1) {
+                updateLocalVideoRender(mLocalCanvas, localViewIsScreen);
+                mUserViewArray[localViewIndex].renderContainer.removeAllViews();
+                mUserViewArray[localViewIndex].renderContainer.addView((SurfaceView) mLocalCanvas.view);
+                mUserViewArray[localViewIndex].setVisible(true);
+            }
         } else {
             // 如果没有空闲视图，将此用户加入未订阅视频用户列表，以等待空闲视图
             // no view available
@@ -443,7 +482,7 @@ public class CallActivity extends CallBaseActivity implements EventHandler {
         // 有用户开启桌面共享，始终显示桌面共享到大图
         if (!mUserViewArray[0].isFree) {
             // 如果大图已经在显示桌面共享，则首先取消订阅之前的共享
-            if (mUserViewArray[0].isScreen) {
+            if (mUserViewArray[0].isScreen && !mSelfUid.equals(mUserViewArray[0].userId)) {
                 mRtcEngine.subscribeRemoteVideoStream(mUserViewArray[0].userId, DingRtcVideoTrackScreen, false);
             } else if (mSelfUid.equals(mUserViewArray[0].userId)) {
                 // 如果大图被本地用户占用，则将本地用户移到小图，如果没有空闲的小图，则不显示本地用户视频
@@ -453,10 +492,10 @@ public class CallActivity extends CallBaseActivity implements EventHandler {
                     mLocalCanvas = mUserViewArray[mUserViewCount - 1].canvas;
                     mUserViewArray[mUserViewCount - 1].setVisible(true);
                     mUserViewArray[mUserViewCount - 1].isFree = false;
-                    mUserViewArray[mUserViewCount - 1].isScreen = false;
+                    mUserViewArray[mUserViewCount - 1].isScreen = mUserViewArray[0].isScreen;
                     mUserViewArray[mUserViewCount - 1].setUser(mSelfUid);
                 }
-                updateLocalVideoRender(mLocalCanvas);
+                updateLocalVideoRender(mLocalCanvas, mUserViewArray[0].isScreen);
             } else {
                 // 尝试找到一个空闲的小图给当前大图用户
                 // try to find a free small view
@@ -559,13 +598,11 @@ public class CallActivity extends CallBaseActivity implements EventHandler {
 
     // 将index指定的视图用户和大图用户交换
     private void switchToLargeView(int index) {
+        Log.i(TAG, "switchToLargeView index = " + index);
         if (index < 1 || index > 4) {
             return;
         }
         if (mUserViewArray[index].isFree) {
-            return;
-        }
-        if (!mUserViewArray[0].isFree && mUserViewArray[0].isScreen) {
             return;
         }
 
@@ -577,13 +614,26 @@ public class CallActivity extends CallBaseActivity implements EventHandler {
 
         switchUserViewInfo(mUserViewArray[0], mUserViewArray[index]);
 
-        if (smallViewUid.equals(mSelfUid)) {
-            updateLocalVideoRender(mUserViewArray[0].canvas);
+        // 本地流大小窗交换
+        if (smallViewUid.equals(mSelfUid) && largeViewUid.equals(mSelfUid)) {
+            updateLocalVideoRender(mUserViewArray[0].canvas, mUserViewArray[0].isScreen);
+            updateLocalVideoRender(mUserViewArray[index].canvas, mUserViewArray[index].isScreen);
+           
+            mUserViewArray[0].renderContainer.addView((SurfaceView) mUserViewArray[0].canvas.view);
+            mUserViewArray[0].setVisible(true);
+
+            mUserViewArray[index].renderContainer.addView((SurfaceView) mUserViewArray[index].canvas.view);
+            mUserViewArray[index].setVisible(true);
+        }
+        else if (smallViewUid.equals(mSelfUid)) {
+            // 本地流（小窗）-> 大窗
+            updateLocalVideoRender(mUserViewArray[0].canvas, mUserViewArray[0].isScreen);
             mUserViewArray[0].renderContainer.addView((SurfaceView) mUserViewArray[0].canvas.view);
             mUserViewArray[0].setVisible(true);
 
             if (!TextUtils.isEmpty(largeViewUid)) {
-                mRtcEngine.setRemoteViewConfig(mUserViewArray[index].canvas, largeViewUid, DingRtcVideoTrackCamera);
+                // 远端流（大窗）-> 小窗
+                updateRemoteVideoRender(mUserViewArray[index].canvas, largeViewUid, mUserViewArray[index].isScreen);                
                 mUserViewArray[index].renderContainer.addView((SurfaceView) mUserViewArray[index].canvas.view);
                 mUserViewArray[index].setVisible(true);
             } else {
@@ -591,20 +641,24 @@ public class CallActivity extends CallBaseActivity implements EventHandler {
             }
 
         } else if (largeViewUid.equals(mSelfUid)) {
-            mRtcEngine.setRemoteViewConfig(mUserViewArray[0].canvas, smallViewUid, DingRtcVideoTrackCamera);
+            // 远端流（小窗）-> 大窗
+            updateRemoteVideoRender(mUserViewArray[0].canvas, smallViewUid, mUserViewArray[0].isScreen);
             mUserViewArray[0].renderContainer.addView((SurfaceView) mUserViewArray[0].canvas.view);
             mUserViewArray[0].setVisible(true);
 
-            updateLocalVideoRender(mUserViewArray[index].canvas);
+            // 本地流（大窗）-> 小窗
+            updateLocalVideoRender(mUserViewArray[index].canvas, mUserViewArray[index].isScreen);
             mUserViewArray[index].renderContainer.addView((SurfaceView) mUserViewArray[index].canvas.view);
             mUserViewArray[index].setVisible(true);
         } else {
-            mRtcEngine.setRemoteViewConfig(mUserViewArray[0].canvas, smallViewUid, DingRtcVideoTrackCamera);
+            // 远端流（小窗）-> 大窗
+            updateRemoteVideoRender(mUserViewArray[0].canvas, smallViewUid, mUserViewArray[0].isScreen);
             mUserViewArray[0].renderContainer.addView((SurfaceView) mUserViewArray[0].canvas.view);
             mUserViewArray[0].setVisible(true);
 
             if (!TextUtils.isEmpty(largeViewUid)) {
-                mRtcEngine.setRemoteViewConfig(mUserViewArray[index].canvas, largeViewUid, DingRtcVideoTrackCamera);
+                // 远端流（大窗）-> 小窗
+                updateRemoteVideoRender(mUserViewArray[index].canvas, largeViewUid, mUserViewArray[index].isScreen);
                 mUserViewArray[index].renderContainer.addView((SurfaceView) mUserViewArray[index].canvas.view);
                 mUserViewArray[index].setVisible(true);
             } else {
@@ -695,10 +749,31 @@ public class CallActivity extends CallBaseActivity implements EventHandler {
         mUserViewArray[index].userId = "";
     }
 
+    // 更新远端用户视频的视图
+    private void updateRemoteVideoRender(DingRtcEngine.DingRtcVideoCanvas canvas, String uid, boolean isScreen) {
+        if(isScreen) {
+            mRtcEngine.setRemoteViewConfig(null, uid, DingRtcVideoTrackScreen);
+            mRtcEngine.setRemoteViewConfig(canvas, uid, DingRtcVideoTrackScreen);
+            return;
+        } else {
+            mRtcEngine.setRemoteViewConfig(null, uid, DingRtcVideoTrackCamera);
+            mRtcEngine.setRemoteViewConfig(canvas, uid, DingRtcVideoTrackCamera);
+        }
+    }
+
     // 更新本地用户视频的视图
-    private void updateLocalVideoRender(DingRtcEngine.DingRtcVideoCanvas canvas) {
+    private void updateLocalVideoRender(DingRtcEngine.DingRtcVideoCanvas canvas, boolean isScreen) {
         mLocalCanvas = canvas;
-        mRtcEngine.setLocalViewConfig(mLocalCanvas, DingRtcVideoTrackCamera);
+        if(isScreen) {
+            mRtcEngine.setLocalViewConfig(null, DingRtcVideoTrackScreen);
+            mRtcEngine.setLocalViewConfig(mLocalCanvas, DingRtcVideoTrackScreen);
+            return;
+        }
+        else{
+            mRtcEngine.setLocalViewConfig(null, DingRtcVideoTrackCamera);
+            mRtcEngine.setLocalViewConfig(mLocalCanvas, DingRtcVideoTrackCamera);
+            return;
+        }
     }
 
 }

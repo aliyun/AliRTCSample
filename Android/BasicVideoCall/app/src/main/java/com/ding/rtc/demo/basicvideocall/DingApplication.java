@@ -42,7 +42,7 @@ public class DingApplication extends Application {
         if (mRtcEngine == null) {
             mRtcEngine = DingRtcEngine.create(getApplicationContext(), "");
             mRtcEngine.subscribeAllRemoteAudioStreams(true);
-            mRtcEngine.subscribeAllRemoteVideoStreams(false);
+            mRtcEngine.subscribeAllRemoteVideoStreams(true);
             mRtcEngine.setRemoteDefaultVideoStreamType(DingRtcEngine.DingRtcVideoStreamType.DingRtcVideoStreamTypeFHD);
             mRtcEngine.setRtcEngineEventListener(mRtcCallback);
         }

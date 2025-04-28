@@ -25,6 +25,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name="com.ding.rtc.demo.basicvideocall.ScreenCapturePermissionActivity"
+            android:theme="@android:style/Theme.Translucent"
+            android:exported="false" />
+        <activity
             android:name="com.ding.rtc.demo.basicvideocall.CallActivity"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTask"
