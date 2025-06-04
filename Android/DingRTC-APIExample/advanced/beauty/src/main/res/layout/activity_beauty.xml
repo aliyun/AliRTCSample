@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- middle: SurfaceView -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="@android:drawable/divider_horizontal_dark"
+        android:dividerPadding="8dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:showDividers="middle">
+
+        <LinearLayout
+            android:id="@+id/local_view_group"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:paddingBottom="4dp"
+                android:text="@string/beauty_local"
+                android:textSize="16sp" />
+
+            <FrameLayout
+                android:id="@+id/preview_view"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@android:color/darker_gray" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/remote_view_group"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:paddingBottom="4dp"
+                android:text="@string/beauty_remote"
+                android:textSize="16sp" />
+
+            <FrameLayout
+                android:id="@+id/remote_view"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@android:color/darker_gray" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- bottom -->
+    <LinearLayout
+        android:id="@+id/beauty_view_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <!-- First Group : Beauty Effect -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/beauty_effect"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:id="@+id/beautyGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/beautyWhitening"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_weight="1"
+                android:onClick="onBeautyClick"
+                android:text="@string/beauty_effect_white" />
+
+            <CheckBox
+                android:id="@+id/beautyBuffing"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_weight="1"
+                android:onClick="onBeautyClick"
+                android:text="@string/beauty_effect_buff" />
+
+            <CheckBox
+                android:id="@+id/beautyRosy"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_weight="1"
+                android:onClick="onBeautyClick"
+                android:text="@string/beauty_effect_rosy" />
+
+            <CheckBox
+                android:id="@+id/beautySharpening"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_weight="1"
+                android:onClick="onBeautyClick"
+                android:text="@string/beauty_effect_sharp" />
+        </LinearLayout>
+
+        <!-- Second Group : Filter Effect -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/filter_effect"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RadioGroup
+                android:id="@+id/filterGroup1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:tag="0">
+
+                <RadioButton
+                    android:id="@+id/filterClose"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:onClick="onFilterClick"
+                    android:tag="0"
+                    android:text="@string/filter_effect_disable" />
+
+                <RadioButton
+                    android:id="@+id/filterFilm"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onFilterClick"
+                    android:tag="1"
+                    android:text="@string/filter_effect_film" />
+
+                <RadioButton
+                    android:id="@+id/filterHK"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onFilterClick"
+                    android:tag="2"
+                    android:text="@string/filter_effect_hongkong" />
+
+                <RadioButton
+                    android:id="@+id/filterKorean"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onFilterClick"
+                    android:tag="3"
+                    android:text="@string/filter_effect_korea" />
+            </RadioGroup>
+
+            <RadioGroup
+                android:id="@+id/filterGroup2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:tag="1">
+
+                <RadioButton
+                    android:id="@+id/filterBlackWhite"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onFilterClick"
+                    android:tag="4"
+                    android:text="@string/filter_effect_bw" />
+
+                <RadioButton
+                    android:id="@+id/filterNaiXia"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onFilterClick"
+                    android:tag="5"
+                    android:text="@string/filter_effect_milk_summer" />
+
+                <RadioButton
+                    android:id="@+id/filterQingXin"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onFilterClick"
+                    android:tag="6"
+                    android:text="@string/filter_effect_fresh" />
+
+                <RadioButton
+                    android:id="@+id/filterRiXi"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onFilterClick"
+                    android:tag="7"
+                    android:text="@string/filter_effect_japan" />
+
+            </RadioGroup>
+
+            <RadioGroup
+                android:id="@+id/filterGroup3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:tag="2">
+
+                <RadioButton
+                    android:id="@+id/filterSenXi"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onFilterClick"
+                    android:tag="8"
+                    android:text="@string/filter_effect_forest" />
+
+                <RadioButton
+                    android:id="@+id/filterYuanQi"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onFilterClick"
+                    android:tag="9"
+                    android:text="@string/filter_effect_spirit" />
+
+                <RadioButton
+                    android:id="@+id/filterZiRan"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onFilterClick"
+                    android:tag="10"
+                    android:text="@string/filter_effect_nature" />
+
+                <RadioButton
+                    android:id="@+id/filterLanDiao"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onFilterClick"
+                    android:tag="11"
+                    android:text="@string/filter_effect_blue" />
+            </RadioGroup>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

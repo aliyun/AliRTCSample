@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">DingRTC API Example</string>
+    <string name="base_function">Base Function</string>
+    <string name="base_function_videocall">Video Call</string>
+    <string name="advanced_function">Advance Function</string>
+    <string name="advanced_function_rtm">Real Time Message</string>
+    <string name="advanced_function_audiogroup">Audio Group</string>
+    <string name="advanced_function_whiteboard">Whiteboard</string>
+    <string name="advanced_function_speechenhance">Speech Enhance</string>
+    <string name="advanced_function_screenshare">ScreenShare</string>
+    <string name="advanced_function_virtual_background">Virtual Background</string>
+    <string name="advanced_function_beauty">Beauty</string>
+</resources>

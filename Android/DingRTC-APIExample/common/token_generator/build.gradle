@@ -1,0 +1,22 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 30
+
+    defaultConfig {
+        minSdkVersion 21
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation 'org.projectlombok:lombok:1.18.8'
+    implementation 'io.netty:netty-buffer:4.1.63.Final'
+    implementation 'org.apache.commons:commons-lang3:3.1'
+    implementation 'commons-codec:commons-codec:1.11'
+    implementation 'com.alibaba:fastjson:1.2.60.sec09'
+}

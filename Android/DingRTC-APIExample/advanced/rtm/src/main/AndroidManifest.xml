@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.ding.rtc.apiexample.advanced.rtm">
+
+    <application>
+        <activity
+            android:name="com.ding.rtc.apiexample.advanced.rtm.RTMLoginActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name="com.ding.rtc.apiexample.advanced.rtm.RTMActivity"
+            android:exported="false" />
+    </application>
+
+</manifest>

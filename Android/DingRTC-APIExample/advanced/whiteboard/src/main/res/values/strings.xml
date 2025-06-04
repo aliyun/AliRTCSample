@@ -1,0 +1,7 @@
+<resources>
+    <string name="whiteboard_button_select">选择</string>
+    <string name="whiteboard_button_draw">绘画</string>
+    <string name="whiteboard_button_erase">擦除</string>
+    <string name="whiteboard_button_laser">激光笔</string>
+    <string name="whiteboard_pageinfo">0/0</string>
+</resources>

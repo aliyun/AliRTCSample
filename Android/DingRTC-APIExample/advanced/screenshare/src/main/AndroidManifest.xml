@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.ding.rtc.apiexample.advanced.screenshare">
+
+    <application>
+        <activity
+            android:name=".ScreenCapturePermissionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ScreenshareLoginActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".ScreenshareActivity"
+            android:exported="false" />
+    </application>
+
+</manifest>

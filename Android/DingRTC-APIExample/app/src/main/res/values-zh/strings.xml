@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">DingRTC API Example</string>
+    <string name="base_function">基础功能</string>
+    <string name="base_function_videocall">视频通话</string>
+    <string name="advanced_function">高级功能</string>
+    <string name="advanced_function_rtm">实时消息</string>
+    <string name="advanced_function_audiogroup">音频分组</string>
+    <string name="advanced_function_whiteboard">互动白板</string>
+    <string name="advanced_function_speechenhance">智能降噪</string>
+    <string name="advanced_function_screenshare">屏幕分享</string>
+    <string name="advanced_function_virtual_background">虚拟背景</string>
+    <string name="advanced_function_beauty">美颜</string>
+</resources>

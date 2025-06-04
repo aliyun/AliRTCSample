@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.ding.rtc.apiexample.advanced.whiteboard">
+
+    <application>
+        <activity
+            android:name="com.ding.rtc.apiexample.advanced.whiteboard.WhiteboardLoginActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name="com.ding.rtc.apiexample.advanced.whiteboard.WhiteboardActivity"
+            android:exported="false"/>
+    </application>
+
+</manifest>

@@ -1,0 +1,5 @@
+<resources>
+    <string name="denoise_enhance">智能降噪</string>
+    <string name="denoise_dsp">传统降噪</string>
+    <string name="denoise_off">关闭降噪</string>
+</resources>

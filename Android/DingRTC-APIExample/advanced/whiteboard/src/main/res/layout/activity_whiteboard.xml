@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="0dp">
+
+    <!-- 顶部按钮栏 -->
+    <RadioGroup
+        android:id="@+id/topButtonGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <!-- 选择按钮 -->
+        <RadioButton
+            android:id="@+id/buttonSelect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/whiteboard_button_select"
+            android:onClick="onTopButtonClick"
+            android:background="?android:attr/selectableItemBackgroundBorderless"/>
+
+        <!-- 绘画按钮 -->
+        <RadioButton
+            android:id="@+id/buttonDraw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/whiteboard_button_draw"
+            android:onClick="onTopButtonClick"
+            android:checked="true"
+            android:background="?android:attr/selectableItemBackgroundBorderless"/>
+
+        <!-- 擦除按钮 -->
+        <RadioButton
+            android:id="@+id/buttonErase"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/whiteboard_button_erase"
+            android:onClick="onTopButtonClick"
+            android:background="?android:attr/selectableItemBackgroundBorderless"/>
+
+        <!-- 激光笔按钮 -->
+        <RadioButton
+            android:id="@+id/buttonLaser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/whiteboard_button_laser"
+            android:onClick="onTopButtonClick"
+            android:background="?android:attr/selectableItemBackgroundBorderless"/>
+
+    </RadioGroup>
+
+    <!-- 中间区域 -->
+    <com.ding.rtc.DingRtcWhiteboardView
+        android:id="@+id/whiteboard_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- 底部按钮栏 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="8dp">
+
+        <!-- 第一页按钮 -->
+        <ImageButton
+            android:id="@+id/buttonFirstPage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_media_previous"
+            android:onClick="onBottomButtonClick"
+            android:padding="8dp"/>
+
+        <!-- 上一页按钮 -->
+        <ImageButton
+            android:id="@+id/buttonPreviousPage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_media_rew"
+            android:onClick="onBottomButtonClick"
+            android:padding="8dp"/>
+
+        <!-- 当前页/总页数 -->
+        <TextView
+            android:id="@+id/textPageInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/whiteboard_pageinfo"
+            android:textSize="16sp"
+            android:padding="8dp"/>
+
+        <!-- 下一页按钮 -->
+        <ImageButton
+            android:id="@+id/buttonNextPage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_media_ff"
+            android:onClick="onBottomButtonClick"
+            android:padding="8dp"/>
+
+        <!-- 最后一页按钮 -->
+        <ImageButton
+            android:id="@+id/buttonLastPage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_media_next"
+            android:onClick="onBottomButtonClick"
+            android:padding="8dp"/>
+
+        <!-- 添加一页按钮 -->
+        <ImageButton
+            android:id="@+id/buttonAddPage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_add"
+            android:onClick="onBottomButtonClick"
+            android:padding="8dp"/>
+
+        <!-- 删除一页按钮 -->
+        <ImageButton
+            android:id="@+id/buttonDeletePage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:onClick="onBottomButtonClick"
+            android:padding="8dp"/>
+    </LinearLayout>
+</LinearLayout>

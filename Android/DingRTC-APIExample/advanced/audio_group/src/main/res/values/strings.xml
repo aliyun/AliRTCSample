@@ -1,0 +1,3 @@
+<resources>
+    <string name="rtm_message_received">收到消息: (%s) %s</string>
+</resources>

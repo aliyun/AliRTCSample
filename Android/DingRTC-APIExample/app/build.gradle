@@ -1,0 +1,44 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        applicationId "com.ding.rtc.api.example"
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled true
+    }
+
+    packagingOptions {
+        exclude 'META-INF/io.netty.versions.properties'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation project(':basic:videocall')
+    implementation project(':advanced:screenshare')
+    implementation project(':advanced:rtm')
+    implementation project(':advanced:audio_group')
+    implementation project(':advanced:whiteboard')
+    implementation project(':advanced:speech_enhance')
+    implementation project(':advanced:beauty')
+    implementation project(':advanced:virtual_background')
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+}

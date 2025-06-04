@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">DingRTC API Example</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_call">CallActivity</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Preference Titles -->
+    <string name="channel_header">Channel</string>
+    <string name="video_header">Video</string>
+    <string name="audio_header">Audio</string>
+
+</resources>

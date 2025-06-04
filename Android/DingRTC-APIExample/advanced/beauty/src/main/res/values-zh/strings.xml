@@ -1,0 +1,32 @@
+<resources>
+    <string name="beauty">美颜</string>
+    <string name="channel_id">频道ID</string>
+    <string name="channel_id_input">请输入频道ID</string>
+    <string name="user_id">用户ID</string>
+    <string name="user_id_input">请输入用户ID</string>
+    <string name="user_name">用户名</string>
+    <string name="user_name_input">请输入用户名</string>
+    <string name="join_channel_as_publisher">作为发布者加入频道</string>
+    <string name="join_channel_as_subscriber">作为订阅者加入频道</string>
+    <string name="beauty_remote">远端</string>
+    <string name="beauty_local">本地</string>
+    <string name="beauty_effect">美颜特效</string>
+    <string name="beauty_effect_disable">关闭</string>
+    <string name="beauty_effect_white">美白</string>
+    <string name="beauty_effect_buff">磨皮</string>
+    <string name="beauty_effect_rosy">红润</string>
+    <string name="beauty_effect_sharp">锐化</string>
+    <string name="filter_effect">滤镜特效</string>
+    <string name="filter_effect_disable">关闭</string>
+    <string name="filter_effect_film">胶片</string>
+    <string name="filter_effect_hongkong">港风</string>
+    <string name="filter_effect_korea">韩风</string>
+    <string name="filter_effect_bw">黑百</string>
+    <string name="filter_effect_milk_summer">奶夏</string>
+    <string name="filter_effect_fresh">清新</string>
+    <string name="filter_effect_japan">日系</string>
+    <string name="filter_effect_forest">森系</string>
+    <string name="filter_effect_spirit">元气</string>
+    <string name="filter_effect_nature">自然</string>
+    <string name="filter_effect_blue">蓝调</string>
+</resources>

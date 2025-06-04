@@ -1,0 +1,20 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.ding.rtc.basic.videocall">
+
+    <application>
+        <activity
+            android:name="com.ding.rtc.apiexample.basic.videocall.ScreenCapturePermissionActivity"
+            android:theme="@android:style/Theme.Translucent"
+            android:exported="false" />
+        <activity
+            android:name="com.ding.rtc.apiexample.basic.videocall.CallActivity"
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="com.ding.rtc.apiexample.basic.videocall.VideoCallLoginActivity"
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar"/>
+    </application>
+
+</manifest>
