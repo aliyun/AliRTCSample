@@ -1,0 +1,15 @@
+<resources>
+    <string name="switch_screen">横竖屏切换</string>
+    <string name="switch_screen_local">本地</string>
+    <string name="switch_screen_remote">远端</string>
+    <string name="switch_screen_systemui_auto">系统UI横竖屏自动切换</string>
+    <string name="switch_screen_systemui_portrait">系统UI固定竖屏</string>
+    <string name="switch_screen_systemui_landscape">系统UI固定横屏</string>
+    <string name="channel_id">频道ID</string>
+    <string name="channel_id_input">请输入频道ID</string>
+    <string name="user_id">用户ID</string>
+    <string name="user_id_input">请输入用户ID</string>
+    <string name="user_name">用户名</string>
+    <string name="user_name_input">请输入用户名</string>
+    <string name="join_channel">加入频道</string>
+</resources>

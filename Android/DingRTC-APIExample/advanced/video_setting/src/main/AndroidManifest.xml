@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.ding.rtc.apiexample.advanced.videosetting">
+
+    <application>
+        <activity
+            android:name=".VideoSettingActivity"
+            android:screenOrientation="portrait"
+            android:exported="false"/>
+        <activity
+            android:name=".VideoSettingLoginActivity"
+            android:screenOrientation="portrait"
+            android:exported="false" />
+    </application>
+
+</manifest>

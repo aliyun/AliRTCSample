@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:divider="@android:drawable/divider_horizontal_dark"
+        android:dividerPadding="8dp"
+        android:padding="10dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:showDividers="middle">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:paddingBottom="4dp"
+                android:text="@string/switch_screen_local"
+                android:textSize="16sp" />
+
+            <FrameLayout
+                android:id="@+id/preview_view"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@android:color/darker_gray" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:divider="@android:drawable/divider_horizontal_dark"
+        android:dividerPadding="8dp"
+        android:gravity="center"
+        android:padding="10dp"
+        android:orientation="vertical"
+        android:showDividers="middle">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:paddingBottom="4dp"
+                android:text="@string/switch_screen_remote"
+                android:textSize="16sp" />
+
+            <FrameLayout
+                android:id="@+id/remote_view"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@android:color/darker_gray" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

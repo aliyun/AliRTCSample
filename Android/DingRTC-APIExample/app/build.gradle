@@ -31,6 +31,7 @@ android {
 }
 
 dependencies {
+    implementation project(':basic:audiocall')
     implementation project(':basic:videocall')
     implementation project(':advanced:screenshare')
     implementation project(':advanced:rtm')
@@ -39,6 +40,14 @@ dependencies {
     implementation project(':advanced:speech_enhance')
     implementation project(':advanced:beauty')
     implementation project(':advanced:virtual_background')
+    implementation project(':advanced:external_video_source')
+    implementation project(':advanced:external_audio_source')
+    implementation project(':advanced:raw_video_data')
+    implementation project(':advanced:raw_audio_data')
+    implementation project(':advanced:subtitle')
+    implementation project(':advanced:switch_screen')
+    implementation project(':advanced:video_setting')
+    implementation project(':advanced:audio_setting')
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'androidx.appcompat:appcompat:1.1.0'
 }

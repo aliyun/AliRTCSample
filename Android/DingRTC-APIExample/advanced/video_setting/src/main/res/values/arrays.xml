@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="resolution_options">
+        <item>1080P</item>
+        <item>720P</item>
+        <item>360P</item>
+    </string-array>
+    <string-array name="framerate_options">
+        <item>30fps</item>
+        <item>20fps</item>
+        <item>15fps</item>
+        <item>10fps</item>
+        <item>5fps</item>
+    </string-array>
+    <string-array name="orientation_options">
+        <item>Adaptive</item>
+        <item>FixedLandscape</item>
+        <item>FixedPortrait</item>
+    </string-array>
+</resources>

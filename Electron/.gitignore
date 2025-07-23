@@ -1,0 +1,31 @@
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+
+# dependencies
+node_modules/
+
+# production
+dist/
+tmp/
+cjs/
+esm/
+out/
+es2017/
+
+Default/
+
+# misc
+.idea/
+.DS_Store
+*.swp
+*.dia~
+
+.vscode/
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+release*.zip
+.eslintcache
+docs/
+*.backup

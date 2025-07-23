@@ -1,0 +1,19 @@
+<resources>
+    <string name="video_setting">视频属性设置</string>
+    <string name="video_setting_resolution">分辨率：</string>
+    <string name="video_setting_framerate">帧率: </string>
+    <string name="video_setting_orientation">方位模式: </string>
+    <string name="join_channel_as_publisher">作为发布者加入频道</string>
+    <string name="join_channel_as_subscriber">作为订阅者加入频道</string>
+    <string name="video_setting_local">本地</string>
+    <string name="video_setting_remote">远端</string>
+    <string name="video_setting_publish">推视频流</string>
+    <string name="video_setting_unpublish">取消视频推流</string>
+    <string name="channel_id">频道ID</string>
+    <string name="channel_id_input">请输入频道ID</string>
+    <string name="user_id">用户ID</string>
+    <string name="user_id_input">请输入用户ID</string>
+    <string name="user_name">用户名</string>
+    <string name="user_name_input">请输入用户名</string>
+    <string name="join_channel">加入频道</string>
+</resources>

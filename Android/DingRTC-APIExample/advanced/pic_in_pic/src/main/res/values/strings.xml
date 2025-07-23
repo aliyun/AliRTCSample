@@ -1,0 +1,32 @@
+<resources>
+    <string name="beauty">Beauty</string>
+    <string name="channel_id">Channel ID</string>
+    <string name="channel_id_input">Please input channel ID</string>
+    <string name="user_id">User ID</string>
+    <string name="user_id_input">Please input user ID</string>
+    <string name="user_name">User Name</string>
+    <string name="user_name_input">Please input user name</string>
+    <string name="join_channel_as_publisher">Join Channel As Publisher</string>
+    <string name="join_channel_as_subscriber">Join Channel As Subscriber</string>
+    <string name="beauty_remote">Remote</string>
+    <string name="beauty_local">Local</string>
+    <string name="beauty_effect">Beauty Effect</string>
+    <string name="beauty_effect_disable">Close</string>
+    <string name="beauty_effect_white">White</string>
+    <string name="beauty_effect_buff">Buff</string>
+    <string name="beauty_effect_rosy">Rosy</string>
+    <string name="beauty_effect_sharp">Sharp</string>
+    <string name="filter_effect">Filter Effect</string>
+    <string name="filter_effect_disable">Close</string>
+    <string name="filter_effect_film">Film</string>
+    <string name="filter_effect_hongkong">HKStyle</string>
+    <string name="filter_effect_korea">KoeraStyle</string>
+    <string name="filter_effect_bw">BW</string>
+    <string name="filter_effect_milk_summer">MilkSummary</string>
+    <string name="filter_effect_fresh">Fresh</string>
+    <string name="filter_effect_japan">JapanStyle</string>
+    <string name="filter_effect_forest">Forest</string>
+    <string name="filter_effect_spirit">Spirit</string>
+    <string name="filter_effect_nature">Nature</string>
+    <string name="filter_effect_blue">Blue</string>
+</resources>

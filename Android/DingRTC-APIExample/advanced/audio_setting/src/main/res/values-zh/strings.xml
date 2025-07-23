@@ -1,0 +1,15 @@
+<resources>
+    <string name="audio_setting">音频属性设置</string>
+    <string name="audio_setting_mode">模式：</string>
+    <string name="audio_setting_scene">场景: </string>
+    <string name="audio_setting_volumn">音量: </string>
+    <string name="audio_setting_publish">推音频流</string>
+    <string name="audio_setting_unpublish">取消音频推流</string>
+    <string name="channel_id">频道ID</string>
+    <string name="channel_id_input">请输入频道ID</string>
+    <string name="user_id">用户ID</string>
+    <string name="user_id_input">请输入用户ID</string>
+    <string name="user_name">用户名</string>
+    <string name="user_name_input">请输入用户名</string>
+    <string name="join_channel">加入频道</string>
+</resources>

@@ -1,0 +1,15 @@
+<resources>
+    <string name="audio_setting">Audio Setting</string>
+    <string name="audio_setting_mode">Mode: </string>
+    <string name="audio_setting_scene">Scene: </string>
+    <string name="audio_setting_volumn">Volumn: </string>
+    <string name="audio_setting_publish">Publish Audio</string>
+    <string name="audio_setting_unpublish">Unpublish Audio</string>
+    <string name="channel_id">Channel ID</string>
+    <string name="channel_id_input">Please input channel ID</string>
+    <string name="user_id">User ID</string>
+    <string name="user_id_input">Please input user ID</string>
+    <string name="user_name">User Name</string>
+    <string name="user_name_input">Please input user name</string>
+    <string name="join_channel">Join Channel</string>
+</resources>

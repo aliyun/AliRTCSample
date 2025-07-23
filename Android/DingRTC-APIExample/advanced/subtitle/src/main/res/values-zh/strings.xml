@@ -1,0 +1,14 @@
+<resources>
+    <string name="subtitle">字幕</string>
+    <string name="subtitle_local">本地</string>
+    <string name="subtitle_remote">远端</string>
+    <string name="channel_id">频道ID</string>
+    <string name="channel_id_input">请输入频道ID</string>
+    <string name="user_id">用户ID</string>
+    <string name="user_id_input">请输入用户ID</string>
+    <string name="user_name">用户名</string>
+    <string name="user_name_input">请输入用户名</string>
+    <string name="join_channel_as_publisher">作为发布者加入频道</string>
+    <string name="join_channel_as_subscriber">作为订阅者加入频道</string>
+
+</resources>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="mode_options">
+        <item>Basic</item>
+        <item>High</item>
+        <item>SuperHigh</item>
+        <item>StereoHigh</item>
+        <item>StereoSuperHigh</item>
+    </string-array>
+    <string-array name="scene_options">
+        <item>Default</item>
+        <item>Music</item>
+    </string-array>
+</resources>

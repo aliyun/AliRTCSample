@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "~/*": [
+        "src/renderer/src/*"
+      ]
+    },
+    "target": "esnext",
+    "module": "esnext",
+    "sourceMap": false,
+    "strict": true,
+    "jsx": "preserve",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitAny": false,
+    "noImplicitReturns": false,
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "composite": true,
+    "strictNullChecks": false,
+    "allowSyntheticDefaultImports": true,
+    "noFallthroughCasesInSwitch": true,
+    "importHelpers": true
+  },
+  "include": [
+    "src/renderer/src/env.d.ts",
+    "src/renderer/src/**/*",
+    "src/renderer/src/**/*.vue",
+  ]
+}

@@ -1,0 +1,11 @@
+<resources>
+    <string name="audio_call">音频通话</string>
+    <string name="channel_id">频道ID</string>
+    <string name="channel_id_input">请输入频道ID</string>
+    <string name="user_id">用户ID</string>
+    <string name="user_id_input">请输入用户ID</string>
+    <string name="user_name">用户名</string>
+    <string name="user_name_input">请输入用户名</string>
+    <string name="join_channel">加入频道</string>
+
+</resources>

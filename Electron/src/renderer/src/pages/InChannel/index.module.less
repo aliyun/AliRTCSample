@@ -1,0 +1,479 @@
+.hideBar {
+  height: 0!important;
+}
+.toolBarWrap {
+  background-color: #fff;
+  width: 100%;
+  align-self: flex-end;
+  height: 56px;
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  transition: height 0.5s ease;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  & > button {
+    position: absolute;
+    top: 12px;
+    right: 40px;
+  }
+  & .toolBtn {
+    flex-direction: column;
+    cursor: pointer;
+    width: 72px;
+    justify-content: center;
+    align-items: center;
+    height: 48px;
+    color: rgba(23, 26, 29, 0.85);
+    font-size: 18px;
+    & > span:last-of-type {
+      font-size: 12px;
+      opacity: 0.56;
+    }
+    &:hover {
+      background-color: #dcdcdc;
+      border-radius: 4px;
+    }
+  }
+
+}
+
+.mainView {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  & .higherMainUserInfo {
+    bottom: 60px;
+    // transition: bottom 0.5s ease;
+  }
+  :deep(.ant-avatar) {
+    display: none;
+  }
+  &.avatar {
+    :deep(.ant-avatar) {
+      width: 120px;
+      height: 120px;
+    }
+  }
+
+}
+
+.confInfo {
+  position: absolute;
+  top: 0;
+  z-index: 11;
+  font-size: 12px;
+  padding-left: 4px;
+  color: rgba(23, 26, 29, 0.85);
+  left: 0;
+  flex-direction: column;
+}
+
+.blockWrapper {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  flex-direction: column;
+  background-color: #dce1e6;
+  & > div:first-of-type {
+    height: 24px;
+    width: 100%;
+    position: absolute;
+    background-color: #fff;
+    z-index: 2;
+    transition: height 0.5s ease;
+    overflow: hidden;
+    & > span:first-of-type {
+      position: relative;
+      left: 4px;
+      width: 134px;
+      line-height: 24px;
+    }
+  }
+}
+
+.fullscreen {
+  position: absolute;
+  right: 24px;
+  top: 2px;
+  align-items: center;
+  cursor: pointer;
+  align-items: center;
+  color: var(--common_level1_base_color, #171a1d);
+  font-size: 14px;
+  & span {
+    margin-right: 4px;
+  }
+  .anticon {
+    font-size: 16px;
+  }
+}
+.viewConfigHot {
+  padding: 2px 12px;
+  border-radius: 6px;
+  &:hover {
+    background-color: #eaecef;
+  }
+}
+.smallVideoItems {
+  padding-bottom: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  overflow-y: auto;
+}
+
+.grid {
+  background-color: #eaecef;
+  align-content: center;
+  height: 100%;
+  & .speaking {
+    &::after {
+      border-radius: 0;
+    }
+  }
+  
+}
+
+.standard {
+  padding-top: 32px;
+  min-height: 120px;
+  max-height: 250px;
+  padding-left: 20px;
+  width: 100%;
+  background-color: #f5f7fa;
+  & .smallVideoItem {
+    width: 184.889px;
+    border-radius: 6px;
+    height: 104px;
+  }
+}
+
+.smallVideoItem {
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  display: flex;
+  border: 1px solid #eaecef;
+  overflow: hidden;
+  background-color: #dde1e5;
+
+  & > svg, & > .anticon {
+    position: absolute;
+    right: 2px;
+    top: 2px;
+  }
+}
+
+.avatar {
+  :deep(.ant-avatar) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  :deep(canvas) {
+    display: none;
+  }
+}
+
+.camera {
+  :deep(.ant-avatar) {
+    display: none!important;
+  }
+  :deep(canvas) {
+    border-radius: 6px;
+    display: inline-block;
+  }
+}
+
+.smallViewStatus, .pip {
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  padding: 0 4px;
+  max-width: 110px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  border-radius: 4px;
+  background-color: hsla(0,0%,100%,0.8);
+  z-index: 1;
+  height: 22px;
+  line-height: 22px;
+  transition: bottom 0.5s ease;
+  & > span:last-of-type {
+    font-size: 12px;
+    margin-left: 2px;
+    color: #171a1d;
+  }
+}
+
+.viewConfigContainer {
+  margin-right: 20px;
+}
+
+.stopShare {
+  & :global(.deviceIcon) {
+    color: #fb602d !important;
+  }
+}
+
+.smallViewActions {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  padding: 0 4px;
+  border-radius: 4px;
+  background-color: hsla(0,0%,100%,0.8);
+  cursor: pointer;
+  z-index: 1;
+  height: 22px;
+  line-height: 22px;
+}
+
+.actionsItem {
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.userId {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  font-size: 12px;
+  color: #fb602d;
+}
+
+.speaking {
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    border-radius: 6px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 2px solid green;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .toolBarWrap {
+    & button:last-of-type {
+      right: 8px;
+    }
+    & .toolBtn {
+      width: 90px;
+      font-size: 18px;
+    }
+  }
+  .smallVideoItems {
+    padding-left: 0;
+  }
+  .confInfo {
+    padding-left: 0;
+    zoom: 0.83;
+  }
+}
+
+.disconnectIconWrapper {
+  margin: 0 8px;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  overflow: hidden;
+  :hover {
+    background-color: var(--btm-toolbar-btn-bg-color);
+    cursor: pointer;
+  }
+  .disconnectIcon {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.cardWrapper {
+  width: 100%;
+  height: 100%;
+  min-width: 240px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .labelWrap {
+    flex-shrink: 1;
+    flex-grow: 0;
+    display: flex;
+    flex-direction: column;
+    margin-right: 10px;
+    .label {
+      margin: 8px 0;
+    }
+  }
+  .valueWrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    .value {
+      margin: 8px 0;
+      white-space: nowrap;
+    }
+  }
+}
+.networkIcon {
+  width: 24px;
+  height: 24px;
+}
+
+.networkTrigger {
+  margin-left: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.encodeLayers {
+  position: absolute;
+  right: 4px;
+  top: 2px;
+  font-size: 12px;
+}
+.sendLayers {
+  position: absolute;
+  right: 4px;
+  top: 16px;
+  font-size: 12px;
+}
+
+.viewConfig {
+  padding: 0 4px;
+  color: #171a1d;
+  & .ant-radio-wrapper {
+    height: 30px;
+    line-height: 30px;
+    display: flex;
+  }
+  & .ant-divider-horizontal {
+    margin: 4px 0;
+  }
+  & .anticon {
+    font-size: 16px;
+  }
+  & > div {
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+  }
+}
+
+.disconnected {
+  font-size: 24px;
+}
+
+.shareItem {
+  height: 120px;
+  width: 155px;
+  border-radius: 4px;
+  padding: 7px 7px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  border: 1px solid  rgba(126, 134, 142, 0.24);
+  & > div:first-of-type {
+    text-align: left;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+  }
+  &Icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    margin-right: 6px;
+  }
+  &Title {
+    width: calc(100% - 24px);
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 14px;
+    line-height: 16px;
+    font-weight: 500;
+    color: #171a1d;
+  }
+  &Selected {
+    background: rgba(0, 127, 255, .12) !important;
+    border: 1px solid #0075eb;
+  }
+  & > div:nth-of-type(2) {
+    flex: 1;
+    display: flex;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 4px;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.08);
+    & img {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+    }
+  }
+  &:hover {
+    cursor: pointer;
+  }
+}
+.shareContainerModal {
+  & .ant-modal-content {
+    padding: 0;
+  }
+}
+.shareContainer {
+  background-color: #fff;
+  height: 550px;
+  overflow: hidden;
+  border-radius: 8px;
+  &Body {
+    padding: 12px;
+    padding-right: 0;
+    height: calc(100% - 60px);
+    overflow-y: auto;
+  }
+  &Header {
+    text-align: left;
+    font-size: 14px;
+    font-weight: 500;
+    height: 40px;
+    line-height: 40px;
+    display: flex;
+    justify-content: center;
+  }
+  &Footer {
+    position: absolute;
+    display: flex;
+    width: 100%;
+    height: 60px;
+    bottom: 0;
+    padding-left: 20px;
+    padding-right: 20px;
+    align-items: center;
+    justify-content: space-between;
+    & :deep(.ant-btn) {
+      width: 76px;
+      height: 36px;
+    }
+  }
+  &FooterWithBorder {
+    border: 1px solid rgba(126, 134, 142, 0.24);
+    box-shadow: 0 -2px 6px 0 rgba(0, 0, 0, 0.1);
+  }
+}
+

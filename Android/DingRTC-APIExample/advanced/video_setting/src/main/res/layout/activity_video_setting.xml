@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- middle: SurfaceView -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="@android:drawable/divider_horizontal_dark"
+        android:dividerPadding="8dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:showDividers="middle">
+
+        <LinearLayout
+            android:id="@+id/local_view_group"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:paddingBottom="4dp"
+                android:text="@string/video_setting_local"
+                android:textSize="16sp" />
+
+            <FrameLayout
+                android:id="@+id/preview_view"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@android:color/darker_gray" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/remote_view_group"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:paddingBottom="4dp"
+                android:text="@string/video_setting_remote"
+                android:textSize="16sp" />
+
+            <FrameLayout
+                android:id="@+id/remote_view"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@android:color/darker_gray" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- bottom -->
+    <LinearLayout
+        android:id="@+id/video_setting_view_group"
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <!-- first：resolution -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/video_setting_resolution"
+                android:textSize="16sp" />
+
+            <Spinner
+                android:id="@+id/spinner_resolution"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <!-- second：framerate -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/video_setting_framerate"
+                android:textSize="16sp" />
+
+            <Spinner
+                android:id="@+id/spinner_framerate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <!-- third：orientation -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/video_setting_orientation"
+                android:textSize="16sp" />
+
+            <Spinner
+                android:id="@+id/spinner_orientation_mode"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <!-- forth：bitrate -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="码率："
+                android:textSize="16sp"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <SeekBar
+                    android:id="@+id/seekBar_bitrate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="10000"
+                    android:progress="3000"
+                    android:paddingTop="8dp"/>
+
+                <TextView
+                    android:id="@+id/tv_bitrate_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="3000 kbps"
+                    android:textAlignment="center"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- fifth: publish button -->
+        <Button
+            android:id="@+id/btn_operation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#2196F3"
+            android:text="@string/video_setting_publish"
+            android:onClick="onPublishButtonClick"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+    </LinearLayout>
+</LinearLayout>

@@ -74,25 +74,36 @@ public class LinuxServerPullDemo {
         }
 
         @Override
-        public boolean onCapturedAudioFrame(DingRtcEngine.DingRtcAudioFrame frame) {
-            return false;
+        public void onCapturedAudioFrame(DingRtcEngine.DingRtcAudioFrame frame) {
+            return;
         }
 
         @Override
-        public boolean onProcessCapturedAudioFrame(DingRtcEngine.DingRtcAudioFrame frame) {
-            return false;
+        public void onProcessCapturedAudioFrame(DingRtcEngine.DingRtcAudioFrame frame) {
+            return;
         }
 
         @Override
-        public boolean onPublishAudioFrame(DingRtcEngine.DingRtcAudioFrame frame) {
-            return false;
+        public void onPublishAudioFrame(DingRtcEngine.DingRtcAudioFrame frame) {
+            return;
         }
 
         @Override
-        public boolean onPlaybackAudioFrame(DingRtcEngine.DingRtcAudioFrame frame) {
-            // 拉流播放数据
+        public void onPlaybackAudioFrame(DingRtcEngine.DingRtcAudioFrame frame) {
+            // 拉流播放数据, mixed pcm
             // TODO do save or other logic, ex: asr
-            return false;
+            // enable callback :
+            // engine.enableAudioFrameObserver(true, DingRtcEngine.DingRtcAudioObservePosition.RtcEngineAudioPositionPlayback);
+            return;
+        }
+
+        @Override
+        public void onRemoteUserAudioFrame(String uid, DingRtcEngine.DingRtcAudioFrame frame) {
+            // 拉流播放数据, single user(uid) pcm
+            // TODO do save or other logic, ex: asr
+            // enable callback :
+            // engine.enableAudioFrameObserver(true, DingRtcEngine.DingRtcAudioObservePosition.RtcEngineAudioPositionRemoteUser);
+            return;
         }
     }
 
@@ -258,8 +269,11 @@ public class LinuxServerPullDemo {
         }
         if (context.engine != null) {
             // 1. 关闭音频数据订阅位置
-            context.engine.enableAudioFrameObserver(false, DingRtcEngine.DintRtcAudioObservePosition.RtcEngineAudioPositionPlayback);
-
+            // mixed pcm callback
+            context.engine.enableAudioFrameObserver(false, DingRtcEngine.DingRtcAudioObservePosition.RtcEngineAudioPositionPlayback);
+            // single user callback
+            //context.engine.enableAudioFrameObserver(false, DingRtcEngine.DingRtcAudioObservePosition.RtcEngineAudioPositionRemoteUser);
+            
             // 2. 取消注册observer
             context.engine.registerAudioFrameObserver(null);
 
@@ -293,8 +307,11 @@ public class LinuxServerPullDemo {
             DingRtcEngine.DingRtcAudioFrameObserverConfig config = new DingRtcEngine.DingRtcAudioFrameObserverConfig();
             config.sampleRate = DingRtcEngine.DingRtcAudioSampleRate.DingRtcAudioSampleRate_16000;
             config.channels = DingRtcEngine.DingRtcAudioNumChannelType.DingRtcMonoAudio;
-            context.engine.enableAudioFrameObserver(true, DingRtcEngine.DintRtcAudioObservePosition.RtcEngineAudioPositionPlayback, config);
-
+            // mixed pcm callback
+            context.engine.enableAudioFrameObserver(true, DingRtcEngine.DingRtcAudioObservePosition.RtcEngineAudioPositionPlayback, config);
+            // single user callback
+            //context.engine.enableAudioFrameObserver(true, DingRtcEngine.DingRtcAudioObservePosition.RtcEngineAudioPositionRemoteUser, config);
+            
             // 3. 开启音量提示和说话人提示功能，interval > 0 代表开启，<= 0 代表关闭
             // 相关信息见回调： onAudioVolumeIndication
             context.engine.enableAudioVolumeIndication(300, 3, 1);
