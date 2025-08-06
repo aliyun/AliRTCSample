@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import { ref, reactive, toRaw } from 'vue';
 import { message, Form, Input, Button, Card, FormItem } from 'ant-design-vue';
-import { getAppToken } from '~/utils/request';
+import { getAppToken } from '~/utils/app_token';
 import { print } from '~/utils/tools';
 import DingRTC, {
   CameraVideoTrack,
@@ -67,17 +67,14 @@ const onJoin = async () => {
   print('localJoinChannel');
   joining.value = true;
   try {
-    let appTokenResult = await getAppToken(uid, app, channelName);
+    let appToken = await getAppToken(uid, channelName, app);
     const loginParam = {
       appId: app,
       userId: uid,
       userName: name,
       channelName,
-      appToken: appTokenResult.token,
+      appToken,
     };
-    if (appTokenResult.gslb.length) {
-      DingRTC.setClientConfig({ gslb: appTokenResult.gslb });
-    }
     bindEvents();
     try {
       const result = await toRaw(client).join({

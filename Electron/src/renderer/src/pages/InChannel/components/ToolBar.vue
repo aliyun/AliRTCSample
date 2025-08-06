@@ -94,6 +94,10 @@ const toggleShowShareSelector = () => {
   if (!channelInfo.screenTrack) {
     showShareSelector.value = !showShareSelector.value
   } else {
+    if (deviceInfo.shareSystemAudio) {
+      deviceInfo.$patch({ shareSystemAudio: false });
+      channelInfo.micTrack?.enableSystemAudio(false);
+    }
     if (channelInfo.publishedTracks.has(channelInfo.screenTrack.getTrackId())) {
       operateScreen()
     }
