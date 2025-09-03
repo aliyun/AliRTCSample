@@ -30,7 +30,7 @@ public class SubtitleView extends View {
         textPaint.setTextSize(42);
         textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setAntiAlias(true);
-        setBackgroundColor(Color.parseColor("#80000000")); // 半透明背景
+        setBackgroundColor(Color.parseColor("#80000000"));
     }
 
     public void setSubtitles(List<SubtitleItem> subtitles) {
@@ -39,27 +39,35 @@ public class SubtitleView extends View {
         invalidate();
     }
 
+    public void setSubtitle(SubtitleItem subtitleItem){
+        this.subtitles.clear();
+        subtitles.add(subtitleItem);
+    }
+
+    public void addSubtitle(SubtitleItem subtitleItem){
+        subtitles.add(subtitleItem);
+    }
+
     public void setCurrentPosition(long positionMs) {
         this.currentPosition = positionMs;
-        invalidate(); // 触发重绘
+        invalidate();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        int yPos = 100; // 起始Y坐标
+        int yPos = 80;
         for (SubtitleItem item : subtitles) {
-            if (currentPosition >= item.getStartTimeMs() &&
-                    currentPosition <= item.getEndTimeMs()) {
-
+//            if (currentPosition >= item.getStartTimeMs() &&
+//                    currentPosition <= item.getEndTimeMs()) {
                 canvas.drawText(
                         item.getText(),
-                        getWidth() / 2f, // X居中
+                        getWidth() / 2f,
                         yPos,
                         textPaint
                 );
-                yPos += 60; // 行间距
-            }
+                yPos += 60;
+//            }
         }
     }
 }

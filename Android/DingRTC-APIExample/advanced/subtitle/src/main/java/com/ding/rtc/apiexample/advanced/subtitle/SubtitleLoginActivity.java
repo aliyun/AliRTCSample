@@ -31,7 +31,6 @@ public class SubtitleLoginActivity extends AppCompatActivity {
     private EditText mChannelId;
     private EditText mUserId;
     private EditText mUserName;
-    private boolean isPublisher = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,12 +52,7 @@ public class SubtitleLoginActivity extends AppCompatActivity {
         String userName = preferences.getString(kUserName, "");
         mUserName = findViewById(R.id.usernameEditText);
         mUserName.setText(userName);
-        findViewById(R.id.joinChannelAsPublisherButton).setOnClickListener(v -> {
-            isPublisher = true;
-            joinChannel();
-        });
-        findViewById(R.id.joinChannelAsSubscriberButton).setOnClickListener(v -> {
-            isPublisher = false;
+        findViewById(R.id.joinChannelButton).setOnClickListener(v -> {
             joinChannel();
         });
 
@@ -155,7 +149,7 @@ public class SubtitleLoginActivity extends AppCompatActivity {
 
     private void startCall(String channelId, String userId, String userName) {
         SubtitleActivity.launch(SubtitleLoginActivity.this, TokenGenerator.APP_ID, channelId,
-                userId, userName, TokenGenerator.generateAppToken(channelId, userId), isPublisher);
+                userId, userName, TokenGenerator.generateAppToken(channelId, userId));
         finish();
     }
 }

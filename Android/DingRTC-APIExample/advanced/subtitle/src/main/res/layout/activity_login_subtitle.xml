@@ -72,15 +72,9 @@
 
     <!-- 加入频道按钮 -->
     <Button
-        android:id="@+id/joinChannelAsPublisherButton"
+        android:id="@+id/joinChannelButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/join_channel_as_publisher"
-        android:layout_marginTop="16dp"/>
-    <Button
-        android:id="@+id/joinChannelAsSubscriberButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/join_channel_as_subscriber"
+        android:text="@string/join_channel"
         android:layout_marginTop="16dp"/>
 </LinearLayout>
