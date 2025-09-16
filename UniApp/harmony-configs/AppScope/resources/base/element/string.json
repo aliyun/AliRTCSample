@@ -1,0 +1,16 @@
+{
+  "string": [
+    {
+      "name": "app_name",
+      "value": "DingRtcUniDemo"
+    },
+    {
+      "name": "microphone",
+      "value": "request microphone permission"
+    },
+    {
+      "name": "camera",
+      "value": "request camera permission"
+    }
+  ]
+}

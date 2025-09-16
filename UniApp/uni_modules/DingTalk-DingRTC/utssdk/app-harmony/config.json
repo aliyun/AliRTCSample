@@ -1,0 +1,5 @@
+{
+    "dependencies": {
+        "@dingrtc/dingrtc": "3.8.5"
+    }
+}

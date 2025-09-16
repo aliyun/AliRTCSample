@@ -1,0 +1,147 @@
+.drtc-container {
+	background-color: #F4F4F4;
+}
+
+.drtc-log-view {
+	position: fixed;
+	background-color: #000000;
+	height: 76.92rpx;
+	left: 0;
+	right: 0;
+}
+
+.drtc-log-fold-btn {
+	position: fixed;
+	right: 0;
+	width: 100rpx;
+	height: 50rpx;
+}
+
+.drtc-log-text {
+	width: 750rpx;
+	font-size: 23.07rpx;
+	line-height: 40rpx;
+	color: #FFFFFF;
+}
+
+.drtc-row-area {
+	flex-direction: row;
+	margin-left: 36.53rpx;
+	margin-right: 36.53rpx;
+	margin-top: 17.3rpx;
+	margin-bottom: 17.3rpx;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.drtc-input {
+	background-color: #FFFFFF;
+	border-radius: 9.61rpx;
+	border-color: #BBBBBB;
+	border-width: 1.92rpx;
+	border-style: solid;
+	color: #101010;
+	font-size: 26.92rpx;
+	height: 46.15rpx;
+	padding-left: 9.61rpx;
+}
+
+.drtc-video-area {
+	flex-direction: row;
+	flex: 1;
+  flex-wrap: wrap;
+}
+.drtc-local-view {
+	
+}
+.drtc-video-view {
+	border-width: 1.92rpx;
+	border-color: #BBBBBB;
+	/* background-color: #FFFFFF; */
+	height: 403.84rpx;
+	flex: 1;
+}
+.drtc-video-remote-view {
+  border-width: 1.92rpx;
+	border-color: #BBBBBB;
+	/* background-color: #FFFFFF; */
+	height: 403.84rpx;
+  width: 375rpx;  
+}
+
+.drtc-video-btn {
+	position: fixed;
+	background-color: #52C2FF;
+	color: #FFF;
+	font-size: 26.92rpx;
+	bottom: 11.53rpx;
+	height: 57.69rpx;
+	left: 17.3rpx;
+	right: 17.3rpx;
+}
+
+.drtc-video-text {
+	position: fixed;
+	margin-top: 90.38rpx;
+	font-size: 26.92rpx;
+	text-align: center;
+}
+
+.drtc-line {
+	background-color: #BBBBBB;
+	height: 1.92rpx;
+	flex: 1;
+}
+
+.drtc-title-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	margin-top: 10rpx;
+}
+.drtc-title-text {
+	color: #101010;
+	font-size: 26.92rpx;
+}
+
+.drtc-btn-long {
+	font-size: 26.92rpx;
+	background-color: #2985FF;
+	border-color: #A3D0FD;
+	border-width: 1.92rpx;
+	margin-left: 42.3rpx;
+	margin-right: 42.3rpx;
+	margin-top: 20rpx;
+	color: #FFF;
+}
+
+.drtc-btn-mid {
+	background-color: #2985FF;
+	border-color: #A3D0FD;
+	color: #FFF;
+	font-size: 26.92rpx;
+	width: 292.3rpx;
+	height: 55.76rpx;
+}
+
+.drtc-btn-short {
+	background-color: #52C2FF;
+	border-color: #A3D0FD;
+	color: #FFF;
+	font-size: 19.23rpx;
+	width: 75rpx;
+	height: 38.46rpx;
+}
+
+.drtc-conent-text {
+	color: #AEAEAE;
+	font-size: 19.23rpx;
+}
+
+.picker-view {
+	padding: 15rpx 25rpx;
+	line-height: 50rpx;
+	font-size: 26.92rpx;
+	background: #FFF;
+	flex: 1;
+}

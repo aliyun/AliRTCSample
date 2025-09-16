@@ -1,0 +1,516 @@
+
+/**
+ * @brief 用户离线原因。
+ * - 0: quit, 用户主动离开。
+ * - 1: dropped, 因过长时间收不到对方数据包，超时掉线。
+ * - 2: becomeAudience, 用户身份从主播切换为观众时触发。
+ */
+export type UDingRtcUserOfflineReason = 0 | 1 | 2
+
+/**
+ * @brief OnBye类型。
+ * - 1: beKickedOut, 当前user被踢出channel。
+ * - 2: channelTerminated, channel已结束，需要离开会议。
+ * - 3: userReplaced, 相同userID在其他设备 JoinChannel，当前设备被下线。
+ * - 4: needRelogin, 信令服务失败，自动重连失败，需要用户手动重试。
+ */
+export type UDingRtcOnByeType = 1 | 2 | 3 | 4
+
+/**
+ * @brief 视图显示模式。
+ * - 0: auto, 自动模式。
+ * - 1: stretch, 拉伸平铺模式 ，如果外部输入的视频宽高比和推流设置的宽高比不一致时，将输入视频拉伸到推流设置的比例，画面会变形。
+ * - 2: fill, 填充黑边模式，如果外部输入的视频宽高比和推流设置的宽高比不一致时，将输入视频上下或者左右填充黑边。
+ * - 3: crop, 裁剪模式，如果外部输入的视频宽高比和推流设置的宽高比不一致时，将输入视频宽或者高进行裁剪，画面内容会丢失。
+ */
+export type UDingRtcRenderMode = 0 | 1 | 2 | 3
+
+/**
+ * @brief 视频窗口镜像模式。
+ * - 0: onlyFrontCameraPreviewEnabled, 只有前置摄像头预览镜像，其余不镜像。
+ * - 1: allEnabled, 镜像开启。
+ * - 2: allDisabled, 镜像关闭。
+ */
+export type UDingRtcRenderMirrorMode = 0 | 1 | 2
+
+/**
+ * @brief 视频旋转角度。
+ * - 0: 旋转0度。
+ * - 90: 旋转90度。
+ * - 180: 旋转180度。
+ * - 270: 旋转270度。
+ */
+export type UDingRtcRotationMode = 0 | 90 | 180 | 270
+
+/**
+ * @brief 视频流类型。
+ * - 0: no, 无摄像头和屏幕共享。
+ * - 1: camera, 摄像头。
+ * - 2: screen, 屏幕共享。
+ * - 3: both, 摄像头+屏幕共享。
+ */
+export type UDingRtcVideoTrack = 0 | 1 | 2 | 3
+
+/**
+ * @brief 音频流类型。
+ * - 0: no, 无麦克风。
+ * - 1: mic, 麦克风。
+ */
+export type UDingRtcAudioTrack = 0 | 1 | 0xffffffff
+
+/**
+ * @brief 推流状态。
+ * - 0: Idle, SDK初始推流状态。
+ * - 1: NoPublish, 未推流状态，可能是因为：已设置停止推送媒体流；推送媒体流失败。
+ * - 2: Publishing, 推流链接建立过程中。
+ * - 3: Published, 推流成功。
+ */
+export type UDingRtcPublishState = 0 | 1 | 2 | 3
+
+/**
+ * @brief 订阅状态。
+ * - 0: Idle, 初始状态。
+ * - 1: NoSubscribe, 未订阅。
+ * - 2: Subscribing, 订阅中。
+ * - 3: Subscribed, 已订阅。
+ */
+export type UDingRtcSubscribeState = 0 | 1 | 2 | 3
+
+/**
+ * @brief 网络连接状态。
+ * - 0: Default, 默认的语音路由。
+ * - 1: headset, 耳机。
+ * - 2: earpiece, 听筒。
+ * - 3: headsetNoMic, 不带麦克风的耳机。
+ * - 4: speakerphone, 手机扬声器。 
+ * - 5: loudSpeaker, 外接扬声器。
+ * - 6: blueTooth, 蓝牙耳机。
+ */
+export type UDingRtcAudioRouteType = 0 | 1 | 2 | 3 | 4 | 5 | 6
+
+/**
+ * @brief 网络连接状态。
+ * - 0: init, 初始化完成。
+ * - 1: disconnected, 网络连接断开。
+ * - 2: connecting, 建立网络连接中。
+ * - 3: connected, 网络已连接。
+ * - 4: reconnecting, 重新建立网络连接中。 
+ * - 5: failed, 网络连接失败。
+ */
+export type UDingRtcConnectionStatus = 0 | 1 | 2 | 3 | 4 | 5
+
+/**
+ * @brief 网络连接状态。
+ * - 0: DummyReason, 未知原因。
+ * - 1: SignalingHeartbeatTimeout, 心跳超时。
+ * - 2: SignalingHeartbeatAlive, 心跳恢复。 
+ * - 3: SignalingJoinChannelFailure, 加入频道失败。
+ * - 4: SignalingJoinChannelSuccess, 加入频道成功。 
+ * - 5: SignalingLeaveRoom, 离开频道。
+ * - 6: SignalingConnecting, 信令建立连接。
+ * - 7: MediaLinkChange, 媒体链路变化。
+ * - 8: NetworkInterrupted, 网络连接中断。 
+ * - 9: NetworkRecovery, 网络连接恢复。
+ */
+export type UDingRtcConnectionStatusChangeReason = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+
+/**
+ * @brief 用户鉴权信息。
+ */
+export type UDingRtcAuthInfo = {
+    /** 频道ID。 */
+    channelId: String
+    /** 用户ID。 */
+    userId: String
+    /** 应用ID。 */
+    appId: String
+    /** 令牌。 */
+    token: String
+    /** GSLB地址。 */
+    gslbServer: String
+}
+
+/**
+ * @brief 显示视图配置。
+ */
+export type UDingRtcVideoCanvas = {
+    /** 显示视图id。 */
+    viewId: String
+    /** 渲染模式，默认值为{@link DingRtcRenderMode::DingRtcRenderModeAuto}。 */
+    renderMode?: UDingRtcRenderMode
+    /** 镜像模式，默认值为{@link DingRtcRenderMirrorMode::DingRtcRenderMirrorModeOnlyFrontCameraPreviewEnabled}。 */
+    mirrorMode?: UDingRtcRenderMirrorMode
+    /** 背景颜色，格式为RGB的Hex。 */
+    backgroundColor?: Number
+    /** 旋转角度，默认值为 {@link DingRtcRotationMode::DingRtcRotationMode_0}。 */
+    rotationMode?: UDingRtcRotationMode
+    /** 是否移除，默认为false*/
+    toBeRemoved?: Boolean
+}
+
+export type UDingRtcEventListener = {
+    /**
+     * @brief 加入频道结果。
+     * @details 当应用调用 {@link RtcEngine::JoinChannel} 方法时，该回调表示成功/失败加入频道，并且返回频道加入的相关信息以及加入频道耗时。
+     * @param result 加入频道结果，成功返回0，失败返回错误码。
+     * @param channel 频道id。
+     * @param userId  用户ID。
+     * @param elapsed 加入频道耗时。
+     */
+    onJoinChannelResult?: (result: Number, channel: String, userId: String, elapsed: Number) => void
+    /**
+     * @brief 离开频道结果。
+     * @details 应用调用 {@link RtcEngine::LeaveChannel} 方法时，该回调表示成功/失败离开频道，回调将会返回离会的result和该频道的基本信息,如果 {@link RtcEngine::LeaveChannel} 后直接 {@link RtcEngine::Destroy} SDK，将不会收到此回调。
+     * @param result 离开频道结果，成功返回0，失败返回错误码。
+     */
+    onLeaveChannelResult?: (result: Number) => void
+    /**
+     * @brief 频道剩余时长回调。
+     * @param remainingTimeInSec 频道剩余时长，单位秒。
+     */
+    onChannelRemainingTimeNotify?: (remainingTimeInSec: Number) => void
+    /**
+     * @brief 音频推流变更回调。
+     * @param oldState 之前的推流状态，详见{@link DingRtcPublishState}。
+     * @param newState 当前的推流状态，详见{@link DingRtcPublishState}。
+     * @param elapseSinceLastState 状态变更时间间隔（毫秒）。
+     * @param channel 当前频道id。
+     */
+    onAudioPublishStateChanged?: (oldState: UDingRtcPublishState, newState: UDingRtcPublishState, elapseSinceLastState: Number, channel: String) => void
+    /**
+     * @brief 视频推流变更回调。
+     * @param oldState 之前的推流状态，详见{@link DingRtcPublishState}。
+     * @param newState 当前的推流状态，详见{@link DingRtcPublishState}。
+     * @param elapseSinceLastState 状态变更时间间隔（毫秒）。
+     * @param channel 当前频道id。
+    */
+    onVideoPublishStateChanged?: (oldState: UDingRtcPublishState, newState: UDingRtcPublishState, elapseSinceLastState: Number, channel: String) => void
+	/**
+     * @brief 远端用户加入频道回调。
+     * @param userId 用户ID 从App server分配的唯一标示符。
+     * @param elapsed 用户加入频道时的耗时。
+     */
+    onRemoteUserOnLineNotify?: (userId: String, elapsed: Number) => void
+    /**
+     * @brief 远端用户离开频道回调。
+     * @param userId 用户ID 从App server分配的唯一标示符。
+     * @param reason 用户离线的原因，详见 {@link RtcEngineUserOfflineReason}。
+     */
+    onRemoteUserOffLineNotify?: (userId: String, reason: UDingRtcUserOfflineReason) => void
+    /**
+     * @brief 远端用户的音视频流发生变化回调。
+     * @details 该回调在以下场景会被触发。
+     * - 当远端用户从未推流变更为推流（包括音频和视频）。
+     * - 当远端用户从已推流变更为未推流（包括音频和视频）。
+     *
+     * @param userId userId，从App server分配的唯一标示符。
+     * @param audioTrack 音频流类型，详见 {@link DingRtcAudioTrack}。
+     * @param videoTrack 视频流类型，详见 {@link DingRtcVideoTrack}。
+     */
+    onRemoteTrackAvailableNotify?: (userId: String, audioTrack: UDingRtcAudioTrack, videoTrack: UDingRtcVideoTrack) => void
+    /**
+     * @brief 音频流订阅情况变更回调。
+     * @param userId 用户ID，从App server分配的唯一标示符。
+     * @param oldState 之前的订阅状态，详见 {@link DingRtcSubscribeState}。
+     * @param newState 当前的订阅状态，详见 {@link DingRtcSubscribeState}。
+     * @param elapseSinceLastState 两次状态变更时间间隔（毫秒）。
+     * @param channel 当前频道id。
+     */
+    onAudioSubscribeStateChanged?: (userId: String, oldState: UDingRtcSubscribeState, newState: UDingRtcSubscribeState, elapseSinceLastState: Number, channel: String) => void
+    /**
+     * @brief 相机流订阅情况变更回调。
+     * @param userId 用户ID，从App server分配的唯一标示符。
+     * @param oldState 之前的订阅状态，详见 {@link DingRtcSubscribeState}。
+     * @param newState 当前的订阅状态，详见 {@link DingRtcSubscribeState}。
+     * @param elapseSinceLastState 两次状态变更时间间隔（毫秒）。
+     * @param channel 当前频道id。
+     */
+    onVideoSubscribeStateChanged?: (userId: String, oldState: UDingRtcSubscribeState, newState: UDingRtcSubscribeState, elapseSinceLastState: Number, channel: String) => void
+    /**
+     * @brief 远端用户静音/取消静音回调。
+     * @param userId 远端用户ID。
+     * @param isMute 
+     * - 该用户是否静音
+     * - ture：静音。
+     * - false：取消静音。
+     */
+    onUserAudioMuted?: (userId: String, isMute: Boolean) => void
+    /**
+     * @brief 远端用户暂停/恢复视频流发送的通知。
+     * @param userId 远端用户ID。
+     * @param isMute
+     *         -  ture：该用户暂停视频流的发送。
+     *         -  false：该用户恢复视频流的发送。
+     * @param track 屏幕流或者相机流。
+     */
+    onUserVideoMuted?: (userId: String, isMute: Boolean, track: UDingRtcVideoTrack) => void
+    /**
+     * @brief 音频路由发生变化回调。
+     * @details 所谓“音频路由”，是指声音是从手机的扬声器还是从听筒中播放出来，音频路由变化也就是声音的播放位置发生了变化。
+     * - 当音频路由为听筒时，声音比较小，只有将耳朵凑近才能听清楚，隐私性较好，适合用于接听电话。
+     * - 当音频路由为扬声器时，声音比较大，不用将手机贴脸也能听清，因此可以实现“免提”的功能。
+     *
+     * @param routing 当前使用的音频路由，详情参考{@link DingRtcAudioRouteType}
+     */
+    onAudioRouteChanged?: (routing: UDingRtcAudioRouteType) => void
+    /**
+     * @brief 网络连接状态改变的回调。
+     * @param status 当前状态值, 对应值参考枚举DingRtcConnectionStatus。
+     * @param reason 引起状态变化的具体原因, 对应值参考枚举DingRtcConnectionStatusChangeReason。
+     */
+    onConnectionStatusChanged?: (status: UDingRtcConnectionStatus, reason: UDingRtcConnectionStatusChangeReason) => void
+    /**
+     * @brief 被动离会通知，触发原因有：用户被踢、频道被主动关闭、会话失效等。
+     * @param code onBye类型，详见 {@link RtcEngineOnByeType}。
+     * @note 在收到此通知时，不会再收到主动离会的onLeaveChannelResult通知。
+     */
+    onBye?: (code: UDingRtcOnByeType) => void
+    /**
+     * @brief 如果engine出现warning，通过这个消息通知app。
+     * @param warn 警告类型。
+     * @param msg 警告信息。
+     */
+    onOccurWarning?: (warn: Number, msg: String) => void
+    /**
+     * @brief 如果engine出现error，通过这个消息通知app。
+     * @param error  错误类型，参考 {@link RtcEngineErrorCode}。
+     * @param msg 错误描述。
+     */
+    onOccurError?: (error: Number, msg: String) => void
+}
+
+export interface IUDingRtcEngine {
+    /**
+     * @brief 该方法让用户加入频道，一个频道内可以加入多个用户进行互相通话。
+     * @param authInfo    认证信息，从App Server获取。
+     * @param userName 任意用于显示的用户名称。不是User ID。支持emoji。要求utf8编码。如何转换为utf8字符串，参考<a href="https://help.aliyun.com/document_detail/2664101.html?#f08191615e5am">客户端入会失败常见问题</a>
+     * @return
+     * - 0：成功；
+     * - <0：失败。
+     * @note
+     *    - 异步接口。是否成功入会，通过 {@link RtcEngineEventListener::OnJoinChannelResult}判断。如果接口返回值为非0，则不会触发回调。
+     *    - 正常情况一个Appid对应一个App，只有同一个AppId的应用可进行互相童话，不同AppId和channelID不同都不能互通。
+     *    - 当入会成功后，会触发远端用户收到 {@link RtcEngineEventListener::OnJoinChannelResult} 回调。
+     *    - 如果已在会中想重新入会，需要先调用 {@link LeaveChannel} 离会，且确保 {@link RtcEngineEventListener::OnLeaveChannelResult} 回调收到后，再次调用进行入会。
+     *    - userNameUtf8如果过长，超过64个字节，调用会失败。App业务系统应当避免过长的userNameUtf8传入进来。一般汉字占用3个字节，简单的emoji占用4~8个字节，一个复杂emoji占用34甚至更多字节。
+     */
+    joinChannel(authInfo: UDingRtcAuthInfo, userName: String): Number
+    
+    /**
+     * @brief  离开频道，即挂断或者停止通话。
+     * @details 如果当前不在频道内，{@link LeaveChannel} 不会有任何影响。{@link LeaveChannel} 会产生消息通知频道内其他用户。
+     * @details 调用 {@link JoinChannel}  后必须要调用 {@link LeaveChannel} 离开频道，否则无法进入下一个频道通话。
+     * @details 异步方法，成功调用后需要收到 {@link RtcEngineEventListener::OnLeaveChannelResult} 才会真正退出频道，离开频道成功远端用户会触发会收到 {@link RtcEngineEventListener::OnRemoteUserOnLineNotify}回调。
+     * @return
+     * - 0：成功；
+     * - 非0：失败。
+     * @note
+     *  - 如果调用了 {@link LeaveChannel} 后立刻调用 {@link Destroy} 方法，SDK将会无法触发 {@link RtcEngineEventListener::OnLeaveChannelResult}。
+     */
+    leaveChannel(): Number
+    
+    /**
+     * @brief 停止/恢复本地音频数据发送。
+     * @param mute  
+     *          - YES表示静音本地音频流。
+     *          - NO表示取消静音。
+     * @return
+     * - 0：成功；
+     * - 非0：失败。
+     * @note 静音整个音频流, 包括采集音频、外部音频、共享音频等。
+     */
+    muteLocalAudio(mute: Boolean): Number
+    
+    /**
+     * @brief 停止/恢复远端指定用户的音频流的播放。
+     * @param userId  用户ID, 从App server分配的唯一标示符。
+     * @param mute 
+     * - YES：表示停止播放；
+     * - NO：表示恢复播放。
+     * @return
+     * - 0： 成功；
+     * - 非0： 失败。
+     * @note 拉流和解码不受影响, 支持 {@link DingRtcEngine::joinChannel:name:onResultWithUserId:} 之前和之后设置。
+     */
+    muteRemoteAudio(userId: String, mute: Boolean): Number
+    
+    /**
+     * @brief 设置音频输出为听筒还是扬声器。
+     * @param enable YES：扬声器模式（默认扬声器）；NO：听筒模式。
+     * @return
+     * - 0：成功；
+     * - <0：失败。
+     */
+    enableSpeakerphone(enable: Boolean): Number
+    
+    /**
+     * @brief 获取当前音频输出为听筒还是扬声器。
+     * @return
+     * - YES：扬声器模式；
+     * - NO：听筒模式。
+     */
+    isSpeakerphoneEnabled(): Boolean
+    
+    /**
+     * @brief 设置本地预览显示视图。
+     * @param viewConfig 用于承载视频画面的渲染控件，使用原生插件中的 RtcSurfaceView，需要提供 viewId 属性值。
+     * @param track  只支持 {@link UDingRtcVideoTrack.Camera} 和 {@link UDingRtcVideoTrack.Screen}。
+     * @return
+     * - 0：成功；
+     * - 非0：失败。
+     * @note 支持joinChannel之前和之后切换窗口。如果 {@link RtcEngineVideoCanvas::displayView} 为null，则停止显示。
+     *       如果需要重新设置{@link RtcEngineVideoCanvas::renderMode}，请保持renderConfig中其他属性不变，仅修改
+     *       {@link RtcEngineVideoCanvas::renderMode}。
+     *       如果需要重新设置{@link RtcEngineVideoCanvas::mirrorMode}，请保持renderConfig中其他属性不变，仅修改
+     *       {@link RtcEngineVideoCanvas::mirrorMode}。
+     */
+    setLocalViewConfig(viewConfig: UDingRtcVideoCanvas, track: UDingRtcVideoTrack): Number
+    
+    /**
+     * @brief 设置远端视频显示视图。
+     * @param viewConfig 用于承载视频画面的渲染控件，使用原生插件中的 RtcSurfaceView，需要提供 viewId 属性值。
+     * @param userId user id。
+     * @param track  只支持 {@link UDingRtcVideoTrack.Camera} 和 {@link UDingRtcVideoTrack.Screen}。
+     * @return
+     * - 0：成功；
+     * - 非0：失败。
+     * @note 如果 {@link RtcEngineVideoCanvas::displayView}为null，则停止显示。
+     *       如果需要重新设置 {@link RtcEngineVideoCanvas::renderMode}，请保持renderConfig中其他属性不变，仅修改
+     *        {@link RtcEngineVideoCanvas::renderMode}。
+     *       如果需要重新设置 {@link RtcEngineVideoCanvas::mirrorMode}，请保持renderConfig中其他属性不变，仅修改
+     *        {@link RtcEngineVideoCanvas::mirrorMode}。
+     */
+    setRemoteViewConfig(viewConfig: UDingRtcVideoCanvas, userId: String, track: UDingRtcVideoTrack): Number
+    
+    /**
+     * @brief 开启本地视频预览。
+     * @return
+     * - 0：成功；
+     * - 非0：失败。
+     * @note 如果没有调用 {@link SetLocalViewConfig} 设置显示的view，则无法预览。
+     *       可以在{@link JoinChannel}之前就开启预览会自动打开摄像头。
+     *       调用LeaveChannel不会关闭本地预览，会一直保留，直到调用StopPreview结束。
+     */
+    startPreview(): Number
+    
+    /**
+     * @brief 关闭本地视频预览。
+     * @return
+     * - 0：成功；
+     * - 非0：失败。
+     * @note {@link LeaveChannel} 会自动停止本地预览；如果没有在推相机流，则会自动关闭摄像头。
+     */
+    stopPreview(): Number
+    
+    /**
+     * @brief 切换前后摄像头。
+     * @return
+     * - 0：表示Success；
+     * - 非0：表示Failure。
+     */
+    switchCamera(): Number
+    
+    /**
+     * @brief 暂停/恢复本地视频流的发送。
+     * @param mute
+     *         - YES表示暂停视频流的发送。
+     *         -  NO表示恢复视频流的发送。
+     * @param track  只支持{@link DingRtcVideoTrackCamera 和 DingRtcVideoTrackScreen}。
+     * @return
+     * - 0：表示Success；
+     * - 非0：表示Failure。
+     * @note 视频流暂停发送时，采集和编码模块仍然在工作。
+    */
+    muteLocalCamera(mute: Boolean, track: UDingRtcVideoTrack): Number
+    
+    /**
+     * @brief 是否推送音频流。
+     * @param enabled 
+     * - 是否开启/关闭本地音频流推流。
+     * - YES：开启音频流推送。
+     * - NO：关闭音频流推送。
+     * @return
+     * - 0：设置成功；
+     * - <0：设置失败。
+     *  - DingRtcErrInner：SDK内部状态错误，需检查是否创建SDK实例成功。
+     *
+     * @note
+     * - SDK默认设置推送音频流，加入频道前调用此接口设置推送音频流，将在加入频道成功时生效，加入频道成功后可以随时调用此接口开启/关闭音频流推送。
+     * - 本地音频流内容默认为麦克风采集音频，如需自定义输入音频推送内容，可参考接口{@link DingRtcEngine::setExternalAudioSource:withSampleRate:channelsPerFrame:}使用外部音频输入替换麦克风采集。
+     * - 本地音频推流结果发生变化时，SDK会触发{@link DingRtcEngineDelegate:onAudioPublishStateChanged:newState:elapseSinceLastState:channel:}回调通知音频推流最新状态。
+     */
+    publishLocalAudioStream(enable: Boolean): Number
+    
+    /**
+     * @brief 是否推送本地视频流。
+     * @param enabled 
+     * - 是否开启/关闭本地视频流推流。
+     * - YES：开启视频流推送。
+     * - NO：关闭视频流推送。
+     * @return
+     * - 0：设置成功；
+     * - <0：设置失败。
+     *   - DingRtcErrInner：SDK内部状态错误，需检查是否创建SDK实例成功。
+     *
+     * @note
+     * - SDK默认设置为推送视频流，加入频道前调用此接口设置推送视频流，将在加入频道成功时生效，加入频道成功后可以随时调用此接口开启/关闭视频流推送。
+     * - 本地视频流内容默认为摄像头采集视频，如需自定义输入视频推送内容，可参考接口{@link DingRtcEngine::setExternalVideoSource:track:}使用外部视频输入替换摄像头采集。
+     * - 本地视频推流结果发生变化时，SDK会触发{@link DingRtcEngineDelegate::onVideoPublishStateChanged:newState:elapseSinceLastState:channel:}回调通知视频推流最新状态。
+    */
+    publishLocalVideoStream(enable: Boolean): Number
+    
+    /**
+     * @brief 停止/恢复订阅所有远端音频流，包含后入会成员的订阅。
+     * @param sub 
+     * - 是否订阅所有远端音频流。
+     * - YES：订阅所有用户的音频流，后入会成员会自动订阅其音频。
+     * - NO：停止订阅所有用户的音频流，后入会成员也不会自动订阅其音频。
+     * @return
+     * - 0：设置成功；
+     * - <0：设置失败。
+     *
+     * @note
+     * - 入会前入会后均可以调用。
+     */
+    subscribeAllRemoteAudioStreams(sub: Boolean): Number
+    
+    /**
+     * @brief 停止/恢复订阅所有远端视频流，包含后入会成员的订阅。
+     * @param sub 
+     * - 是否订阅所有远端视频流。
+     * - YES：订阅所有用户的视频流，后入会成员会自动订阅其视频。
+     * - NO：停止订阅所有用户的视频流，后入会成员也不会自动订阅其视频。
+     * @return
+     * - 0：设置成功；
+     * - <0：设置失败。
+     *
+     * @note
+     * - 入会前入会后均可以调用。
+     * - 如果设置了 subscribeAllRemoteVideoStreams:NO，会取消订阅已订阅的远端视频流，同时后面再入会的人不会进行自动订阅；但是依然可以通过 {@link subscribeRemoteVideoStream:track:sub:} 来主动订阅某个人的远端视频流。
+     */
+    subscribeAllRemoteVideoStreams(sub: Boolean): Number
+    
+    /**
+     * @brief 停止/恢复订阅远端用户的视频流。
+     * @param userId 用户ID，从App server分配的唯一标示符。
+     * @param track 视频流类型，详见 {@link DingRtcVideoTrack}。
+     * @param sub 
+     * - 是否订阅远端用户的视频流。
+     * - YES：订阅指定用户的视频流。
+     * - NO：停止订阅指定用户的视频流。
+     * @return
+     * - 0：设置成功；
+     * - <0：设置失败。
+     *
+     * @note
+    * - 如果设置了 subscribeAllRemoteVideoStreams:NO，会取消订阅已订阅的远端视频流，同时后面再入会的人不会进行自动订阅；但是依然可以通过 {@link subscribeRemoteVideoStream:track:sub:} 来主动订阅某个人的远端视频流。
+     */
+    subscribeRemoteVideoStream(userId: String, track:UDingRtcVideoTrack, sub: Boolean): Number
+	
+	/**
+	 * @brief 销毁引擎实例。
+	 * @note
+	 * - 为避免死锁，不建议在任何SDK的回调中调用本方法。
+	 */
+	destroy(): void
+}

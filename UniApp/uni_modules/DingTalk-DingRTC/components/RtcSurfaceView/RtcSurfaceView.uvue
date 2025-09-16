@@ -1,0 +1,21 @@
+<template>
+    <native-view style="width: 100%; height: 100%;" @init="onviewinit"></native-view>
+</template>
+
+<script setup>
+    import { DingRtcSurfaceView } from "@/uni_modules/Dingtalk-DingRTC"
+    let view : DingRtcSurfaceView | null = null
+
+    function onviewinit(e : UniNativeViewInitEvent) {
+        //获取UniNativeViewElement
+        view = new DingRtcSurfaceView(e.detail.element);
+    }
+
+    function onUnmounted() {
+        // iOS平台需要主动释放 uts 实例
+        view?.destroy()
+    }
+</script>
+
+<style>
+</style>

@@ -1,0 +1,87 @@
+{
+  "module": {
+    "name": "entry",
+    "type": "entry",
+    "description": "$string:module_desc",
+    "mainElement": "EntryAbility",
+    "deviceTypes": [
+      "phone",
+      "tablet",
+      "2in1"
+    ],
+    "querySchemes": [
+      "mailto"
+    ],
+    "deliveryWithInstall": true,
+    "installationFree": false,
+    "pages": "$profile:main_pages",
+    "abilities": [
+      {
+        "name": "EntryAbility",
+        "srcEntry": "./ets/entryability/EntryAbility.ets",
+        "description": "$string:EntryAbility_desc",
+        "icon": "$media:layered_image",
+        "label": "$string:EntryAbility_label",
+        "startWindowIcon": "$media:startIcon",
+        "startWindowBackground": "$color:start_window_background",
+        "exported": true,
+        "backgroundModes": [
+          "audioRecording",
+          "audioPlayback",
+          "dataTransfer"
+        ],		
+        "skills": [
+          {
+            "entities": [
+              "entity.system.home"
+            ],
+            "actions": [
+              "action.system.home"
+            ]
+          }
+        ],
+        "preferMultiWindowOrientation": "landscape_auto"
+      }
+    ],
+    "metadata": [
+      {
+        "name": "TENCENT_MAP_KEY",
+        "value": ""
+      }
+    ],
+    "requestPermissions": [
+      {
+        "name": "ohos.permission.INTERNET" // 使用网络权限
+      },
+      {
+        "name": "ohos.permission.GET_WIFI_INFO" // 获取WLAN信息权限
+      },
+      {
+        "name": "ohos.permission.GET_NETWORK_INFO" // 获取网络状态权限
+      },
+      {
+        "name": "ohos.permission.KEEP_BACKGROUND_RUNNING" // Demo 长时任务权限，用于后台音频采集和播放
+      },
+      {
+        "name": "ohos.permission.MICROPHONE",
+        "reason": "$string:microphone",
+        "usedScene": {
+          "abilities": [
+            "EntryAbility"
+          ],
+          "when": "inuse"
+        }
+      },
+      {
+        "name": "ohos.permission.CAMERA",
+        "reason": "$string:camera",
+        "usedScene": {
+          "abilities": [
+            "EntryAbility"
+          ],
+          "when": "inuse"
+        }
+      },
+    ],
+  }
+}

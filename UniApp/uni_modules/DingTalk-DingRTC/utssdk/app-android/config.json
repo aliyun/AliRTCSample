@@ -1,0 +1,9 @@
+{
+	"minSdkVersion": "21",
+	"abis": [
+		"armeabi-v7a|arm64-v8a"
+	],
+	"dependencies": [
+		
+	]
+}

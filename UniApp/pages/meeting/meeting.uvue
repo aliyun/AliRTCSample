@@ -1,0 +1,256 @@
+<template>
+	<div class="drtc-container">
+		<view class="drtc-video-area">
+			<view class="drtc-video-view" id='root'>
+				<RtcSurfaceView :id="userId" style="height: 403.84rpx;flex: 1;"></RtcSurfaceView>
+			</view>
+		</view>
+    <view class="drtc-video-area">
+      <view class="drtc-video-remote-view" v-for="(userId, index) in remoteUserIdList">
+				<RtcSurfaceView v-if="userId" :id="userId" style="height: 403.84rpx;flex: 1">
+				</RtcSurfaceView>
+			</view>
+    </view>
+
+    <button class="drtc-btn-long" style="margin-top: 20rpx;" type="primary" @click="joinChannel">Join Channel</button>
+		<button class="drtc-btn-long" style="margin-top: 20rpx;" type="primary" @click="startLocalPreview">Start Local Preview</button>
+		<button class="drtc-btn-long" style="margin-top: 20rpx;" type="primary" @click="subAllRemoteVideo">{{remoteVideoSubState ? 'UnSubscribe' : 'Subscribe'}} All Remote Video</button>
+		<button class="drtc-btn-long" style="margin-top: 20rpx;" type="primary" @click="leaveChannel">Leave Channel</button>
+		<button class="drtc-btn-long" type="primary" @click="destroyInstance">Destroy DingRtcEngine</button>
+	</div>
+</template>
+
+<script setup lang="uts">
+	import { APP_ID, TOKEN, GSLB_SERVER, USER_NAME } from "@/store/index.uts"
+    import { IUDingRtcEngine,
+		UDingRtcConnectionStatusChangeReason,
+		UDingRtcAuthInfo,
+		UDingRtcAudioRouteType,
+		UDingRtcAudioTrack,
+		UDingRtcConnectionStatus,
+		UDingRtcEventListener,
+		UDingRtcOnByeType,
+		UDingRtcRenderMode,
+		UDingRtcSubscribeState,
+		UDingRtcUserOfflineReason,
+		UDingRtcVideoCanvas,
+		UDingRtcVideoTrack,
+		createRtcEngine,
+		destroyRtcEngine } from "@/uni_modules/Dingtalk-DingRTC"
+
+	let engine : IUDingRtcEngine | null = null
+    let channelId = ""
+    let userId = ""
+    
+    const remoteUserIdList = ref([String])
+    const remoteVideoSubState = ref(true)
+    
+	function destroyInstance() {
+	    if (engine != null) {
+	        engine?.destroy()
+	        engine = null
+	        uni.showToast({
+	            title: '销毁实例',
+	            icon: 'none'
+	        })
+	    }
+	}
+
+    onReady(() => {
+		console.log('- onReady');
+    
+    })
+    onUnload(() => {
+        destroyInstance();
+        console.log('- onUnload');
+    })
+    onBackPress((options : OnBackPressOptions) : boolean | null => {
+        destroyInstance();
+		return false
+    })
+    onLoad((options : OnLoadOptions) => {
+        console.log('onLoad', options)
+        channelId = options["channel_id"]!
+        userId = options["user_id"]!
+    })
+    
+    function createDingRtcEngine() {
+        uni.showToast({
+            title: '创建实例 ',
+            icon: 'none',
+        });
+    
+        engine = createRtcEngine({
+            onJoinChannelResult: (result: Number, channel: String, userId: String, elapsed: Number) => {
+                console.log(`onJoinChannelResult result = ${result}`)
+                if (result == 0) {
+                    uni.showToast({
+                        title: `入会成功，耗时: ${elapsed}ms`,
+                        icon: 'none',
+                    })
+                } else {
+                    console.log(`join channel failed，error code = ${result}`);
+                }
+            },
+            onLeaveChannelResult: (result: Number) => {
+                console.log(`onLeaveChannelResult result = ${result}`)
+                uni.showToast({
+                    title: `离会成功: ${result}`,
+                    icon: 'none',
+                })
+            },
+            onChannelRemainingTimeNotify: (remainingTimeInSec: Number) => {
+                console.log(`channel count down = ${remainingTimeInSec}`)
+            },
+            onRemoteUserOnLineNotify: (userId: String, elapsed: Number) => {
+                console.log(`remote user join channel,uid = ${userId}`)
+                if (!remoteUserIdList.value.includes(userId)) {
+                	remoteUserIdList.value.push(userId);
+                }
+                uni.showToast({
+                    title: `远端用户入会: ${userId}`,
+                    icon: 'none',
+                })
+            },
+            onRemoteUserOffLineNotify: (userId: String, reason: UDingRtcUserOfflineReason) => {
+                console.log(`remote user leave channel,uid = ${userId}`)
+                if (userId.length > 0) {
+                  const list = remoteUserIdList.value.filter(val =>
+				   val !== userId);
+                  remoteUserIdList.value = list;
+                }
+                uni.showToast({
+                    title: `远端用户离会: ${userId}, reason: ${reason}`,
+                    icon: 'none',
+                })
+            },
+            onRemoteTrackAvailableNotify: (userId: String, audioTrack: UDingRtcAudioTrack, videoTrack: UDingRtcVideoTrack) => {
+                console.log(`remote user track notify, uid = ${userId}, audioTrack = ${audioTrack}, videoTrack = ${videoTrack}`)
+                if (videoTrack == 1 && remoteUserIdList.value.includes(userId)) {
+                	startRemoteView(userId);
+                }
+                uni.showToast({
+                    title: `远端用户流变化: ${userId}, audioTrack: ${audioTrack}, videoTrack: ${videoTrack}`,
+                    icon: 'none',
+                })
+            },
+            onAudioSubscribeStateChanged: (userId: String, oldState: UDingRtcSubscribeState, newState: UDingRtcSubscribeState, elapseSinceLastState: Number, channel: String) => {
+                console.log(`audio sub state changed, uid = ${userId}, oldState = ${oldState}, newState = ${newState}`)
+                uni.showToast({
+                    title: `订阅远端用户音频流: ${userId}, newState: ${newState}`,
+                    icon: 'none',
+                })
+            },
+            onVideoSubscribeStateChanged: (userId: String, oldState: UDingRtcSubscribeState, newState: UDingRtcSubscribeState, elapseSinceLastState: Number, channel: String) => {
+                console.log(`video sub state changed, uid = ${userId}, oldState = ${oldState}, newState = ${newState}`)
+                uni.showToast({
+                    title: `订阅远端用户视频流: ${userId}, newState: ${newState}`,
+                    icon: 'none',
+                })
+            },
+            onConnectionStatusChanged: (status: UDingRtcConnectionStatus, reason: UDingRtcConnectionStatusChangeReason) => {
+                console.log(`network connection status changed, status = ${status}, reason = ${reason}`)
+                uni.showToast({
+                    title: `网络状态改变: ${status}, reason: ${reason}`,
+                    icon: 'none',
+                })
+            },
+            onBye: (code: UDingRtcOnByeType) => {
+                console.log(`onbye, code = ${code}`)
+                uni.showToast({
+                    title: `被动离会: ${code}`,
+                    icon: 'none',
+                })
+            },
+            onOccurWarning: (warn: Number, msg: String) => {
+                console.log(`occur warning ${warn}, msg = ${msg}`)
+                uni.showToast({
+                    title: `SDK告警: ${warn}`,
+                    icon: 'none',
+                })
+            },
+            onOccurError: (error: Number, msg: String) => {
+                console.log(`occur error ${error}, msg = ${msg}`)
+                uni.showToast({
+                    title: `SDK报错: ${error}`,
+                    icon: 'none',
+                })
+            }
+        } as UDingRtcEventListener)
+    }
+
+	function startLocalAudio() {
+	    engine?.publishLocalAudioStream(true)
+	}
+
+    function joinChannel() {
+        // 1. 创建 Engine 实例
+        createDingRtcEngine()
+        // 2. 加入 Channel
+        let ret = engine?.joinChannel({
+            channelId: channelId,
+            userId: userId,
+            appId: APP_ID,
+            token: TOKEN,
+            gslbServer: GSLB_SERVER
+        } as UDingRtcAuthInfo, USER_NAME)
+        if (ret != 0) {
+            console.log(`joinChannel error = ${ret}`)
+        } else {
+            uni.showToast({
+                title: 'joinChannel ',
+                icon: 'none',
+            });
+            // 3. 本地音频推流
+            startLocalAudio()
+        }
+    }
+    
+    function leaveChannel() {
+        let ret = engine?.leaveChannel()
+        if (ret != 0) {
+            console.log(`leaveChannel error = ${ret}`)
+        } else {
+            uni.showToast({
+                title: 'leaveChannel ',
+                icon: 'none',
+            });
+        }
+    }
+    
+    function startLocalPreview() {
+        // 1. 绑定view
+        engine?.setLocalViewConfig({
+            viewId: userId,
+            renderMode: 2,
+            mirrorMode: 0,
+            backgroundColor: 0xffffff,
+            rotationMode: 0,
+        } as UDingRtcVideoCanvas, 1)
+        // 2. 开启本地预览
+        engine?.startPreview()
+        // 3. 开始本地视频推流
+        engine?.publishLocalVideoStream(true)
+    }
+    
+
+    
+    function subAllRemoteVideo() {
+        remoteVideoSubState.value = !remoteVideoSubState.value
+        engine?.subscribeAllRemoteVideoStreams(remoteVideoSubState.value)
+    }
+    
+    function startRemoteView(userId: String) {
+        console.log(`startRemoteView, user = ${userId}`)
+        // 1. 绑定view
+        engine?.setRemoteViewConfig({
+            viewId: userId
+        } as UDingRtcVideoCanvas, userId, 1)
+        // 2. 订阅远端视频流
+        engine?.subscribeRemoteVideoStream(userId, 1, true)
+    }
+</script>
+
+<style>
+
+</style>

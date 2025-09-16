@@ -1,0 +1,263 @@
+import { UIView } from 'UIKit'
+import { DingRtcEngine, DingRtcEngineDelegate, DingRtcAuthInfo, DingRtcVideoCanvas, DingRtcRenderMode, DingRtcRenderMirrorMode, DingRtcRotationMode, DingRtcVideoTrack, DingRtcAudioTrack, DingRtcUserOfflineReason, DingRtcSubscribeState, DingRtcAudioRouteType, DingRtcConnectionStatus, DingRtcConnectionStatusChangeReason} from "DingRTC"
+import { IUDingRtcEngine, UDingRtcEventListener, UDingRtcAuthInfo, UDingRtcRenderMode, UDingRtcRenderMirrorMode, UDingRtcRotationMode, UDingRtcVideoTrack, UDingRtcVideoCanvas } from "../interface.uts"
+import { Int, Int32 } from 'Swift';
+
+export class DingRtcSurfaceView {
+    element: UniNativeViewElement
+    view: UIView
+    
+    constructor(element: UniNativeViewElement) {
+        this.element = element
+        this.view = new UIView()
+        super.init()
+        
+        this.element.bindIOSView(this.view)
+    }
+    
+    destroy() {
+      // 释放 UTS 实例对象，避免内存泄露
+    	UTSiOS.destroyInstance(this)
+    }
+}
+
+class DingRtcEngineDelegateImpl implements DingRtcEngineDelegate {
+    listener?: UDingRtcEventListener
+    
+    constructor(listener?: UDingRtcEventListener) {
+        console.log("DingRtcEngineDelegateImpl")
+        this.listener = listener
+    }
+    
+    onJoinChannelResult(result: Int32, @argumentLabel("") channel: String, @argumentLabel("") userId: String, @argumentLabel("") elapsed: Int32) {
+        console.log("onJoinChannelResult")
+        this.listener?.onJoinChannelResult?.(Number.from(result), channel, userId, Number.from(elapsed))
+    }
+    
+    onLeaveChannelResult(result: Int32, @argumentLabel("") stats: DingRtcStats) {
+        console.log("onLeaveChannelResult")
+        this.listener?.onLeaveChannelResult?.(Number.from(result))
+    }
+    
+    onChannelRemainingTimeNotify(remainingTimeInSec: Int32) {
+        console.log("onChannelRemainingTimeNotify")
+        this.listener?.onChannelRemainingTimeNotify?.(Number.from(remainingTimeInSec))
+    }
+    
+    onRemoteUser(@argumentLabel("onLineNotify") uid: String, @argumentLabel("") elapsed: Int32) {
+        console.log("onRemoteUser")
+        this.listener?.onRemoteUserOnLineNotify?.(uid, Number.from(elapsed))
+    }
+    
+    onRemoteUserOffLineNotify(uid: String, @argumentLabel("offlineReason") reason: DingRtcUserOfflineReason) {
+        console.log("onRemoteUserOffLineNotify")
+        this.listener?.onRemoteUserOffLineNotify?.(uid, Number.from(reason.rawValue))
+    }
+    
+    onRemoteTrackAvailableNotify(uid: String, @argumentLabel("") audioTrack: DingRtcAudioTrack, @argumentLabel("") videoTrack: DingRtcVideoTrack) {
+        console.log("onRemoteTrackAvailableNotify")
+        this.listener?.onRemoteTrackAvailableNotify?.(uid, Number.from(audioTrack.rawValue), Number.from(videoTrack.rawValue))
+    }
+    
+    onAudioSubscribeStateChanged(uid: String, @argumentLabel("") oldState: DingRtcSubscribeState, @argumentLabel("") newState: DingRtcSubscribeState, @argumentLabel("") elapseSinceLastState: Int, @argumentLabel("") channel: String) {
+        console.log("onAudioSubscribeStateChanged")
+        this.listener?.onAudioSubscribeStateChanged?.(uid, Number.from(oldState.rawValue), Number.from(newState.rawValue), Number.from(elapseSinceLastState), channel)
+    }
+    
+    onVideoSubscribeStateChanged(uid: String, @argumentLabel("") oldState: DingRtcSubscribeState, @argumentLabel("") newState: DingRtcSubscribeState, @argumentLabel("") elapseSinceLastState: Int, @argumentLabel("") channel: String) {
+        console.log("onVideoSubscribeStateChanged")
+        this.listener?.onVideoSubscribeStateChanged?.(uid, Number.from(oldState.rawValue), Number.from(newState.rawValue), Number.from(elapseSinceLastState), channel)
+    }
+    
+    onUserAudioMuted(uid: String, @argumentLabel("audioMuted") isMute: Bool) {
+        console.log("onUserAudioMuted")
+        this.listener?.onUserAudioMuted?.(uid, isMute)
+    }
+    
+    onUserVideoMuted(uid: String, @argumentLabel("videoMuted") isMute: Bool, @argumentLabel("") track: DingRtcVideoTrack) {
+        console.log("onUserVideoMuted")
+        this.listener?.onUserVideoMuted?.(uid, isMute, Number.from(track.rawValue))
+    }
+    
+    onAudioRouteChanged(routing: DingRtcAudioRouteType) {
+        console.log("onAudioRouteChanged")
+        this.listener?.onAudioRouteChanged?.(Number.from(routing.rawValue))
+    }
+    
+    onConnectionStatusChanged(status: DingRtcConnectionStatus, @argumentLabel("") reason: DingRtcConnectionStatusChangeReason) {
+        console.log("onConnectionStatusChanged")
+        this.listener?.onConnectionStatusChanged?.(Number.from(status.rawValue), Number.from(reason.rawValue))
+    }
+    
+    onBye(code: DingRtcOnByeType) {
+        console.log("onBye")
+        this.listener?.onBye?.(Number.from(code.rawValue))
+    }
+    
+    onOccurWarning(warn: Int32, @argumentLabel("") message: String) {
+        console.log("onOccurWarning")
+        this.listener?.onOccurWarning?.(Number.from(warn), message)
+    }
+    
+    onOccurError(error: Int32, @argumentLabel("") message: String) {
+        console.log("onOccurError")
+        this.listener?.onOccurError?.(Number.from(error), message)
+    }
+}
+
+class UDingRtcEngineImpl implements IUDingRtcEngine {
+    rtcEngine: DingRtcEngine
+    delegate: DingRtcEngineDelegateImpl
+    
+    constructor(delegate: DingRtcEngineDelegateImpl) {
+        this.delegate = delegate
+        this.rtcEngine = DingRtcEngine.sharedInstance(delegate, extras = null)
+    }
+    
+    destroy() {
+        console.log("destroyRtcEngine")
+        DingRtcEngine.destroy()
+    }
+    
+    joinChannel(authInfo: UDingRtcAuthInfo, userName: String): Number {
+        let rtcAuthInfo = new DingRtcAuthInfo()
+        rtcAuthInfo.channelId = authInfo.channelId
+        rtcAuthInfo.userId = authInfo.userId
+        rtcAuthInfo.appId = authInfo.appId
+        rtcAuthInfo.token = authInfo.token
+        rtcAuthInfo.gslbServer = authInfo.gslbServer
+        return Number.from(this.rtcEngine.joinChannel(rtcAuthInfo, name = userName, onResultWithUserId = null))
+    }
+    
+    leaveChannel(): Number {
+        return Number.from(this.rtcEngine.leaveChannel())
+    }
+    
+    muteLocalAudio(mute: Boolean): Number {
+        return Number.from(this.rtcEngine.muteLocalAudio(mute))
+    }
+    
+    muteRemoteAudio(userId: String, mute: Boolean): Number {
+        return Number.from(this.rtcEngine.muteRemoteAudio(userId, mute = mute))
+    }
+
+    enableSpeakerphone(enable: Boolean): Number {
+        return Number.from(this.rtcEngine.enableSpeakerphone(enable))
+    }
+
+    isSpeakerphoneEnabled(): Boolean {
+        return this.rtcEngine.isSpeakerphoneEnabled()
+    }
+
+    setLocalViewConfig(viewConfig: UDingRtcVideoCanvas, track: UDingRtcVideoTrack): Number {
+        let element : UniNativeViewElement | null = null;
+        let e: UniElement | null = null
+        e = uni.getElementById(viewConfig.viewId)
+        if (e instanceof UniNativeViewElement) {
+        	element = e as UniNativeViewElement | null
+        }
+        let view = element?.getIOSView()
+        if (view == null) {
+            console.log("Can not find valid view with viewId")
+            return -1
+        }
+        let config = new DingRtcVideoCanvas()
+        config.view = view!
+        if (viewConfig.renderMode != null) {
+            config.renderMode = DingRtcRenderMode(rawValue = viewConfig.renderMode!.toUInt())!
+        }
+        if (viewConfig.mirrorMode != null) {
+            config.mirrorMode = DingRtcRenderMirrorMode(rawValue = viewConfig.mirrorMode!.toInt())!
+        }
+        if (viewConfig.rotationMode != null) {
+            config.rotationMode = DingRtcRotationMode(rawValue = viewConfig.rotationMode!.toInt())!
+        }
+        if (viewConfig.backgroundColor != null) {
+            config.backgroundColor = viewConfig.backgroundColor!.toInt32()
+        }
+        if (viewConfig.toBeRemoved != null) {
+            config.toBeRemoved = viewConfig.toBeRemoved!
+        }
+        return Number.from(this.rtcEngine.setLocalViewConfig(config, for = DingRtcVideoTrack(rawValue = track.toUInt())!))
+    }
+
+    setRemoteViewConfig(viewConfig: UDingRtcVideoCanvas, userId: String, track: UDingRtcVideoTrack): Number {
+        let element : UniNativeViewElement | null = null;
+        let e: UniElement | null = null
+        e = uni.getElementById(viewConfig.viewId)
+        if (e instanceof UniNativeViewElement) {
+        	element = e as UniNativeViewElement | null
+        }
+        let view = element?.getIOSView()
+        if (view == null) {
+            console.log("Can not find valid view with viewId")
+            return -1
+        }
+        let config = new DingRtcVideoCanvas()
+        config.view = view!
+        if (viewConfig.renderMode != null) {
+            config.renderMode = DingRtcRenderMode(rawValue = viewConfig.renderMode!.toUInt())!
+        }
+        if (viewConfig.mirrorMode != null) {
+            config.mirrorMode = DingRtcRenderMirrorMode(rawValue = viewConfig.mirrorMode!.toInt())!
+        }
+        if (viewConfig.rotationMode != null) {
+            config.rotationMode = DingRtcRotationMode(rawValue = viewConfig.rotationMode!.toInt())!
+        }
+        if (viewConfig.backgroundColor != null) {
+            config.backgroundColor = viewConfig.backgroundColor!.toInt32()
+        }
+        if (viewConfig.toBeRemoved != null) {
+            config.toBeRemoved = viewConfig.toBeRemoved!
+        }
+        return Number.from(this.rtcEngine.setRemoteViewConfig(config, uid = userId, for = DingRtcVideoTrack(rawValue = track.toUInt())!))
+    }
+
+    startPreview(): Number {
+        return Number.from(this.rtcEngine.startPreview())
+    }
+
+    stopPreview(): Number {
+        return Number.from(this.rtcEngine.stopPreview())
+    }
+
+    switchCamera(): Number {
+        return Number.from(this.rtcEngine.switchCamera())
+    }
+
+    muteLocalCamera(mute: Boolean, track: UDingRtcVideoTrack): Number {
+        return Number.from(this.rtcEngine.muteLocalCamera(mute, for = DingRtcVideoTrack(rawValue = track.toUInt())!))
+    }
+
+    publishLocalAudioStream(enable: Boolean): Number {
+        return Number.from(this.rtcEngine.publishLocalAudioStream(enable))
+    }
+
+    publishLocalVideoStream(enable: Boolean): Number {
+        return Number.from(this.rtcEngine.publishLocalVideoStream(enable))
+    }
+
+    subscribeAllRemoteAudioStreams(sub: Boolean): Number {
+        return Number.from(this.rtcEngine.subscribeAllRemoteAudioStreams(sub))
+    }
+
+    subscribeAllRemoteVideoStreams(sub: Boolean): Number {
+        return Number.from(this.rtcEngine.subscribeAllRemoteVideoStreams(sub))
+    }
+
+    subscribeRemoteVideoStream(userId: String, track:UDingRtcVideoTrack, sub: Boolean): Number {
+        return Number.from(this.rtcEngine.subscribeRemoteVideoStream(userId, track = DingRtcVideoTrack(rawValue = track.toUInt())!, sub = sub))
+    }
+}
+
+@UTSJS.keepAlive
+export function createRtcEngine(listener?: UDingRtcEventListener): IUDingRtcEngine {
+    console.log("createRtcEngine")
+    let delegate = new DingRtcEngineDelegateImpl(listener)
+    return new UDingRtcEngineImpl(delegate);
+}
+
+export function getSDKVersion(): String {
+    console.log("getSDKVersion")
+    return DingRtcEngine.getSDKVersion()
+}

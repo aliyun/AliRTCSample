@@ -1,0 +1,281 @@
+import DingRtcEngine from "com.ding.rtc.DingRtcEngine";
+import DingRtcEngineEventListener from "com.ding.rtc.DingRtcEngineEventListener";
+import DingRtcAuthInfo from "com.ding.rtc.DingRtcAuthInfo";
+import DingRtcStats from "com.ding.rtc.DingRtcEngine.DingRtcStats";
+import DingRtcAudioTrack from "com.ding.rtc.DingRtcEngine.DingRtcAudioTrack";
+import DingRtcVideoTrack from "com.ding.rtc.DingRtcEngine.DingRtcVideoTrack";
+import DingRtcRenderMode from "com.ding.rtc.DingRtcEngine.DingRtcRenderMode";
+import DingRtcVideoCanvas from "com.ding.rtc.DingRtcEngine.DingRtcVideoCanvas";
+import DingRtcAudioRouteType from "com.ding.rtc.DingRtcEngine.DingRtcAudioRouteType";
+import DingRtcSubscribeState from "com.ding.rtc.DingRtcEngine.DingRtcSubscribeState";
+import DingRtcConnectionStatus from "com.ding.rtc.DingRtcEngine.DingRtcConnectionStatus";
+import DingRtcUserOfflineReason from "com.ding.rtc.DingRtcEngine.DingRtcUserOfflineReason";
+import DingRtcRenderMirrorMode from "com.ding.rtc.DingRtcEngine.DingRtcRenderMirrorMode";
+import DingRtcRotationMode from "com.ding.rtc.DingRtcEngine.DingRtcRotationMode";
+import DingRtcConnectionStatusChangeReason from "com.ding.rtc.DingRtcEngine.DingRtcConnectionStatusChangeReason";
+import { IUDingRtcEngine, UDingRtcEventListener, UDingRtcAuthInfo, UDingRtcVideoTrack, UDingRtcVideoCanvas } from "../interface.uts"
+import SurfaceView from 'android.view.SurfaceView';
+import UTSAndroid from "io.dcloud.uts.UTSAndroid";
+
+
+export class DingRtcSurfaceView {
+	element : UniNativeViewElement
+
+	constructor(element : UniNativeViewElement) {
+		this.element = element
+		this.bindView()
+	}
+
+	surfaceView: SurfaceView | null = null
+	bindView() {
+		this.surfaceView = DingRtcEngine.createRenderSurfaceView(UTSAndroid.getAppContext())
+		this.element.bindAndroidView(this.surfaceView!)
+	}
+
+	destroy() {
+	}
+}
+
+class DingRtcEngineListenerImpl implements DingRtcEngineEventListener {
+	listener ?: UDingRtcEventListener
+
+	constructor(listener ?: UDingRtcEventListener) {
+		console.log("DingRtcEngineListenerImpl")
+		this.listener = listener
+	}
+
+	override onJoinChannelResult(result : Int, channel : string, userId : string, elapsed : Int) {
+		console.log("onJoinChannelResult")
+		this.listener?.onJoinChannelResult?.(Number.from(result), channel, userId, Number.from(elapsed))
+	}
+
+	override onLeaveChannelResult(result : Int, stats : DingRtcStats) {
+		console.log("onLeaveChannelResult")
+		this.listener?.onLeaveChannelResult?.(Number.from(result))
+	}
+
+	override onChannelRemainingTimeNotify(remainingTimeInSec : Int) {
+		console.log("onChannelRemainingTimeNotify")
+		this.listener?.onChannelRemainingTimeNotify?.(Number.from(remainingTimeInSec))
+	}
+
+	override onRemoteUserOnLineNotify(uid : string, elapsed : Int) {
+		console.log("onRemoteUserOnLineNotify")
+		this.listener?.onRemoteUserOnLineNotify?.(uid, Number.from(elapsed))
+	}
+
+	override onRemoteUserOffLineNotify(uid : string, reason : DingRtcUserOfflineReason) {
+		console.log("onRemoteUserOffLineNotify")
+		this.listener?.onRemoteUserOffLineNotify?.(uid, Number.from(reason.getValue()))
+	}
+
+	override onRemoteTrackAvailableNotify(uid : string, audioTrack : DingRtcAudioTrack, videoTrack : DingRtcVideoTrack) {
+		console.log("onRemoteTrackAvailableNotify")
+		this.listener?.onRemoteTrackAvailableNotify?.(uid, Number.from(audioTrack.getValue()), Number.from(videoTrack.getValue()))
+	}
+
+	override onAudioSubscribeStateChanged(uid : string, oldState : DingRtcSubscribeState, newState : DingRtcSubscribeState, elapseSinceLastState : Int, channel : String) {
+		console.log("onAudioSubscribeStateChanged")
+		this.listener?.onAudioSubscribeStateChanged?.(uid, Number.from(oldState.getValue()), Number.from(newState.getValue()), Number.from(elapseSinceLastState), channel)
+	}
+
+	override onVideoSubscribeStateChanged(uid : string, oldState : DingRtcSubscribeState, newState : DingRtcSubscribeState, elapseSinceLastState : Int, channel : String) {
+		console.log("onVideoSubscribeStateChanged")
+		this.listener?.onVideoSubscribeStateChanged?.(uid, Number.from(oldState.getValue()), Number.from(newState.getValue()), Number.from(elapseSinceLastState), channel)
+	}
+
+	override onUserAudioMuted(uid : string, isMute : boolean) {
+		console.log("onUserAudioMuted")
+		this.listener?.onUserAudioMuted?.(uid, isMute)
+	}
+
+	override onUserVideoMuted(uid : string, isMute : boolean, track : DingRtcVideoTrack) {
+		console.log("onUserVideoMuted")
+		this.listener?.onUserVideoMuted?.(uid, isMute, Number.from(track.getValue()))
+	}
+
+	override onAudioRouteChanged(routing : DingRtcAudioRouteType) {
+		console.log("onAudioRouteChanged")
+		this.listener?.onAudioRouteChanged?.(Number.from(routing.getValue()))
+	}
+
+	override onConnectionStatusChanged(status : DingRtcConnectionStatus, reason : DingRtcConnectionStatusChangeReason) {
+		console.log("onConnectionStatusChanged")
+		this.listener?.onConnectionStatusChanged?.(Number.from(status.getValue()), Number.from(reason.getValue()))
+	}
+
+	override onBye(code : Int) {
+		console.log("onBye")
+		this.listener?.onBye?.(Number.from(code))
+	}
+
+	override onOccurWarning(warn : Int, message : string) {
+		console.log("onOccurWarning")
+		this.listener?.onOccurWarning?.(Number.from(warn), message)
+	}
+
+	override onOccurError(error : Int, message : string) {
+		console.log("onOccurError")
+		this.listener?.onOccurError?.(Number.from(error), message)
+	}
+}
+
+class UDingRtcEngineImpl implements IUDingRtcEngine {
+	rtcEngine : DingRtcEngine
+	listener : DingRtcEngineListenerImpl
+
+	constructor(listener : DingRtcEngineListenerImpl) {
+		this.listener = listener
+		this.rtcEngine = DingRtcEngine.create(UTSAndroid.getAppContext(), "")
+		this.rtcEngine.setRtcEngineEventListener(listener)
+	}
+
+	joinChannel(authInfo : UDingRtcAuthInfo, userName : string) : Number {
+		let rtcAuthInfo = new DingRtcAuthInfo()
+		rtcAuthInfo.channelId = authInfo.channelId.valueOf()
+		rtcAuthInfo.userId = authInfo.userId.valueOf()
+		rtcAuthInfo.appId = authInfo.appId.valueOf()
+		rtcAuthInfo.token = authInfo.token.valueOf()
+		rtcAuthInfo.gslbServer = authInfo.gslbServer.valueOf()
+		return Number.from(this.rtcEngine.joinChannel(rtcAuthInfo, userName))
+	}
+
+	leaveChannel() : Number {
+		return Number.from(this.rtcEngine.leaveChannel())
+	}
+
+	muteLocalAudio(mute : boolean) : Number {
+		return Number.from(this.rtcEngine.muteLocalAudio(mute))
+	}
+
+	muteRemoteAudio(userId : string, mute : boolean) : Number {
+		return Number.from(this.rtcEngine.muteRemoteAudio(userId, mute))
+	}
+
+	enableSpeakerphone(enable : boolean) : Number {
+		return Number.from(this.rtcEngine.enableSpeakerphone(enable))
+	}
+
+	isSpeakerphoneEnabled() : boolean {
+		return this.rtcEngine.isSpeakerphoneEnabled()
+	}
+
+	setLocalViewConfig(viewConfig : UDingRtcVideoCanvas, track : UDingRtcVideoTrack) : Number {
+		let element : UniNativeViewElement | null = null;
+		let e : UniElement | null = uni.getElementById(viewConfig.viewId)
+		if (e instanceof UniNativeViewElement) {
+			element = e as UniNativeViewElement | null
+		}
+		let view = element?.getAndroidView()
+		if (view == null) {
+			console.log("Can not find valid view with viewId")
+			return -1
+		}
+		let config = new DingRtcVideoCanvas()
+		config.view = view!
+		if (viewConfig.renderMode != null) {
+			config.renderMode = DingRtcRenderMode.fromValue(viewConfig.renderMode!.toInt())
+		}
+		if (viewConfig.mirrorMode != null) {
+			config.mirrorMode = DingRtcRenderMirrorMode.fromValue(viewConfig.mirrorMode!.toInt())
+		}
+		if (viewConfig.rotationMode != null) {
+			config.rotationMode = DingRtcRotationMode.fromValue(viewConfig.rotationMode!.toInt())
+		}
+		if (viewConfig.backgroundColor != null) {
+			config.backgroundColor = viewConfig.backgroundColor!.toInt()
+		}
+		if (viewConfig.toBeRemoved != null) {
+			config.toBeRemoved = viewConfig.toBeRemoved!
+		}
+		return Number.from(this.rtcEngine.setLocalViewConfig(config, DingRtcVideoTrack.fromValue(track.toInt())))
+	}
+
+	setRemoteViewConfig(viewConfig : UDingRtcVideoCanvas, userId : string, track : UDingRtcVideoTrack) : Number {
+		let element : UniNativeViewElement | null = null;
+		let e : UniElement | null = uni.getElementById(viewConfig.viewId)
+		if (e instanceof UniNativeViewElement) {
+			element = e as UniNativeViewElement | null
+		}
+		let view = element?.getAndroidView()
+		if (view == null) {
+			console.log("Can not find valid view with viewId")
+			return -1
+		}
+		let config = new DingRtcVideoCanvas()
+		config.view = view!
+		if (viewConfig.renderMode != null) {
+			config.renderMode = DingRtcRenderMode.fromValue(viewConfig.renderMode!.toInt())!
+		}
+		if (viewConfig.mirrorMode != null) {
+			config.mirrorMode = DingRtcRenderMirrorMode.fromValue(viewConfig.mirrorMode!.toInt())!
+		}
+		if (viewConfig.rotationMode != null) {
+			config.rotationMode = DingRtcRotationMode.fromValue(viewConfig.rotationMode!.toInt())!
+		}
+		if (viewConfig.backgroundColor != null) {
+			config.backgroundColor = viewConfig.backgroundColor!.toInt()
+		}
+		if (viewConfig.toBeRemoved != null) {
+			config.toBeRemoved = viewConfig.toBeRemoved!
+		}
+		return Number.from(this.rtcEngine.setRemoteViewConfig(config, userId, DingRtcVideoTrack.fromValue(track.toInt())))
+	}
+
+	startPreview() : Number {
+		return Number.from(this.rtcEngine.startPreview())
+	}
+
+	stopPreview() : Number {
+		return Number.from(this.rtcEngine.stopPreview())
+	}
+
+	switchCamera() : Number {
+		return Number.from(this.rtcEngine.switchCamera())
+	}
+
+	muteLocalCamera(mute : boolean, track : UDingRtcVideoTrack) : Number {
+		return Number.from(this.rtcEngine.muteLocalCamera(mute, DingRtcVideoTrack.fromValue(track.toInt())))
+	}
+
+	publishLocalAudioStream(enable : boolean) : Number {
+		return Number.from(this.rtcEngine.publishLocalAudioStream(enable))
+	}
+
+	publishLocalVideoStream(enable : boolean) : Number {
+		return Number.from(this.rtcEngine.publishLocalVideoStream(enable))
+	}
+
+	subscribeAllRemoteAudioStreams(sub : boolean) : Number {
+		return Number.from(this.rtcEngine.subscribeAllRemoteAudioStreams(sub))
+	}
+
+	subscribeAllRemoteVideoStreams(sub : boolean) : Number {
+		return Number.from(this.rtcEngine.subscribeAllRemoteVideoStreams(sub))
+	}
+
+	subscribeRemoteVideoStream(userId : string, track : UDingRtcVideoTrack, sub : boolean) : Number {
+		return Number.from(this.rtcEngine.subscribeRemoteVideoStream(userId, DingRtcVideoTrack.fromValue(track.toInt()), sub))
+	}
+
+	destroy() : void {
+		this.rtcEngine.destroy()
+	}
+}
+
+@UTSJS.keepAlive
+export function createRtcEngine(listener ?: UDingRtcEventListener) : IUDingRtcEngine {
+	console.log("createRtcEngine")
+	let listenerImpl = new DingRtcEngineListenerImpl(listener)
+	return new UDingRtcEngineImpl(listenerImpl);
+}
+
+export function destroyRtcEngine() {
+	console.log("destroyRtcEngine")
+}
+
+
+export function getSDKVersion() : String {
+	console.log("getSDKVersion")
+	return DingRtcEngine.getSDKVersion()
+}

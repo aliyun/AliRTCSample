@@ -1,0 +1,15 @@
+
+/* Please refer to Glossary to understand the meaning of App ID, Channel ID, Token, User ID, and User Name:
+   请参考 名词解释 了解 App ID、Channel ID、Token、User ID、User Name 的含义：
+   https://help.aliyun.com/document_detail/159037.html
+
+   You can use temporary token for temporary testing:
+   可以使用 临时token 来进行临时测试：
+   https://help.aliyun.com/document_detail/146833.html
+*/
+export const APP_ID = YOUR_APP_ID
+export const TOKEN = YOUR_TOEKN
+export const GSLB_SERVER = "https://gslb.dingrtc.com"
+export const CHANNEL_ID = YOUR_CHANNEL_ID
+export const USER_ID = YOUR_UID
+export const USER_NAME = YOUR_USER_NAME

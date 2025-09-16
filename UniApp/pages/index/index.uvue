@@ -1,0 +1,131 @@
+<template>
+	<view>
+		<image class="logo" src="/static/logo.png"></image>
+		<view class="text-area">
+			<text class="title">{{title}}</text>
+		</view>
+        <view class="drtc-row-area">
+            <text class="drtc-title-text">channelId</text>
+            <input class="drtc-input" style="width: 182.69rpx;" auto-blur=true :value="channelId"
+                @input="bindInputChange($event, 'channelId')" />
+            <text class="drtc-title-text">userId</text>
+            <input class="drtc-input" style="width: 182.69rpx;" auto-blur=true :value="userId"
+                @input="bindInputChange($event, 'userId')" />
+        </view>
+        <view class="drtc-line"></view>
+        <view v-for="(item, index) in list">
+            <navigator :url="item.url">
+            <button class="drtc-btn-long" style="margin-top: 20rpx;" type="primary">{{item.name}}</button>
+            </navigator>
+        </view>
+	</view>
+</template>
+
+<script setup>
+    import { CHANNEL_ID, USER_ID } from "@/store/index.uts"
+    let title = ref("Welcome to DingRTC")
+    let channelId = ref(CHANNEL_ID)
+    let userId = ref(USER_ID)
+    const list = reactive([
+        {
+            name: "1v1音视频",
+            url: "/pages/1v1/1v1?channel_id=" + channelId.value + "&user_id=" + userId.value
+        }
+    ] as Array<UTSJSONObject>)
+    
+	function bindInputChange(event: UniInputEvent, type: String) {
+	    const value = event.detail.value;
+	    if (type === 'channelId') {
+	        channelId = value as Ref<String>;
+	    } else if (type === 'userId') {
+	        userId = value as Ref<String>;
+	    }
+	}
+	
+	function requestPermission() {
+		// #ifdef APP-ANDROID
+		if (uni.getSystemInfoSync().platform === 'android') {
+			let permissionsNeed = [//'android.permission.WRITE_EXTERNAL_STORAGE', 
+				'android.permission.READ_PHONE_STATE',
+				'android.permission.RECORD_AUDIO',
+				'android.permission.CAMERA']
+			
+			if (UTSAndroid.checkSystemPermissionGranted(UTSAndroid.getUniActivity()!, permissionsNeed)) {
+			  console.log('已具备请求权限');
+			  return
+			}	
+			UTSAndroid.requestSystemPermission(UTSAndroid.getUniActivity()!, permissionsNeed, function (allRight : boolean, p : string[]) {
+					if (allRight) {
+						console.log('已具备请求权限');
+					} else {
+						console.log('用户拒绝了部分权限.' + p);
+						uni.showToast({
+						  title: "用户拒绝了部分权限" + p,
+						  position: "bottom"
+						})
+					}
+				}, function (_ : boolean, p : string[]) {
+					uni.showToast({
+					  title: "用户拒绝了部分权限" + p,
+					  position: "bottom"
+					})
+				})
+		
+		}
+		// #endif
+		
+	  // #ifdef APP-HARMONY
+	  let permissionsNeed = [
+	  	'ohos.permission.MICROPHONE',
+	  	'ohos.permission.CAMERA']
+	    UTSHarmony.requestSystemPermission(permissionsNeed, (allRight: boolean, _grantedList: string[]) => {
+	      if (allRight) {
+			console.log('已具备请求权限');
+	      } else {
+	        uni.showToast({
+	          title: "用户拒绝了部分权限" + _grantedList,
+	          position: "bottom"
+	        })
+	      }
+	    }, (_doNotAskAgain: boolean, _grantedList: string[]) => {
+	        uni.showToast({
+	          title: "用户拒绝了部分权限" + _grantedList,
+	          position: "bottom"
+	        })
+	    })
+	  // #endif
+	}
+	
+	onReady(() => {
+		requestPermission();
+	})
+	
+	
+</script>
+
+<style>
+	.logo {
+		height: 100px;
+		width: 100px;
+		margin: 100px auto 25px auto;
+	}
+
+	.title {
+		font-size: 18px;
+		color: #8f8f94;
+    text-align: center;
+	}
+    
+    .main {
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+      flex-direction: row;
+      justify-content: center;
+    }
+    
+    .default-button{
+      color: #000000;
+      background-color: #f8f8f8;
+      border-color: rgba(0, 0, 0, 0.2);
+    }
+</style>
