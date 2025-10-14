@@ -1,0 +1,34 @@
+{
+    "appServer": "https://onertc-demo-app-server.dingtalk.com",
+    "appId": "a4zfr1hn",
+    "userId": "linux_user001",
+    "userName": "linux_user001",
+    "channelId": "r1818",
+    "env": "onertcOnline",
+    "passwd": "somepassword",
+    
+    "publishAudio": true,
+    "publishVideo": true,
+    "subscribeAllAudio": true,
+    "subscribeAllVideo": true,
+    "dumpPlaybackAudio": true,
+    "dumpRemoteVideo": true,
+
+    "pushExternalAudio": true,
+    "pcmFilePath": "alan_famous.pcm",
+    "pcmSampleRate": 48000,
+    "pcmChannels": 2,
+    "pcmReadFreq": 40,
+
+    "pushExternalVideo": true,
+    "videoFilePath": "alan.yuv",
+    "videoPixelFormat": "I420",
+    "videoWidth": 720,
+    "videoHeight": 1280,
+    "videoFps": 25,
+    "videoRotation": 0,
+    "videoBitrate": 0,
+
+    "loopPlayCount": 1,
+    "joinLeaveCount": 1
+}

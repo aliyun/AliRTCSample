@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OneRTC测试</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="login-container">
+        <div>
+            <h2>进入频道</h2>
+            <div class="form-grid">
+                <label for="envOptions">环境: </label>
+                <div class="select-editable">
+                    <select id="envOptions" onchange="this.nextElementSibling.value=this.value">
+                        <optgroup label="预发环境">
+                            <option value="onertcPre">onertcPre</option>
+                        </optgroup>
+                        <optgroup label="线上环境">
+                            <option value="onertcOnline">onertcOnline</option>
+                        </optgroup>
+                        <option value="">自定义</option>
+                    </select>
+                    <input type="text" id="envOption" value="onertcPre" oninput="this.previousElementSibling.options[this.previousElementSibling.options.length-1].value=this.value; this.previousElementSibling.options[this.previousElementSibling.options.length-1].innerHTML=this.value" onchange="this.previousElementSibling.selectedIndex=this.previousElementSibling.options.length-1"/>
+                    <!-- <input type="text" id="envOption" value="onertcPre" onchange="this.previousElementSibling.selectedIndex = -1" /> -->
+                </div>
+
+                <label for="appIdOptions">AppId: </label>
+                <div class="select-editable">
+                    <select id="appIdOptions" onchange="this.nextElementSibling.value=this.value">
+                        <option value="64o1r7v2">64o1r7v2</option>
+                        <option value="z7fxhu8v">z7fxhu8v</option>
+                        <option value="">自定义</option>
+                    </select>
+                    <input type="text" id="appId" value="64o1r7v2" oninput="this.previousElementSibling.options[this.previousElementSibling.options.length-1].value=this.value; this.previousElementSibling.options[this.previousElementSibling.options.length-1].innerHTML=this.value" onchange="this.previousElementSibling.selectedIndex=this.previousElementSibling.options.length-1"/>
+                </div>
+
+                <label for="channelId">频道ID: </label>
+                <input type="text" id="channelId" placeholder="请输入频道ID（必选）" value="r1818">
+                
+                <label for="userId">用户ID: </label>
+                <input type="text" id="userId" placeholder="请输入用户ID（必选）" value="linux_test">
+
+                <label for="userId">用户名称: </label>
+                <input type="text" id="userName" placeholder="请输入用户名称（可选）">
+
+                <label for="token">Token入会:</label>
+                <input type="text" id="token" placeholder="控制台生成Token" style="min-width: 200px;">
+            </div>
+
+            <div calss="settings">
+                <fieldset>
+                    <legend>设置</legend>
+                    <div class="checkbox-grid">
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="settings" id="publishAudio" checked> 音频推流
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="settings" id="publishVideo" checked> 视频推流
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="settings" id="subscribeAllAudio" checked> 订阅所有远端音频
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="settings" id="subscribeAllVideo" checked> 订阅所有远端视频
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="settings" id="dumpPlaybackAudio" checked> 保存远端音频数据
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="settings" id="dumpRemoteVideo" checked> 保存远端视频数据
+                        </label>
+                    </div>
+    
+                    <fieldset style="margin-top: 18px;">
+                        <legend>外部输入源设置</legend>
+                        <div class="form-grid">
+                            <label for="loopPlayCount">循环推流次数: </label>
+                            <input type="text" id="loopPlayCount" value="-1">
+    
+                            <label for="pcmFilePath">音频文件路径: </label>
+                            <input type="text" id="pcmFilePath" value="alan_famous.pcm">
+                            <label for="pcmSampleRate">音频采样率: </label>
+                            <input type="text" id="pcmSampleRate" value="48000">
+                            <label for="pcmChannels">音频声道数: </label>
+                            <input type="text" id="pcmChannels" value="1">
+    
+                            <label for="videoFilePath">视频文件路径: </label>
+                            <input type="text" id="videoFilePath" value="alan.yuv">
+                            <label for="videoPixelFormat">视频图像格式: </label>
+                            <input type="text" id="videoPixelFormat" value="I420">
+                            <label for="videoWidth">视频宽度: </label>
+                            <input type="text" id="videoWidth" value="720">
+                            <label for="videoHeight">视频高度: </label>
+                            <input type="text" id="videoHeight" value="1280">
+                            <label for="videoFps">视频帧率: </label>
+                            <input type="text" id="videoFps" value="25">
+                            <label for="videoRotation">视频旋转角度: </label>
+                            <input type="text" id="videoRotation" value="0">
+                        </div>
+                    </fieldset>
+                </fieldset>
+            </div>
+            <label class="checkbox-item">
+                <input type="checkbox" id="isWsServer" checked> WebSocket Server（不勾选则为Http Server）
+            </label>
+            <div class="form-group">
+                <label for="serverUrl">Server Url: </label>
+                <input type="text" id="serverUrl" value="ws://127.0.0.1:8000" style="min-width: 200px;">
+            </div>
+            <div>
+                <button id="joinBtn" style="margin: 10px; font-size: 18px;">加入频道</button>
+                <button id="leaveBtn" style="margin: 10px; font-size: 18px;" disabled>离开频道</button>
+            </div>
+        </div>
+    </div>
+    <label>日志：</label>
+    <button id="clearLog" style="margin-left: 10px; font-size: 14px;">清空日志</button>
+    <div class="log-container" id="log">等待加入...<br/></div>
+    <script src="app.js"></script>
+</body>
+</html>

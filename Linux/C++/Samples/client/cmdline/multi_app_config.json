@@ -1,0 +1,167 @@
+[
+    {
+        "appServer": "https://pre-onertc-demo-app-server.dingtalk.com",
+        "appId": "64o1r7v2",
+        "userId": "user001",
+        "userName": "user001",
+        "channelId": "r001",
+        "env": "onertcPre",
+        "passwd": "somepassword",
+        
+        "publishAudio": true,
+        "publishVideo": true,
+        "subscribeAllAudio": true,
+        "subscribeAllVideo": true,
+        "dumpPlaybackAudio": true,
+        "dumpRemoteVideo": true,
+
+        "pushExternalAudio": true,
+        "pcmFilePath": "alan_famous.pcm",
+        "pcmSampleRate": 48000,
+        "pcmChannels": 2,
+        "pcmReadFreq": 40,
+
+        "pushExternalVideo": true,
+        "videoFilePath": "alan.yuv",
+        "videoPixelFormat": "I420",
+        "videoWidth": 720,
+        "videoHeight": 1280,
+        "videoFps": 25,
+        "videoRotation": 0,
+
+        "loopPlayCount": -1,
+        "joinLeaveCount": 1
+    },
+    {
+        "appServer": "https://pre-onertc-demo-app-server.dingtalk.com",
+        "appId": "64o1r7v2",
+        "userId": "user002",
+        "userName": "user002",
+        "channelId": "r002",
+        "env": "onertcPre",
+        "passwd": "somepassword",
+        
+        "publishAudio": true,
+        "publishVideo": true,
+        "subscribeAllAudio": true,
+        "subscribeAllVideo": true,
+        "dumpPlaybackAudio": true,
+        "dumpRemoteVideo": true,
+
+        "pushExternalAudio": true,
+        "pcmFilePath": "alan_famous.pcm",
+        "pcmSampleRate": 48000,
+        "pcmChannels": 2,
+        "pcmReadFreq": 40,
+
+        "pushExternalVideo": true,
+        "videoFilePath": "alan.yuv",
+        "videoPixelFormat": "I420",
+        "videoWidth": 720,
+        "videoHeight": 1280,
+        "videoFps": 25,
+        "videoRotation": 0,
+
+        "loopPlayCount": -1,
+        "joinLeaveCount": 1
+    },
+    {
+        "appServer": "https://pre-onertc-demo-app-server.dingtalk.com",
+        "appId": "64o1r7v2",
+        "userId": "user003",
+        "userName": "user003",
+        "channelId": "r003",
+        "env": "onertcPre",
+        "passwd": "somepassword",
+        
+        "publishAudio": true,
+        "publishVideo": true,
+        "subscribeAllAudio": true,
+        "subscribeAllVideo": true,
+        "dumpPlaybackAudio": true,
+        "dumpRemoteVideo": true,
+
+        "pushExternalAudio": true,
+        "pcmFilePath": "shuziren_audio_16000hz_1ch.pcm",
+        "pcmSampleRate": 16000,
+        "pcmChannels": 1,
+        "pcmReadFreq": 40,
+
+        "pushExternalVideo": true,
+        "videoFilePath": "shuziren_video_1080x1920_25fps.yuv",
+        "videoPixelFormat": "I420",
+        "videoWidth": 1080,
+        "videoHeight": 1920,
+        "videoFps": 25,
+        "videoRotation": 0,
+
+        "loopPlayCount": -1,
+        "joinLeaveCount": 1
+    },
+    {
+        "appServer": "https://pre-onertc-demo-app-server.dingtalk.com",
+        "appId": "64o1r7v2",
+        "userId": "user004",
+        "userName": "user004",
+        "channelId": "r004",
+        "env": "onertcPre",
+        "passwd": "somepassword",
+        
+        "publishAudio": true,
+        "publishVideo": true,
+        "subscribeAllAudio": true,
+        "subscribeAllVideo": true,
+        "dumpPlaybackAudio": true,
+        "dumpRemoteVideo": true,
+
+        "pushExternalAudio": true,
+        "pcmFilePath": "shuziren_audio_16000hz_1ch.pcm",
+        "pcmSampleRate": 16000,
+        "pcmChannels": 1,
+        "pcmReadFreq": 40,
+
+        "pushExternalVideo": true,
+        "videoFilePath": "shuziren_video_1080x1920_25fps.yuv",
+        "videoPixelFormat": "I420",
+        "videoWidth": 1080,
+        "videoHeight": 1920,
+        "videoFps": 25,
+        "videoRotation": 0,
+
+        "loopPlayCount": -1,
+        "joinLeaveCount": 1
+    },
+    {
+        "appServer": "https://pre-onertc-demo-app-server.dingtalk.com",
+        "appId": "64o1r7v2",
+        "userId": "user005",
+        "userName": "user005",
+        "channelId": "r005",
+        "env": "onertcPre",
+        "passwd": "somepassword",
+        
+        "publishAudio": true,
+        "publishVideo": true,
+        "subscribeAllAudio": true,
+        "subscribeAllVideo": true,
+        "dumpPlaybackAudio": true,
+        "dumpRemoteVideo": true,
+
+        "pushExternalAudio": true,
+        "pcmFilePath": "alan_famous.pcm",
+        "pcmSampleRate": 48000,
+        "pcmChannels": 2,
+        "pcmReadFreq": 40,
+
+        "pushExternalVideo": true,
+        "videoFilePath": "alan.yuv",
+        "videoPixelFormat": "I420",
+        "videoWidth": 720,
+        "videoHeight": 1280,
+        "videoFps": 25,
+        "videoRotation": 0,
+
+        "loopPlayCount": -1,
+        "joinLeaveCount": 1
+    }
+]

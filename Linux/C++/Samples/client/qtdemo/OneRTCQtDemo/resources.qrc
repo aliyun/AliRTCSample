@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/camera_off.png</file>
+        <file>images/camera_on.png</file>
+        <file>images/mic_off.png</file>
+        <file>images/mic_on.png</file>
+        <file>images/more.png</file>
+        <file>images/preview_off.png</file>
+        <file>images/preview_on.png</file>
+        <file>images/setting.png</file>
+    </qresource>
+</RCC>

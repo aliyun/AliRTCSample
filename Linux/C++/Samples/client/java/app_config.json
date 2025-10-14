@@ -1,0 +1,35 @@
+{
+  "appServer": "https://pre-onertc-demo-app-server.dingtalk.com",
+  "appId": "64o1r7v2",
+  "userId": "linux_java_user001",
+  "userName": "linux_java_name001",
+  "channelName": "linux_java_room001",
+  "env": "onertcPre",
+  "passwd": "somepassword",
+
+  "joinLeaveCount": 1,
+  "sleepMsBeforeLeave": 3000,
+
+  "publishAudio": true,
+  "publishVideo": true,
+  "subscribeAllAudio": true,
+  "subscribeAllVideo": true,
+
+  "pushExternalAudio": true,
+  "pcmFilePath": "alan_famous.pcm",
+  "pcmSampleRate": 48000,
+  "pcmChannels": 2,
+  "pcmReadFreq": 40,
+
+  "pushExternalVideo": true,
+  "videoFilePath": "alan.yuv",
+  "videoPixelFormat": "I420",
+  "videoWidth": 720,
+  "videoHeight": 1280,
+  "videoFps": 25,
+  "videoRotation": 0,
+  "videoBitrate": 0,
+  "loopPlayCount": 1,
+
+  "rtmSessionId": "linux_java_test"
+}

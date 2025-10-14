@@ -1,0 +1,89 @@
+/* body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+} */
+
+/* body { */
+    /* display: flex;
+    justify-content: center; */
+    /* align-items: center; */
+    /* position: relative; */
+/* } */
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background-color: white(26, 255, 0, 0.354);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); */
+    /* width: auto; */
+}
+
+.log-container {
+    background: #eee; padding: 0.5em;
+    overflow-y: auto;
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+}
+
+.form-group {
+    display: flex;
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    margin-right: 10px;
+}
+
+.select-editable {position:relative; background-color:white; border:solid grey 1px;  width:200px; height:20px;}
+.select-editable select {position:absolute; top:0px; left:0px; font-size:14px; border:none; width:200px; margin:0;}
+.select-editable input {position:absolute; top:0px; left:0px; width:180px; height:18px; padding:1px; font-size:14px; border:none;}
+.select-editable select:focus, .select-editable input:focus {outline:none;}
+
+/* .select-editable {position:relative; width:200px; height:40px;}
+.select-editable > * {position:absolute; top:0; left:0; box-sizing:border-box; outline:none;}
+.select-editable select {width:100%;}
+.select-editable input {width:calc(100% - 20px); margin:1px; border:none; text-overflow:ellipsis;} */
+
+.checkbox-item {
+    display: block;
+    cursor: pointer;
+}
+
+.checkbox-item input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+fieldset {
+    border: 1px solid #ccc;
+    margin: 10px;
+}
+
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 0.8em;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: auto auto; /* Adjust the column sizing as needed */
+    gap: 14px; /* Spacing between grid items */
+    align-items: center;
+}
+
+.form-grid label {
+    text-align: right; /* Aligns text of the label to the right */
+}
+
+/* Optional for alignment perfection */
+.form-grid input {
+    justify-self: start; /* Aligns input to the start of the grid column */
+}
