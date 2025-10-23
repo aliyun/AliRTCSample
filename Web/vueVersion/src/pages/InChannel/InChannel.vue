@@ -7,7 +7,7 @@ import ToolBar from './components/ToolBar.vue';
 import { NetworkDetector } from './components/NetworkBar';
 import Icon from '~/components/Icon';
 import { useChannel, useNetworkStats } from '~/hooks/channel';
-import { parseTime, print } from '~/utils/tools';
+import { parseTime, logger } from '~/utils/tools';
 import { Divider, Col, message, Radio, RadioGroup, Row, Space, Tooltip } from 'ant-design-vue';
 import {
   Group,
@@ -16,7 +16,8 @@ import {
   LocalVideoTrack,
   NetworkQuality,
 } from 'dingrtc';
-import { useClient, useGlobalFlag, useChannelInfo, useCurrentUserInfo, useDeviceInfo, useRTMInfo } from '~/store';
+import { useClient, useGlobalFlag, useChannelInfo, useCurrentUserInfo, useDeviceInfo, useAsrInfo, useRTMInfo } from '~/store';
+import Subtitle from './components/Subtitle/SubtitleBar.vue';
 import ChatRoom from './components/ChatRoom/index.vue';
 
 const rtcStatsTimer = ref(0);
@@ -24,6 +25,7 @@ const wrapRef = ref(null);
 const timeLeftTimer = ref(0);
 const fullscreen = ref(false);
 const channelInfo = useChannelInfo();
+const asrInfo = useAsrInfo();
 const rtmInfo = useRTMInfo();
 const client = useClient();
 const globalFlag = useGlobalFlag();
@@ -94,6 +96,7 @@ const clearRoom = () => {
   channelInfo.whiteboardManager?.clear();
   channelInfo.$reset();
   globalFlag.$reset();
+  asrInfo.$reset();
   rtmInfo.$patch({
     enabled: false,
     sessions: [],
@@ -113,14 +116,14 @@ onMounted(() => {
     timeLeft.value = Math.max(timeLeft.value - 1, 0);
   }, 1000);
   client.on('user-unpublished', (user, mediaType, auxiliary) => {
-    print(
+    logger.info(
       `user ${user.userId} unpublished ${mediaType === 'audio' ? 'audio' : auxiliary ? 'screenShare' : mediaType}}`,
     );
     channelInfo.updateTrackStats(user.userId);
     channelInfo.$patch({ remoteUsers: client.remoteUsers });
   });
   client.on('user-published', (user, mediaType, auxiliary) => {
-    print(
+    logger.info(
       `user ${user.userId} ${user.id} published ${mediaType === 'audio' ? 'audio' : auxiliary ? 'screenShare' : mediaType}}`,
     );
     channelInfo.updateTrackStats(user.userId);
@@ -133,16 +136,16 @@ onMounted(() => {
     }
   });
   client.on('user-joined', (user) => {
-    print(`user ${user.userId} joined`, user);
+    logger.info(`user ${user.userId} joined`, user);
     channelInfo.$patch({ remoteUsers: client.remoteUsers });
     channelInfo.updateTrackStats(user.userId);
   });
   client.on('stream-type-changed', (uid, streamType) => {
-    print(`user ${uid} streamType changeTo ${streamType}`);
+    logger.info(`user ${uid} streamType changeTo ${streamType}`);
   });
 
   client.on('connection-state-change', (current, _, reason) => {
-    print(`connection-state-change ${current} ${reason || ''}`);
+    logger.info(`connection-state-change ${current} ${reason || ''}`);
     if (current === 'disconnected') {
       if (reason !== 'leave') {
         message.info(reason);
@@ -155,44 +158,44 @@ onMounted(() => {
   });
   client.on('volume-indicator', (uids: string[]) => {
     if (uids.length) {
-      print(`${uids.join()} is speaking`);
+      logger.info(`${uids.join()} is speaking`);
     }
     channelInfo.$patch({ speakers: uids });
   });
   client.on('user-info-updated', (uid, msg) => {
-    print(`user ${uid}: ${msg}`);
+    logger.info(`user ${uid}: ${msg}`);
     channelInfo.$patch({ remoteUsers: client.remoteUsers });
     channelInfo.updateTrackStats(uid);
   });
   client.on('user-left', (user) => {
-    print(`user ${user.userId} left`);
+    logger.info(`user ${user.userId} left`);
     checkMainview(user);
     channelInfo.updateTrackStats(user.userId);
     channelInfo.$patch({ remoteUsers: client.remoteUsers });
   });
   client.on('group-add', (group: Group) => {
-    print(`group add`, group);
+    logger.info(`group add`, group);
     channelInfo.groups = client.groups;
   });
   client.on('group-remove', (group: Group) => {
-    print(`group remove`, group);
+    logger.info(`group remove`, group);
     if (channelInfo.subscribeAudio === group.id) {
       channelInfo.subscribeAudio = '';
     }
     channelInfo.$patch({ groups: client.groups });
   });
   client.on('group-user-join', (groupId: string, user: GroupUser) => {
-    print(`group-user-join`, groupId, user);
+    logger.info(`group-user-join`, groupId, user);
     channelInfo.$patch({ groups: client.groups });
   });
   client.on('group-user-leave', (groupId: string, user: GroupUser) => {
-    print(`group-user-leave`, groupId, user);
+    logger.info(`group-user-leave`, groupId, user);
     channelInfo.$patch({ groups: client.groups });
   });
   client.on(
     'group-info-updated',
     (groupId: string, event: GroupPropertyUpdateTypes, value?: string) => {
-      print(`group-info-updated`, groupId, event, value);
+      logger.info(`group-info-updated`, groupId, event, value);
       channelInfo.$patch({ groups: client.groups });
     },
   );
@@ -253,22 +256,15 @@ watch(
       <span v-if="channelInfo.timeLeft">剩余时长：{{ parseTime(timeLeft) }}</span>
       <NetworkDetector />
       <Row class="fullscreen">
-        <Tooltip
-          :arrow="false"
-          placement="bottomLeft"
-          overlayClassName="viewConfigContainer"
-          :overlay-inner-style="{ backgroundColor: 'rgba(245, 247, 250, 0.9)' }"
-        >
+        <Tooltip :arrow="false" placement="bottomLeft" overlayClassName="viewConfigContainer"
+          :overlay-inner-style="{ backgroundColor: 'rgba(245, 247, 250, 0.9)' }">
           <Col class="viewConfigHot">
-            <Icon :type="channelInfo.mode === 'grid' ? 'icon-gallery_20' : 'icon-speaker_top_20'" />
-            视图
+          <Icon :type="channelInfo.mode === 'grid' ? 'icon-gallery_20' : 'icon-speaker_top_20'" />
+          视图
           </Col>
           <template #title>
             <Row class="viewConfig">
-              <RadioGroup
-                v-model:value="channelInfo.mode"
-                :disabled="channelInfo.isWhiteboardOpen"
-              >
+              <RadioGroup v-model:value="channelInfo.mode" :disabled="channelInfo.isWhiteboardOpen">
                 <Radio value="standard">
                   <Icon type="icon-speaker_top_20" />
                   标准
@@ -280,40 +276,26 @@ watch(
               </RadioGroup>
               <Divider />
               <Col @click="onFullScreen">
-                {{ fullscreen ? '退出全屏' : '全屏' }}
+              {{ fullscreen ? '退出全屏' : '全屏' }}
               </Col>
             </Row>
           </template>
         </Tooltip>
         <Divider type="vertical" v-if="fullscreen" />
-        <Icon
-          class="viewConfigHot"
-          v-if="fullscreen"
-          @click="onFullScreen"
-          type="icon-XDS_Minimize"
-        />
+        <Icon class="viewConfigHot" v-if="fullscreen" @click="onFullScreen" type="icon-XDS_Minimize" />
       </Row>
     </Row>
     <Space v-if="channelInfo.mode === 'standard'" :class="['smallVideoItems', channelInfo.mode]">
-      <SmallView
-        v-for="user in channelInfo.allUsers"
-        :key="user.userId"
-        :user="user"
-        :track="channelInfo.getTrack(user)"
-      />
+      <SmallView v-for="user in channelInfo.allUsers" :key="user.userId" :user="user"
+        :track="channelInfo.getTrack(user)" />
     </Space>
     <Row v-else :class="['smallVideoItems', channelInfo.mode]">
-      <SmallView
-        v-for="user in channelInfo.allUsers"
-        :span="spanNum"
-        :style="{ height: gridHeight + 'px' }"
-        :key="user.userId"
-        :user="user"
-        :track="channelInfo.getTrack(user)"
-      />
+      <SmallView v-for="user in channelInfo.allUsers" :span="spanNum" :style="{ height: gridHeight + 'px' }"
+        :key="user.userId" :user="user" :track="channelInfo.getTrack(user)" />
     </Row>
     <MainView v-if="channelInfo.mode === 'standard' && !channelInfo.isWhiteboardOpen" />
     <Whiteboard v-if="channelInfo.mode === 'standard' && channelInfo.isWhiteboardOpen" />
+    <Subtitle v-if="asrInfo.enabled" />
     <ToolBar @leave="clearRoom" />
     <ChatRoom />
   </Row>

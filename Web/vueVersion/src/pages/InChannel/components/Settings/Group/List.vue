@@ -4,10 +4,7 @@
       <Button type="primary" @click="openModal">
         加入分组
       </Button>
-      <Button
-        :disabled="channelInfo.groups.some((item) => item.joined)"
-        @click="mixToChannel"
-      >
+      <Button :disabled="channelInfo.groups.some((item) => item.joined)" @click="mixToChannel">
         混音到大厅
       </Button>
       <Button :disabled="channelInfo.groups.some((item) => item.joined)" @click="subChannel">
@@ -43,7 +40,7 @@ const onRefresh = () => {
   channelInfo.$patch({ groups: [...client.groups] });
 };
 const onJoin = async (joinFromData) => {
-  const { groupId, groupName, publishAudioToGroup = true, userData = '' } = joinFromData;
+  const { groupId, groupName, mixToGroup: publishAudioToGroup, userData = '' } = joinFromData;
   if (channelInfo.subscribeAudio === 'mcu' && channelInfo.mcuAudioTrack) {
     await client.unsubscribe('mcu', 'audio');
     channelInfo.$patch({

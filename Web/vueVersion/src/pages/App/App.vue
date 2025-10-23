@@ -4,6 +4,8 @@
       <InChannel v-if="globalFlag.joined" />
       <Welcome v-else />
     </template>
+    <div style="color: red; position: absolute; left: 0; top: 50%; transform: translateY(-50%); border: solid 1px red;">
+      {{ 'dingrtc v' + DingRTC.VERSION }}</div>
   </div>
 </template>
 
@@ -18,7 +20,7 @@ import VConsole from "vconsole";
 import { useDevice } from "~/hooks/device";
 import 'ant-design-vue/dist/reset.css';
 import { useWhiteboardHooks } from "~/hooks/channel";
-import { print } from "~/utils/tools";
+import { logger } from "~/utils/tools";
 
 const globalFlag = useGlobalFlag();
 const { updateDeviceList, getDeviceList } = useDevice();
@@ -58,6 +60,7 @@ onMounted(() => {
   })
 
   rtmInfo.rtm.on('message', (data) => {
+    console.log('rtm message received===', data);
     const session = rtmInfo.sessions.find(item => item.sessionId === data.sessionId)
     session.messages.push({
       ...data,
@@ -65,7 +68,7 @@ onMounted(() => {
     });
   })
   rtmInfo.rtm.on('session-add', (session) => {
-    print(`rtm session add`, session);
+    logger.info(`rtm session add`, session);
     const idx = rtmInfo.sessions.findIndex(item => item.sessionId === session.id)
     if (idx === -1) {
       rtmInfo.sessions.push({
@@ -76,12 +79,12 @@ onMounted(() => {
     }
   })
   rtmInfo.rtm.on('session-remove', (session) => {
-    print(`rtm session remove`, session);
+    logger.info(`rtm session remove`, session);
     const idx = rtmInfo.sessions.findIndex(item => item.sessionId === session.id)
     rtmInfo.sessions.splice(idx, 1);
   })
   rtmInfo.rtm.on('session-user-join', (sessionId, uid) => {
-    print(`rtm session user join`, sessionId, uid);
+    logger.info(`rtm session user join`, sessionId, uid);
     const session = rtmInfo.sessions.find(item => item.sessionId === sessionId)
     const idx = session.members.findIndex(item => uid === item.userId)
     if (idx === -1) {
@@ -90,7 +93,7 @@ onMounted(() => {
     }
   })
   rtmInfo.rtm.on('session-user-left', (sessionId, uid) => {
-    print(`rtm session user left`, sessionId, uid);
+    logger.info(`rtm session user left`, sessionId, uid);
     const session = rtmInfo.sessions.find(item => item.sessionId === sessionId)
     const idx = session.members.findIndex(item => uid === item.userId)
     session.members.splice(idx, 1);

@@ -16,6 +16,8 @@ import { ref } from 'vue';
 import { useRTMInfo, useCurrentUserInfo, useGlobalFlag } from '~/store';
 
 const rtmInfo = useRTMInfo();
+// @ts-ignore
+window.rtmInfo = rtmInfo;
 const currentUserInfo = useCurrentUserInfo();
 const globalFlag = useGlobalFlag();
 const textareaRef = ref<HTMLTextAreaElement>(null);
@@ -32,6 +34,7 @@ const sendMessage = (e?: KeyboardEvent | MouseEvent) => {
   const data = encoder.encode(inputText.value)
   rtmInfo.rtm.publish(rtmInfo.activeSessionId, data);
   const activeSession = rtmInfo.sessions.find(item => item.sessionId === rtmInfo.activeSessionId);
+  console.log('activeSession===', activeSession);
   activeSession.messages.push({
     message: data,
     broadcast: true,

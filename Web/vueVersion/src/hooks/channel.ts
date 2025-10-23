@@ -10,8 +10,15 @@ import {
 import { AnnotationSourceType } from '@dingrtc/whiteboard';
 import { message } from 'ant-design-vue';
 import { markRaw, toRaw } from 'vue';
-import { RTCStats, useClient, useChannelInfo, useRTMInfo } from '~/store';
-import { print } from '~/utils/tools';
+import {
+  RTCStats,
+  useClient,
+  useChannelInfo,
+  useAsrInfo,
+  useRTMInfo,
+  useCurrentUserInfo,
+} from '~/store';
+import { logger } from '~/utils/tools';
 
 interface EncoderConfig {
   type: 'screenTrack' | 'cameraTrack';
@@ -32,13 +39,13 @@ export const useChannel = () => {
           tempTracks.map((item) => item.getTrackId()),
           'add',
         );
-        print(`publish ${tracks.map((item) => item.trackMediaType)} tracks`);
+        logger.info(`publish ${tracks.map((item) => item.trackMediaType)} tracks`);
       })
       .catch((e) => {
         message.info(
           `publish ${tracks.map((item) => item.trackMediaType)} tracks failed: ${JSON.stringify(e)}`,
         );
-        print(
+        logger.info(
           `publish ${tracks.map((item) => item.trackMediaType)} tracks failed: ${JSON.stringify(e)}`,
         );
         throw e;
@@ -66,13 +73,13 @@ export const useChannel = () => {
           tempTracks.map((item) => item.getTrackId()),
           'remove',
         );
-        print(`unpublish ${tracks.map((item) => item.trackMediaType)} tracks`);
+        logger.info(`unpublish ${tracks.map((item) => item.trackMediaType)} tracks`);
       })
       .catch((e) => {
         message.info(
           `unpublish ${tracks.map((item) => item.trackMediaType)} tracks failed: ${JSON.stringify(e)}`,
         );
-        print(
+        logger.info(
           `unpublish ${tracks.map((item) => item.trackMediaType)} tracks failed: ${JSON.stringify(e)}`,
         );
         throw e;
@@ -83,7 +90,7 @@ export const useChannel = () => {
     return client
       .subscribe(user.userId, mediaType, auxiliary)
       .then((track: any) => {
-        print(`subscribe user ${user.userId} ${auxiliary ? 'screenShare' : 'camera'}`);
+        logger.info(`subscribe user ${user.userId} ${auxiliary ? 'screenShare' : 'camera'}`);
         channelInfo.$patch({ remoteUsers: client.remoteUsers });
         channelInfo.updateTrackStats(user.userId);
         return track;
@@ -92,7 +99,7 @@ export const useChannel = () => {
         message.info(
           `subscribe user ${user.userId} ${auxiliary ? 'screenShare' : 'camera'} failed: ${JSON.stringify(e)}`,
         );
-        print(
+        logger.info(
           `subscribe user ${user.userId} ${auxiliary ? 'screenShare' : 'camera'} failed: ${JSON.stringify(e)}`,
         );
         throw e;
@@ -118,13 +125,13 @@ export const useChannel = () => {
         });
         channelInfo.updateTrackStats(user.userId);
         channelInfo.$patch({ remoteUsers: client.remoteUsers });
-        print(`unsubscribe user ${user.userId} ${auxiliary ? 'screenShare' : 'camera'}`);
+        logger.info(`unsubscribe user ${user.userId} ${auxiliary ? 'screenShare' : 'camera'}`);
       })
       .catch((e) => {
         message.info(
           `unsubscribe user ${user.userId} ${auxiliary ? 'screenShare' : 'camera'} failed: ${JSON.stringify(e)}`,
         );
-        print(
+        logger.info(
           `unsubscribe user ${user.userId} ${auxiliary ? 'screenShare' : 'camera'} failed: ${JSON.stringify(e)}`,
         );
         throw e;
@@ -153,7 +160,7 @@ export const useChannel = () => {
           message.info(
             `subscribe user ${uid} ${auxiliary ? 'screenShare' : 'camera'} failed: ${JSON.stringify(error)}`,
           );
-          print(
+          logger.info(
             `subscribe user ${uid} ${auxiliary ? 'screenShare' : 'camera'} failed: ${JSON.stringify(error)}`,
           );
           continue;
@@ -164,7 +171,7 @@ export const useChannel = () => {
             mainViewUserId: uid,
           });
         }
-        print(`subscribe user ${uid} ${auxiliary ? 'screenShare' : 'camera'}`);
+        logger.info(`subscribe user ${uid} ${auxiliary ? 'screenShare' : 'camera'}`);
         channelInfo.updateTrackStats(uid);
       }
       channelInfo.$patch({
@@ -203,7 +210,7 @@ export const useChannel = () => {
     }
     return client.batchUnsubscribe(unsubParams).then(() => {
       for (const { uid, auxiliary } of unsubParams) {
-        print(`unsubscribe user ${uid} ${auxiliary ? 'screenShare' : 'camera'}`);
+        logger.info(`unsubscribe user ${uid} ${auxiliary ? 'screenShare' : 'camera'}`);
         channelInfo.$patch({
           remoteUsers: client.remoteUsers,
         });
@@ -220,14 +227,14 @@ export const useChannel = () => {
         : () => client.subscribeGroup(channelInfo.subscribeAudio);
     return fn()
       .then((track) => {
-        print(`subscribe mcu audio`);
+        logger.info(`subscribe mcu audio`);
         channelInfo.$patch({ mcuAudioTrack: track as RemoteAudioTrack });
         (track as RemoteAudioTrack).play();
         return track;
       })
       .catch((e) => {
         message.info(`subscribe mcu audio failed: ${JSON.stringify(e)}`);
-        print(`subscribe mcu audio failed: ${JSON.stringify(e)}`);
+        logger.info(`subscribe mcu audio failed: ${JSON.stringify(e)}`);
         throw e;
       });
   };
@@ -240,12 +247,12 @@ export const useChannel = () => {
         : () => client.unsubscribeGroup(channelInfo.subscribeAudio);
     return fn()
       .then(() => {
-        print(`unsubscribe mcu audio`);
+        logger.info(`unsubscribe mcu audio`);
         channelInfo.$patch({ mcuAudioTrack: null });
       })
       .catch((e) => {
         message.info(`subscribe mcu audio failed: ${JSON.stringify(e)}`);
-        print(`subscribe mcu audio failed: ${JSON.stringify(e)}`);
+        logger.info(`subscribe mcu audio failed: ${JSON.stringify(e)}`);
         throw e;
       });
   };
@@ -267,6 +274,7 @@ export const useChannel = () => {
 export const useNetworkStats = () => {
   const client = useClient();
   const channelInfo = useChannelInfo();
+  const currentUserInfo = useCurrentUserInfo();
   const getRtcStats = () => {
     Promise.all([
       client.getLocalAudioStats(),
@@ -275,7 +283,20 @@ export const useNetworkStats = () => {
       client.getRemoteVideoStats(),
     ]).then(([localAudioStats, localVideoStats, remoteAudioStats, remoteVideoStats]) => {
       channelInfo.$patch((prev) => {
+        const resolutionMap = new Map();
         const { camera, auxiliary } = localVideoStats;
+        if (camera) {
+          resolutionMap.set(
+            `${currentUserInfo.userId}#camera`,
+            `${camera.sendResolution.width}*${camera.sendResolution.height}`,
+          );
+        }
+        if (auxiliary) {
+          resolutionMap.set(
+            `${currentUserInfo.userId}#auxiliary`,
+            `${auxiliary.sendResolution.width}*${auxiliary.sendResolution.height}`,
+          );
+        }
         let maxCameraRemoteResolution: { width: number; height: number };
         let maxCameraFps = 0;
         let maxScreenRemoteResolution: { width: number; height: number };
@@ -283,25 +304,14 @@ export const useNetworkStats = () => {
         let maxLoss = 0;
         let recvCameraBitrate = 0;
         let recvScreenBitrate = 0;
+        const bwe = camera?.outgingBitrate || 0;
         let maxRtt = Math.max(localAudioStats.rtt ?? 0, camera?.rtt ?? 0, auxiliary?.rtt ?? 0, 0);
-        // if (localAudioStats.sendPacketsLost) {
-        //   maxLoss = Math.max(localAudioStats.sendPacketsLost / localAudioStats.sendPackets, maxLoss);
-        // }
-        // if (camera?.sendPacketsLost) {
-        //   maxLoss = Math.max(
-        //     camera.sendPacketsLost / camera.sendPackets,
-        //     maxLoss,
-        //   );
-        // }
-        // if (auxiliary?.sendPacketsLost) {
-        //   maxLoss =  Math.max(auxiliary.sendPacketsLost / auxiliary.sendPackets, maxLoss);
-        // }
         const sendBitrate =
           (localAudioStats?.sendBitrate ?? 0) +
           (camera?.sendBitrate ?? 0) +
           (auxiliary?.sendBitrate ?? 0);
         let recvBtrate = remoteAudioStats?.receiveBitrate || 0;
-        for (const remoteVideo of Object.values(remoteVideoStats)) {
+        for (const [uid, remoteVideo] of Object.entries(remoteVideoStats)) {
           const { camera: rCamera, auxiliary: rAuxiliary } = remoteVideo;
           if (rAuxiliary) {
             const {
@@ -319,6 +329,10 @@ export const useNetworkStats = () => {
             }
             recvBtrate += receiveBitrate || 0;
             recvScreenBitrate += receiveBitrate ?? 0;
+            resolutionMap.set(
+              `${uid}#auxiliary`,
+              `${receiveResolution.width}*${receiveResolution.height}`,
+            );
             if (!maxScreenRemoteResolution) {
               maxScreenRemoteResolution = receiveResolution;
             } else if (
@@ -344,6 +358,10 @@ export const useNetworkStats = () => {
               maxLoss = Math.max(maxLoss, receivePacketsLost / receivePackets);
             }
             maxCameraFps = Math.max(maxCameraFps, receiveFrameRate || 0);
+            resolutionMap.set(
+              `${uid}#camera`,
+              `${receiveResolution.width}*${receiveResolution.height}`,
+            );
             if (!maxCameraRemoteResolution) {
               maxCameraRemoteResolution = receiveResolution;
             } else if (
@@ -363,6 +381,7 @@ export const useNetworkStats = () => {
           localScreenFPS: auxiliary?.sendFrameRate,
           localScreenBitrate: auxiliary?.sendBitrate,
           localBitrate: sendBitrate,
+          resolutionMap,
           remoteBitrate: recvBtrate,
           localScreenResolution: auxiliary?.sendResolution,
           localAudioBitrate: localAudioStats?.sendBitrate,
@@ -375,6 +394,7 @@ export const useNetworkStats = () => {
           remoteScreenBitrate: recvScreenBitrate,
           remoteCameraResolution: maxCameraRemoteResolution,
           remoteScreenFPS: maxScreenFps,
+          bwe,
           remoteScreenResolution: maxScreenRemoteResolution,
           remoteAudioBitrate: remoteAudioStats?.receiveBitrate,
           // loss: Math.round(maxLoss * 100),
@@ -426,7 +446,10 @@ export const useWhiteboardHooks = () => {
 
   const openWhiteboard = (id: string) => {
     if (channelInfo.annotation || channelInfo.whiteboard) return;
-    const whiteboard = markRaw(channelInfo.whiteboardManager.getWhiteboard(id));
+    const t = channelInfo.whiteboardManager.getWhiteboard(id);
+    // @ts-ignore
+    window.t = t;
+    const whiteboard = markRaw(t);
     channelInfo.whiteboard = whiteboard;
     preMode = channelInfo.mode;
     channelInfo.$patch({
@@ -438,13 +461,13 @@ export const useWhiteboardHooks = () => {
   };
 
   const openAnnotation = (annotationId: string, sourceType: AnnotationSourceType) => {
-    console.log(annotationId, sourceType)
+    logger.info(annotationId, sourceType);
     if (channelInfo.annotationId === `${annotationId}#${sourceType}`) return;
     preMode = channelInfo.mode;
     const annotation = channelInfo.whiteboardManager.getAnnotation(annotationId, sourceType);
     const [_, trackUserId] = annotationId.split('_');
     channelInfo.annotation = markRaw(annotation);
-    if (channelInfo.isWhiteboardOpen) channelInfo.whiteboard.close()
+    if (channelInfo.isWhiteboardOpen) channelInfo.whiteboard.close();
     channelInfo.$patch({
       isWhiteboardOpen: false,
       mode: 'standard',
@@ -483,6 +506,34 @@ export const useWhiteboardHooks = () => {
   };
 };
 
+export const useAsrHooks = () => {
+  const asrInfo = useAsrInfo();
+
+  const changeTranslateLanguages = (lang: string) => {
+    if (asrInfo.transLang !== lang) {
+      asrInfo.transLang = lang;
+      const newLangs = [lang];
+      if (asrInfo.dualLang) {
+        newLangs.push('source');
+      }
+      asrInfo.asr.setCurrentTranslateLanguages(newLangs);
+    }
+  };
+
+  const changeDualLang = (value: boolean) => {
+    const newLangs = [asrInfo.transLang];
+    asrInfo.dualLang = value;
+    if (value) {
+      newLangs.push('source');
+    }
+    asrInfo.asr.setCurrentTranslateLanguages(newLangs);
+  };
+
+  return {
+    changeTranslateLanguages,
+    changeDualLang,
+  };
+};
 
 export const useRTMInfoHooks = () => {
   const rtmInfo = useRTMInfo();
@@ -542,5 +593,3 @@ export const useRTMInfoHooks = () => {
     initSessions,
   };
 };
-
-

@@ -77,7 +77,6 @@ import {
   Tooltip,
   TypographyText,
   List,
-  message,
 } from 'ant-design-vue';
 import { computed, ref } from 'vue';
 import { useChannelInfo, useCurrentUserInfo, useRTMInfo } from '~/store';

@@ -1,0 +1,127 @@
+.subTitle {
+  position: fixed;
+  bottom: 100px;
+  left: calc(50% - 360px);
+  top: 65%;
+  width: 720px;
+  border-radius: 8px;
+  opacity: 1;
+  z-index: 101;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 12px 12px;
+  background: rgba(30, 32, 38, .6);
+  transition: height .3s ease;
+  &Header{
+    margin-right: 12px;
+    margin-top: 8px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 342px;
+    height: 24px;
+    opacity: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0;
+    flex-grow: 1;
+    z-index: 1;
+    gap: 8px;
+    & :deep(svg) {
+      font-size: 24px;
+      cursor: pointer;
+      color: #fff;
+    }
+  }
+  &Content{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    padding: 8px 12px 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 14px;
+  }
+  &Source, &Translated {
+    justify-content: flex-start;
+    text-indent: 1em;
+    display: flex;
+    line-height: 1em;
+    overflow: hidden;
+    max-height: 3em;
+    align-items: end;
+  }
+  &Translated {
+    color:burlywood;
+  }
+  &List {
+    width: 100%;
+    height: 100%;
+  }
+  &Name {
+    color: hsla(0,0%,100%,.8);
+    margin-bottom: 4px;
+  }
+  &Item {
+    width: 100%;
+    flex-direction: column;
+  }
+}
+
+.translatePanel {
+  display: flex;
+  flex-direction: column;
+  width: 160px;
+
+  .originLangBox {
+    width: 100%;
+    max-height: 300px;
+    overflow-y: auto;
+    .originLangTitle {
+      font-size: 12px;
+      color: rgba(23, 26, 29, 0.6);
+    }
+  }
+
+  .langDivider {
+    width: 100%;
+    margin: 4px 0;
+    border-block-start: 1px solid rgba(5, 5, 5, 0.06);
+  }
+
+  .langItemWrapper {
+    width: 100%;
+    gap: 9px;
+    align-items: center;
+    height: 32px;
+    border-radius: 4px;
+    display: flex;
+    cursor: pointer;
+    &:hover {
+      background: rgba(126, 134, 142, 0.16);
+    }
+    .checkBox {
+      width: 20px;
+      height: 20px;
+    }
+    .langItem {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+
+      .moreInfo {
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+}

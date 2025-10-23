@@ -84,7 +84,16 @@ const networkItems = computed(() => [
   //   label: '丢包率',
   //   value: `${channelInfo.rtcStats.loss} %`,
   // },
-
+  {
+    label: '可用',
+    value: channelInfo.rtcStats.bwe
+      ? `${Math.round(channelInfo.rtcStats.bwe / 1000)} kbps`
+      : '--',
+  },
+  {
+    label: '延迟',
+    value: channelInfo.rtcStats.rtt ? `${channelInfo.rtcStats.rtt} ms` : '--',
+  },
   {
     label: '',
     down: true,
@@ -92,10 +101,8 @@ const networkItems = computed(() => [
       ? `${Math.round(channelInfo.rtcStats.remoteBitrate / 1000)} kbps`
       : '--',
   },
-  {
-    label: '延迟',
-    value: channelInfo.rtcStats.rtt ? `${channelInfo.rtcStats.rtt} ms` : '--',
-  },
+
+
 ]);
 const audioItems = computed(() => [
   {

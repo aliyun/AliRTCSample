@@ -16,9 +16,12 @@ import DingRTC, {
 import { defineStore } from 'pinia';
 import { isIOS, isMac, isMobile, isWeixin, logLevel, parseSearch } from './utils/tools';
 import configJson from '~/config.json';
-import {  RtcWhiteboard, WhiteboardManager } from '@dingrtc/whiteboard'
-import RTM, { RTMMessage, RTMSessionUser } from '@dingrtc/rtm';
+import { RtcWhiteboard, WhiteboardManager } from '@dingrtc/whiteboard';
+import ASR from 'dingrtc-asr';
+import RTM, { RTMMessage, SessionUser } from '@dingrtc/rtm';
 import { markRaw } from 'vue';
+
+const enable2K = parseSearch('2k') === 'true';
 
 DingRTC.setLogLevel(logLevel);
 
@@ -48,6 +51,7 @@ export interface RTCStats {
   remoteAudioBitrate?: number;
   remoteAudioLevel?: number;
   loss?: number;
+  bwe?: number;
   rtt?: number;
   encodeCameraLayers?: number;
   encodeScreenLayers?: number;
@@ -55,6 +59,8 @@ export interface RTCStats {
   sendScreenLayers?: number;
   uplinkProfile?: string;
   downlinkProfile?: string;
+  // uid#'auxiliary' | 'camera';
+  resolutionMap: Map<string, string>;
 }
 
 interface IDeviceInfo {
@@ -71,8 +77,8 @@ interface IDeviceInfo {
   cameraList: MediaDeviceInfo[];
   speakerList: MediaDeviceInfo[];
   micList: MediaDeviceInfo[];
-  cameraOptimization: OptimizationMode,
-  screenOptimization: OptimizationMode,
+  cameraOptimization: OptimizationMode;
+  screenOptimization: OptimizationMode;
   facingMode: 'user' | 'environment';
 }
 
@@ -116,14 +122,24 @@ export interface IChannelInfo {
   enableRTM: boolean;
 }
 
+interface IAsrInfo {
+  asrTaskId: string;
+  asr: ASR;
+  originLang: string;
+  transLang: string;
+  dualLang: boolean;
+  enabled: boolean;
+  functionNumber: number;
+}
+
 interface IGlobalFlag {
   joined: boolean;
   immersive: boolean;
-  isMobile: boolean,
-  hideLog: boolean,
-  env: string,
-  isIOS: boolean,
-  isWeixin: boolean,
+  isMobile: boolean;
+  hideLog: boolean;
+  env: string;
+  isIOS: boolean;
+  isWeixin: boolean;
   isMac: boolean;
 }
 
@@ -132,7 +148,7 @@ interface IRTMMessage extends RTMMessage {
 }
 
 export interface IRTMSession {
-  members: RTMSessionUser[];
+  members: SessionUser[];
   sessionId: string;
   messages: IRTMMessage[];
 }
@@ -145,6 +161,8 @@ interface IRTMInfo {
 }
 
 const client = DingRTC.createClient();
+// @ts-ignore
+window.client = client;
 
 const whiteboardManager = markRaw(new WhiteboardManager());
 // 白板和 rtc 共享同一个入会连接
@@ -175,11 +193,13 @@ export const useCurrentUserInfo = defineStore('ICurrentUserInfo', {
   }),
 });
 
-let defaultCameraDimension: VideoDimension = 'VD_640x480';
-if (isIOS()) {
+let defaultCameraDimension: VideoDimension = 'VD_1920x1080';
+if (isIOS() || (!isMobile() && !isMac())) {
   defaultCameraDimension = 'VD_1280x720';
 }
-
+if (enable2K) {
+  defaultCameraDimension = 'VD_2560x1440';
+}
 export const useDeviceInfo = defineStore('IDeviceInfo', {
   state: (): IDeviceInfo => ({
     cameraId: '',
@@ -207,8 +227,8 @@ export const useDeviceInfo = defineStore('IDeviceInfo', {
     micEnable(): boolean {
       const channelInfo = useChannelInfo();
       return channelInfo.micTrack?.enabled && !channelInfo.micTrack?.muted;
-    }
-  }
+    },
+  },
 });
 
 export const useChannelInfo = defineStore('IChannelInfo', {
@@ -222,7 +242,9 @@ export const useChannelInfo = defineStore('IChannelInfo', {
     defaultRemoteStreamType: 'FHD',
     networkQuality: 1,
     publishedTracks: new Set(),
-    rtcStats: {},
+    rtcStats: {
+      resolutionMap: new Map(),
+    },
     mode: 'grid',
     isWhiteboardOpen: false,
     mcuAudioTrack: null,
@@ -259,16 +281,18 @@ export const useChannelInfo = defineStore('IChannelInfo', {
           auxiliaryTrack: this.screenTrack,
         },
         ...this.remoteUsers,
-      ]
+      ];
       return list as RemoteUser[];
     },
     mainViewUserInfo(): RemoteUser {
-      return this.allUsers.find(user => user.userId === this.mainViewUserId)
+      return this.allUsers.find((user) => user.userId === this.mainViewUserId);
     },
     mainViewTrack(): RemoteVideoTrack {
       const videoTrack = this.mainViewUserInfo?.videoTrack;
       const auxiliaryTrack = this.mainViewUserInfo?.auxiliaryTrack;
-      return this.mainViewPreferType === 'camera' ? videoTrack || auxiliaryTrack : auxiliaryTrack || videoTrack;;
+      return this.mainViewPreferType === 'camera'
+        ? videoTrack || auxiliaryTrack
+        : auxiliaryTrack || videoTrack;
     },
     getTrack() {
       const self = this;
@@ -281,13 +305,13 @@ export const useChannelInfo = defineStore('IChannelInfo', {
             : videoTrack || auxiliaryTrack;
         }
         return auxiliaryTrack || videoTrack;
-      }
-    }
+      };
+    },
   },
   actions: {
     updateTrackStats(uid?: string) {
-      const currentUserInfo = useCurrentUserInfo()
-      const user = this.allUsers.find(item => item.userId === (uid || currentUserInfo.userId));
+      const currentUserInfo = useCurrentUserInfo();
+      const user = this.allUsers.find((item) => item.userId === (uid || currentUserInfo.userId));
       this.trackStatsMap.set(user.userId, {
         mic: user.hasAudio && !user.audioMuted,
         screen: user.hasAuxiliary && !user.auxiliaryMuted,
@@ -301,13 +325,27 @@ export const useChannelInfo = defineStore('IChannelInfo', {
     updatePublishedTracks(trackIds: string[], action: 'add' | 'remove') {
       for (const trackId of trackIds) {
         if (action === 'add') {
-          this.publishedTracks.add(trackId)
+          this.publishedTracks.add(trackId);
         } else {
-          this.publishedTracks.delete(trackId)
+          this.publishedTracks.delete(trackId);
         }
       }
-    }
-  }
+    },
+  },
+});
+// @ts-ignore
+window.useChannelInfo = useChannelInfo;
+
+export const useAsrInfo = defineStore('IAsrInfo', {
+  state: (): IAsrInfo => ({
+    asrTaskId: '',
+    asr: null,
+    originLang: '',
+    transLang: '',
+    enabled: false,
+    dualLang: false,
+    functionNumber: 1,
+  }),
 });
 
 export const useGlobalFlag = defineStore('IGlobalFlag', {
@@ -330,4 +368,4 @@ export const useRTMInfo = defineStore('IRTMInfo', {
     sessions: [],
     activeSessionId: '',
   }),
-})
+});

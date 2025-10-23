@@ -18,6 +18,8 @@ const wrapDomRef = useTemplateRef<HTMLDivElement>('wrapDomRef');
 const domRef = useTemplateRef<HTMLDivElement>('domRef');
 
 const channelInfo = useChannelInfo();
+// @ts-ignore
+window.channelInfo = channelInfo
 
 const activeDocId = ref(channelInfo.annotation?.sessionId);
 const config = { width: 1280.0, height: 720.0, limit: true };
@@ -82,6 +84,7 @@ onBeforeUnmount(() => {
   width: 100%;
   height: 100%;
 }
+
 .annotation {
   width: 100%;
   height: 100%;
@@ -90,6 +93,7 @@ onBeforeUnmount(() => {
   position: absolute;
   justify-content: center;
   align-items: center;
+
   .annotation-container {
     width: 100%;
     height: 100%;

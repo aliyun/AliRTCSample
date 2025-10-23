@@ -1,9 +1,9 @@
 {
   "env": "onertcOnline",
-  "appId": "xxxxxx",
+  "appId": "#### YOUR APP ID ####",
   "channelId": "",
   "userId": "",
   "userName": "",
-  "appKey": "",
+  "appKey": "#### YOUR APP KEY ####",
   "token": ""
 }

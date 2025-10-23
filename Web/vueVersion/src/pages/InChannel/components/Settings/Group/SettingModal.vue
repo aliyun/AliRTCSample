@@ -1,14 +1,7 @@
 <template>
-  <Modal
-    :title="type === 'join' ? '加入分组' : '设置名称'"
-    open
-    :width="400"
-    cancel-text="取消"
-    ok-text="确认"
-    @ok="joinOk"
-    @cancel="cancel"
-  >
-    <Form :label-col="{ span: 6 }" labelAlign="left" :model="formData" >
+  <Modal :title="type === 'join' ? '加入分组' : '设置名称'" open :width="400" cancel-text="取消" ok-text="确认" @ok="joinOk"
+    @cancel="cancel">
+    <Form :label-col="{ span: 6 }" labelAlign="left" :model="formData">
       <Form.Item v-if="type === 'join'" label="分组Id" name="groupId" required>
         <Input v-model:value="formData.groupId" placeholder="请填写分组Id" />
       </Form.Item>
@@ -19,7 +12,7 @@
         <Input v-model:value="formData.userData" placeholder="加入分组时可携带自定义数据" />
       </Form.Item>
       <Form.Item v-if="type === 'join'" name="mixToGroup" required>
-        <Checkbox :checked="formData.mixToGroup" > 混音到分组 </Checkbox>
+        <Checkbox v-model:checked="formData.mixToGroup"> 混音到分组 </Checkbox>
       </Form.Item>
     </Form>
   </Modal>
@@ -27,6 +20,7 @@
 <script setup lang="ts">
 import { Modal, Input, Checkbox, Form } from 'ant-design-vue';
 import { reactive } from 'vue';
+import { logger } from '~/utils/tools';
 
 const props = defineProps<{
   ok: (...args: any) => void;
@@ -46,6 +40,7 @@ const formData = reactive({
 
 const joinOk = () => {
   if (type === 'join') {
+    logger.info('formData', formData);
     ok(formData);
   } else if (type === 'modifyName') {
     ok(formData.groupName);

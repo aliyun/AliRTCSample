@@ -3,7 +3,7 @@ import Icon from '../Icon';
 import { CheckOutlined } from '@ant-design/icons-vue';
 import { useGlobalFlag, useDeviceInfo, useChannelInfo } from '~/store';
 import style from './index.module.less';
-import { print } from '~/utils/tools';
+import { logger } from '~/utils/tools';
 import { ref, computed } from 'vue';
 
 const { Text } = Typography;
@@ -95,7 +95,7 @@ export const Camera = (props: DeviceProps) => {
   const { getNode, setShowPannel } = useBase();
   const onCameraClick = (deviceId: string) => {
     deviceInfo.$patch({ cameraId: deviceId });
-    print(`camera changeTo ${deviceId}`);
+    logger.info(`camera changeTo ${deviceId}`);
     let newDeviceId = deviceId;
     if (deviceId === '0') {
       newDeviceId = 'environment';
@@ -130,13 +130,13 @@ export const Mic = (props: DeviceProps) => {
   );
   const onMicClick = (deviceId: string) => {
     deviceInfo.$patch({ micId: deviceId });
-    print(`mic changeTo ${deviceId}`);
+    logger.info(`mic changeTo ${deviceId}`);
     channelInfo.micTrack?.setDevice(deviceId);
     setShowPannel(false);
   };
   const onSpeakerClick = (deviceId: string) => {
     deviceInfo.$patch({ speakerId: deviceId });
-    print(`speaker changeTo ${deviceId}`);
+    logger.info(`speaker changeTo ${deviceId}`);
     setShowPannel(false);
     channelInfo.mcuAudioTrack?.setSpeaker(deviceId || undefined);
   };

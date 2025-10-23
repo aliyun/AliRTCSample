@@ -1,15 +1,15 @@
 <template>
   <Row class="previewWrap">
-    <Col ref="refContainer" :class="!deviceInfo.cameraEnable ? 'avatar' : 'camera'">
-      <Avatar size="large">{{ userName }}</Avatar>
+    <Col ref="refContainer" id="refContainer" :class="!deviceInfo.cameraEnable ? 'avatar' : 'camera'">
+    <Avatar size="large">{{ userName }}</Avatar>
     </Col>
     <Row class="devices">
       <Col class="deviceColumn">
-        <Camera :click="onClickCamera" />
+      <Camera :click="onClickCamera" />
       </Col>
       <Divider type="vertical" />
       <Col class="deviceColumn">
-        <Mic :click="onClickMic" />
+      <Mic :click="onClickMic" />
       </Col>
     </Row>
   </Row>
@@ -33,23 +33,23 @@ const deviceInfo = useDeviceInfo();
 const channelInfo = useChannelInfo();
 
 // 设备操作
-const { openMicAndCameraSameTime, operateCamera, operateMic, openCamera, openMic } =
+const { operateCamera, operateMic, openCamera, openMic } =
   useDevice('pre');
 onMounted(async () => {
   if (globalFlag.isMobile) {
     return
   };
-  const [track] = await openMicAndCameraSameTime();
+  const track = await openCamera();
   cameraTrack.value = track;
   if (!globalFlag.joined) {
-    track?.play(refContainer.value.$el, { fit: 'cover' });
+    track?.play(refContainer.value.$el, { fit: 'cover', mirror: true });
   }
 });
 
 const onClickCamera = () => {
   if (globalFlag.isMobile && !channelInfo.cameraTrack) {
     openCamera().then((track) => {
-      track?.play(refContainer.value.$el, { fit: 'cover' });
+      track?.play(refContainer.value.$el, { fit: 'cover', mirror: true });
     });
   } else {
     operateCamera();

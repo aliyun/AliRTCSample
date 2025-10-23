@@ -29,6 +29,7 @@ const scrollTimer = ref<number>(0);
 
 const messages = computed(() => {
   const activeSession = rtmInfo.sessions.find(item => item.sessionId === rtmInfo.activeSessionId);
+  console.log(activeSession)
   return activeSession?.messages;
 });
 

@@ -2,9 +2,9 @@
   <div class="dingrtc-wb-wrapper">
     <div class="dingrtc-wb" ref="wrapDomRef">
       <div class="whiteboard-container" ref="domRef">
-        <Toolbar :whiteboard="whiteboard"  />
+        <Toolbar :whiteboard="whiteboard" />
         <VisionShare :whiteboard="whiteboard" />
-        <ToolPagination :activeDocId="activeDocId" :whiteboard="whiteboard"  />
+        <ToolPagination :activeDocId="activeDocId" :whiteboard="whiteboard" />
       </div>
     </div>
   </div>
@@ -18,6 +18,7 @@ import ToolPagination from '../../../components/Whiteboard/Pagination.vue';
 import { useChannelInfo } from '~/store';
 import { defaultWhiteboardId } from '~/constants/index';
 import { RtcWhiteboard } from '@dingrtc/whiteboard';
+import { logger } from '~/utils/tools';
 
 
 const channelInfo = useChannelInfo();
@@ -58,7 +59,11 @@ function updateWbDomSize() {
 onMounted(async () => {
   const { width, height, limit } = config;
   channelInfo.whiteboard.initVision(width, height, limit);
-  await channelInfo.whiteboard.open(domRef.value!);
+  try {
+    await channelInfo.whiteboard.open(domRef.value!);
+  } catch (error) {
+    logger.info('wb open error', error);
+  }
 
   updateWbDomSize();
   setTimeout(() => {
@@ -82,6 +87,7 @@ onBeforeUnmount(() => {
   flex: 1;
   padding: 0 0 60px;
 }
+
 .dingrtc-wb {
   width: 100%;
   height: 100%;
@@ -90,6 +96,7 @@ onBeforeUnmount(() => {
   position: relative;
   justify-content: center;
   align-items: center;
+
   .whiteboard-container {
     width: 100%;
     height: 100%;

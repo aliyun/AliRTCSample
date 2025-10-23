@@ -1,59 +1,50 @@
 <template>
-  <Col
-    ref="containerRef"
-    :style="style"
-    :class="[
-      'smallVideoItem',
-      {
-        avatar: !videoIsPlay,
-        camera: videoIsPlay,
-        speaking: channelInfo.speakers.includes(user.userId),
-      },
-    ]"
-    :span="span"
-    @dblclick="viewBigger"
-  >
-    <span class="userId"> uid:{{ user.userId }} </span>
-    <component
-      :is="ScoreMap(channelInfo.remoteUserNetworkQualitys[user.userId] || 0)?.icon"
-      v-if="!isLocal && track"
-    />
-    <Avatar size="large">
-      {{ user.userName }}
-    </Avatar>
-    <div class="smallViewStatus">
-      <Icon v-if="channelInfo.trackStatsMap.get(props.user.userId)?.screen" style="color: limegreen" type="icon-XDS_share_screen1" />
-      <Icon v-if="!micIconEnable" type="icon-XDS_UnMute2Fill" />
-      <Tooltip :title="user.userName">
-        <span>{{ user.userName }}</span>
-      </Tooltip>
-    </div>
-    <Tooltip :arrow="false" :overlay-inner-style="{ backgroundColor: 'rgba(245, 247, 250, 0.9)' }">
-      <template #title>
-        <List>
-          <List.Item
-            v-for="item in actions"
-            :key="item.text"
-            class="actionsItem"
-            @click="item.onClick"
-          >
-            {{ item.text }}
-          </List.Item>
-        </List>
-      </template>
-      <div class="smallViewActions">
-        <Icon type="icon-XDS_List" />
-      </div>
+  <Col ref="containerRef" :style="style" :class="[
+    'smallVideoItem',
+    {
+      avatar: !videoIsPlay,
+      camera: videoIsPlay,
+      speaking: channelInfo.speakers.includes(user.userId),
+    },
+  ]" :span="span" @dblclick="viewBigger">
+  <span class="userId"> uid:{{ user.userId }} </span>
+  <component :is="ScoreMap(channelInfo.remoteUserNetworkQualitys[user.userId] || 0)?.icon" v-if="!isLocal && track" />
+  <span v-if="isLocal && track" class="encodeLayers"> 编码层数:{{ encodeLayers }} </span>
+  <span v-if="isLocal && track" class="sendLayers"> 推流层数:{{ sendLayers }} </span>
+  <span v-if="track" class="resolution">{{ resolution }} </span>
+
+  <Avatar size="large">
+    {{ user.userName }}
+  </Avatar>
+  <div class="smallViewStatus">
+    <Icon v-if="channelInfo.trackStatsMap.get(props.user.userId)?.screen" style="color: limegreen"
+      type="icon-XDS_share_screen1" />
+    <Icon v-if="!micIconEnable" type="icon-XDS_UnMute2Fill" />
+    <Tooltip :title="user.userName">
+      <span>{{ user.userName }}</span>
     </Tooltip>
+  </div>
+  <Tooltip :arrow="false" :overlay-inner-style="{ backgroundColor: 'rgba(245, 247, 250, 0.9)' }">
+    <template #title>
+      <List>
+        <List.Item v-for="item in actions" :key="item.text" class="actionsItem" @click="item.onClick">
+          {{ item.text }}
+        </List.Item>
+      </List>
+    </template>
+    <div class="smallViewActions">
+      <Icon type="icon-XDS_List" />
+    </div>
+  </Tooltip>
   </Col>
 </template>
 <script lang="ts" setup>
 import { Avatar, Col, Tooltip, List } from 'ant-design-vue';
 import Icon from '~/components/Icon';
-import { downloadFileByBase64 } from '~/utils/tools';
-import { useClient, useChannelInfo, useCurrentUserInfo, useDeviceInfo, useRTMInfo } from '~/store';
+import { downloadFileByBase64, logger } from '~/utils/tools';
+import { useClient, useChannelInfo, useCurrentUserInfo, useDeviceInfo } from '~/store';
 import { ScoreMap } from './NetworkBar';
-import { computed, ref, watch } from 'vue';
+import { computed, onBeforeUnmount, ref, watch } from 'vue';
 import { useChannel, useWhiteboardHooks } from '~/hooks/channel';
 import { VideoSourceInfo } from 'dingrtc';
 import { AnnotationSourceType } from '@dingrtc/whiteboard';
@@ -69,7 +60,6 @@ const client = useClient();
 const streamType = ref(channelInfo.defaultRemoteStreamType);
 const containerRef = ref(null);
 const { openAnnotation, closeAnnotation } = useWhiteboardHooks();
-
 const isLocal = computed(() => props.user.userId === currentUserInfo.userId);
 
 const micIconEnable = computed(() => {
@@ -86,8 +76,19 @@ const videoIsPlay = computed(() => {
   return false;
 });
 
+const resolution = computed(() => {
+  const map = channelInfo.rtcStats.resolutionMap;
+  const uid = props.user.userId;
+  if (!props.track) return;
+  const type = props.track === props.user.auxiliaryTrack ? 'auxiliary' : 'camera'
+  return map.get(`${uid}#${type}`);
+})
 
-watch(() => [containerRef.value, props.track], (newValue) => {
+watch(() => [containerRef.value, props.track], (newValue, oldValue) => {
+  logger.info('newValue, oldValue=====', newValue, oldValue);
+  if (oldValue[0]?.$el && oldValue[0]?.$el !== oldValue[1]?.$el) {
+    oldValue[1]?.stop(oldValue[0]?.$el);
+  }
   if (newValue[1]) {
     newValue[1].play(containerRef.value.$el, {
       fit: 'contain',
@@ -95,20 +96,52 @@ watch(() => [containerRef.value, props.track], (newValue) => {
   }
 })
 
+onBeforeUnmount(() => {
+  if (props.track && containerRef.value?.$el) {
+    logger.info('Stopping track play for user:', props.user.userId);
+    props.track.stop(containerRef.value.$el);
+  }
+});
+
 const viewBigger = () => {
   if (channelInfo.isWhiteboardOpen) return;
   if (channelInfo.mode === 'grid') {
     channelInfo.mode = 'standard';
   }
   channelInfo.$patch((state) => {
-    if (state.mainViewUserId === props.user.userId) {
-      state.mainViewPreferType = state.mainViewPreferType === 'camera' ? 'auxiliary' : 'camera';
-    } else {
-      state.mainViewUserId = props.user.userId;
-      state.mainViewPreferType = 'camera';
+    const oldMainViewUserId = state.mainViewUserId;
+    const oldMainViewType = state.mainViewPreferType;
+    let preferType = oldMainViewType;
+    if (props.user.hasAuxiliary && preferType !== 'auxiliary') {
+      preferType = 'auxiliary'
+    } else if (props.user.hasCamera && preferType !== 'camera') {
+      preferType = 'camera'
     }
+    state.mainViewPreferType = preferType;
+    if (state.mainViewUserId !== props.user.userId) {
+      state.mainViewUserId = props.user.userId;
+    }
+    if (!isLocal.value && ((oldMainViewType !== preferType) || (oldMainViewUserId !== state.mainViewUserId))) {
+      client.setRemoteVideoStreamType(props.user.userId, 'FHD', preferType === 'auxiliary')
+      client.setRemoteVideoStreamType(oldMainViewUserId, 'LD', oldMainViewType === 'auxiliary')
+    }
+
   });
 };
+
+const encodeLayers = computed(() => {
+  if (!props.track) return 0;
+  return props.track?.source === VideoSourceInfo.SCREENCAST
+    ? channelInfo.rtcStats.encodeScreenLayers
+    : channelInfo.rtcStats.encodeCameraLayers;
+});
+
+const sendLayers = computed(() => {
+  if (!props.track) return 0;
+  return props.track?.source === VideoSourceInfo.SCREENCAST
+    ? channelInfo.rtcStats.sendScreenLayers
+    : channelInfo.rtcStats.sendCameraLayers;
+});
 
 const showStopAnnotation = computed(() => {
   const annotationId = channelInfo.annotationId;

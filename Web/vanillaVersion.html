@@ -477,11 +477,11 @@
     /**
      * 链接状态变化时回调，disconnected 时代表离会
      */
-    client.on('connection-state-changed', (current, prev, reason) => {
+    client.on('connection-state-change', (current, prev, reason) => {
       console.log(`connection-state-change ${current} ${reason || ''}`);
       if (current === 'disconnected') {
         if (reason !== 'leave') {
-          showAlert(msg, 'danger');
+          showAlert(reason, 'danger');
           clearRoom();
         }
       }

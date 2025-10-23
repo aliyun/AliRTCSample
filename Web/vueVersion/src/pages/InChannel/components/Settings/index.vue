@@ -22,6 +22,7 @@
         <Video v-else-if="activeTab === 'video'" :close="close" />
         <Audio v-else-if="activeTab === 'audio'" />
         <ScreenShare v-else-if="activeTab === 'share'" :close="close" />
+        <Subtitle v-else-if="activeTab === 'subtitle'" />
         <External v-else-if="activeTab === 'external'" />
         <Metrics v-else-if="activeTab === 'metrics'" />
         <GroupList v-else-if="activeTab === 'group'" /> 
@@ -41,6 +42,7 @@ import External from './External.vue';
 import Metrics from './Metrics.vue';
 import GroupList from './Group/List.vue';
 import { computed, ref, h } from 'vue';
+import Subtitle from '../Subtitle/Setting.vue';
 import { useChannelInfo } from '~/store';
 
 const { Title, Text } = Typography;
@@ -72,6 +74,11 @@ const menus = [
     label: '分组讨论',
     icon: h(Icon, { type: "icon-XDS_Confm" }),
     key: 'group',
+  },
+  {
+    label: '字幕',
+    icon: h(Icon, { type: "icon-subtitle_24" }),
+    key: 'subtitle',
   },
   {
     label: '外部源',

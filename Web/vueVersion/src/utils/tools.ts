@@ -55,12 +55,32 @@ export const logLevel = parseSearch('logLevel') === 'none' ? 'none' : 'debug';
 export const print = async (...args: any) => {
   if (logLevel === 'none') return;
   const outputArea = document.getElementById('logOutput');
+  const now = new Date();
+  const timeStr = `${now.toLocaleString()}:${now.getMilliseconds()}`;
   if (outputArea) {
-    const now = new Date();
-    const timeStr = `${now.toLocaleString()}:${now.getMilliseconds()}`;
-    outputArea.innerText += `[${timeStr} ${args.join(':')}]\r\n`;
+    outputArea.innerText += `[${timeStr} [demo]: ${args.join(':')}]\r\n`;
   }
-  console.log(...args);
+  console.log(`${timeStr} [demo]:`, ...args);
+};
+
+const _log = (...args: any) => {
+  const now = new Date();
+  const timeStr = `${now.toLocaleString()}:${now.getMilliseconds()}`;
+  console.log(`[demo] ${timeStr} :`, ...args);
+};
+export const logger = {
+  debug: (...args: any) => {
+    _log(...args);
+  },
+  info: (...args: any) => {
+    _log(...args);
+  },
+  warn: (...args: any) => {
+    _log(...args);
+  },
+  error: (...args: any) => {
+    _log(...args);
+  },
 };
 
 export const parseTime = (baseTime: number) => {

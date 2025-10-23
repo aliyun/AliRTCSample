@@ -24,7 +24,7 @@
 import { ref, reactive } from 'vue';
 import { message, Form, Input, Button, Card, FormItem } from 'ant-design-vue';
 import { getAppToken } from '~/utils/request';
-import { print, parseSearch } from '~/utils/tools';
+import { parseSearch, logger } from '~/utils/tools';
 import DingRTC, {
   CameraVideoTrack,
   LocalTrack,
@@ -32,13 +32,19 @@ import DingRTC, {
   RemoteAudioTrack,
   SubscribeParam,
 } from 'dingrtc';
-import { useClient, useGlobalFlag, useChannelInfo, useCurrentUserInfo, useRTMInfo } from '~/store';
+import ASR from 'dingrtc-asr';
+import { useClient, useGlobalFlag, useChannelInfo, useCurrentUserInfo, useAsrInfo, useRTMInfo } from '~/store';
 import { useRTMInfoHooks } from '~/hooks/channel';
+
+const disableTransportCC = parseSearch('disableTransportCC') === 'true'
+
+DingRTC.setClientConfig({ disableTransportCC, simulcast: true, highStartBitrate: false })
 
 const joining = ref(false);
 
 const channelInfo = useChannelInfo();
 const globalFlag = useGlobalFlag();
+const asrInfo = useAsrInfo();
 const rtmInfo = useRTMInfo();
 const { initSessions } = useRTMInfoHooks();
 const currentUserInfo = useCurrentUserInfo();
@@ -48,6 +54,10 @@ const formData = reactive({
   userId: currentUserInfo.userId,
   channelName: currentUserInfo.channel,
   userName: currentUserInfo.userName,
+  token: currentUserInfo.token,
+  gslb: '',
+  duration: '',
+  delay: '',
 });
 
 const client = useClient();
@@ -60,16 +70,26 @@ const onJoin = async () => {
     appId: app,
     channelName,
     userName: name,
+    duration: newDuration,
+    delay: newDelay,
+    gslb,
+    token,
   } = formData;
 
   if (!uid || !app || !channelName || !name) {
     message.error('请检查参数填写');
     return;
   }
-  print('localJoinChannel');
+  logger.info('localJoinChannel');
   joining.value = true;
   try {
-    const appTokenResult = await getAppToken(uid, app, channelName);
+    let appTokenResult
+    // const appTokenResult = await getAppToken(uid, app, channelName);
+    if (token) {
+      appTokenResult = { token, gslb: gslb ? [gslb] : [] };
+    } else {
+      appTokenResult = await getAppToken(uid, app, channelName);
+    }
     const loginParam = {
       appId: app,
       userId: uid,
@@ -77,25 +97,27 @@ const onJoin = async () => {
       channelName,
       appToken: appTokenResult.token,
     };
-    if (appTokenResult.gslb.length) {
-        DingRTC.setClientConfig({ gslb: appTokenResult.gslb });
+    if (appTokenResult?.gslb?.length) {
+      DingRTC.setClientConfig({ gslb: gslb || appTokenResult.gslb });
     }
     try {
-      const result = await client.join({
+      const joinParam = {
         appId: loginParam.appId,
         token: loginParam.appToken,
         uid: loginParam.userId,
         channel: loginParam.channelName,
         userName: loginParam.userName,
-      });
+      };
+      const result = await client.join(joinParam);
+
       joining.value = false;
       currentUserInfo.$patch({
         userId: uid,
         appId: app,
         userName: name,
         channel: channelName,
-        // duration: newDuration,
-        // delay: newDelay,
+        duration: newDuration,
+        delay: newDelay,
       });
       channelInfo.$patch({ timeLeft: result.timeLeft });
       message.success('加入房间成功');
@@ -116,13 +138,13 @@ const onJoin = async () => {
             message.info(
               `subscribe user ${usrId} ${auxiliary ? 'screenShare' : 'camera'} failed: ${JSON.stringify(error)}`,
             );
-            print(
+            logger.info(
               `subscribe user ${usrId} ${auxiliary ? 'screenShare' : 'camera'} failed: ${JSON.stringify(error)}`,
             );
             continue;
           }
           if (track.trackMediaType === 'audio') {
-            print(`subscribe ${usrId} audio`);
+            logger.info(`subscribe ${usrId} audio`);
             const audioTrack = track as RemoteAudioTrack;
             channelInfo.$patch({ mcuAudioTrack: audioTrack, subscribeAudio: 'mcu' });
             audioTrack.play();
@@ -133,7 +155,7 @@ const onJoin = async () => {
                 mainViewPreferType: auxiliary ? 'auxiliary' : 'camera',
               });
             }
-            print(`subscribe user ${usrId} ${auxiliary ? 'screenShare' : 'camera'}`);
+            logger.info(`subscribe user ${usrId} ${auxiliary ? 'screenShare' : 'camera'}`);
             channelInfo.$patch({ remoteUsers: [...client.remoteUsers] });
           }
         }
@@ -145,6 +167,17 @@ const onJoin = async () => {
         }
       });
       tasks.push(subTask);
+      const asr = new ASR();
+      // @ts-ignore
+      window.asr = asr
+      // @ts-ignore
+      client.register(asr);
+      asrInfo.$patch({
+        asr,
+        enabled: false,
+        originLang: asr.currentSpeakLanguage,
+        transLang: asr.currentTranslateLanguages[0],
+      })
       client.register(rtmInfo.rtm);
       initSessions();
       const localTracks: LocalTrack[] = [
@@ -157,13 +190,13 @@ const onJoin = async () => {
           .publish(localTracks)
           .then(() => {
             channelInfo.updatePublishedTracks(localTracks.map(item => item.getTrackId()), 'add')
-            print(`publish ${localTracks.map((item) => item.trackMediaType)} tracks`);
+            logger.info(`publish ${localTracks.map((item) => item.trackMediaType)} tracks`);
           })
           .catch((e) => {
             message.info(
               `publish ${localTracks.map((item) => item.trackMediaType)} tracks failed: ${JSON.stringify(e)}`,
             );
-            print(
+            logger.info(
               `publish ${localTracks.map((item) => item.trackMediaType)} tracks failed: ${JSON.stringify(e)}`,
             );
             throw e;
@@ -179,6 +212,7 @@ const onJoin = async () => {
         globalFlag.$patch({ joined: true });
       });
     } catch (e: any) {
+      logger.info(e)
       joining.value = false;
       globalFlag.$patch({ joined: false });
       message.error(`加入房间失败${e?.reason || e?.message || JSON.stringify(e)}`);
@@ -187,7 +221,7 @@ const onJoin = async () => {
     globalFlag.$patch({ joined: false });
     joining.value = false;
     message.error(`访问appServer失败${JSON.stringify(error)}`);
-    print('error to join', error);
+    logger.info('error to join', error);
   }
 };
 </script>
