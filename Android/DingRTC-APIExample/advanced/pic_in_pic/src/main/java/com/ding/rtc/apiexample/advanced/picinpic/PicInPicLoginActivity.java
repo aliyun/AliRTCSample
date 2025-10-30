@@ -39,7 +39,7 @@ public class PicInPicLoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login_picinpic);
         if (getSupportActionBar() != null) {
             getSupportActionBar().show();
-            getSupportActionBar().setTitle(R.string.beauty);
+            getSupportActionBar().setTitle(R.string.pic_in_pic);
         }
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);

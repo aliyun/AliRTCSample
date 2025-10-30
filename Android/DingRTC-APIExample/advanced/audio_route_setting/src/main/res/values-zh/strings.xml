@@ -1,0 +1,14 @@
+<resources>
+    <string name="audio_route_setting">音频路由设置</string>
+    <string name="audio_route_setting_tips">选择默认路由设备（receiver为听筒，speaker为扬声器）</string>
+    <string name="audio_route_setting_device_name">音频设备名称</string>
+    <string name="audio_route_setting_device_type">音频类型名称</string>
+    <string name="audio_route_setting_change_device_type">默认路由已设置为: </string>
+    <string name="channel_id">频道ID</string>
+    <string name="channel_id_input">请输入频道ID</string>
+    <string name="user_id">用户ID</string>
+    <string name="user_id_input">请输入用户ID</string>
+    <string name="user_name">用户名</string>
+    <string name="user_name_input">请输入用户名</string>
+    <string name="join_channel">加入频道</string>
+</resources>

@@ -19,4 +19,15 @@
     <string name="advanced_function_switch_screen">Switch Screen</string>
     <string name="advanced_function_video_setting">Video Setting</string>
     <string name="advanced_function_audio_setting">Audio Setting</string>
+    <string name="advanced_function_audio_mixing">Audio Mixing</string>
+    <string name="advanced_function_multiview_render">Multiview Render</string>
+    <string name="advanced_function_pic_in_pic">Pic In Pic</string>
+    <string name="advanced_function_audio_device_test">Audio Device Test</string>
+    <string name="advanced_function_video_render_setting">Video Render Setting</string>
+    <string name="advanced_function_token_privilege_setting">Token Privilege Setting</string>
+    <string name="advanced_function_audio_route">Audio Route Setting</string>
+    <string name="advanced_function_audio_custom_render">Custom Audio Render</string>
+    <string name="advanced_function_audio_custom_capture">Custom Audio Capture</string>
+    <string name="advanced_function_audio_volume_indication">Audio Volume Indication</string>
+    <string name="advanced_function_rtc_stats">RTC Media Stats</string>
 </resources>

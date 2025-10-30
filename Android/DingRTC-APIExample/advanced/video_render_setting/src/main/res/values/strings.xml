@@ -1,0 +1,16 @@
+<resources>
+    <string name="video_render_setting">Video Render Setting</string>
+    <string name="video_render_setting_local">Local</string>
+    <string name="video_render_setting_remote">Remote</string>
+    <string name="video_render_mode">Render Mode</string>
+    <string name="video_mirror_mode">Mirror Mode</string>
+    <string name="video_rotation_mode">Rotation Mode</string>
+    <string name="channel_id">Channel ID</string>
+    <string name="channel_id_input">Please input channel ID</string>
+    <string name="user_id">User ID</string>
+    <string name="user_id_input">Please input user ID</string>
+    <string name="user_name">User Name</string>
+    <string name="user_name_input">Please input user name</string>
+    <string name="join_channel">Join Channel</string>
+    <string name="switch_camera">Switch Camera</string>
+</resources>

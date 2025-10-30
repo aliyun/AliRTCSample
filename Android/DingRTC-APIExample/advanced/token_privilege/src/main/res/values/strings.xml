@@ -1,0 +1,17 @@
+<resources>
+    <string name="token_privilege_setting">Token Privilege Setting</string>
+    <string name="token_privilege_setting_local">Local</string>
+    <string name="token_privilege_setting_remote">Remote</string>
+    <string name="token_privilege_setting_audio">Allow Publish Audio</string>
+    <string name="token_privilege_setting_video">Allow Publish Video</string>
+    <string name="token_privilege_setting_screenshare">Allow Publish Screenshare</string>
+    <string name="channel_id">Channel ID</string>
+    <string name="channel_id_input">Please input channel ID</string>
+    <string name="user_id">User ID</string>
+    <string name="user_id_input">Please input user ID</string>
+    <string name="user_name">User Name</string>
+    <string name="user_name_input">Please input user name</string>
+    <string name="join_channel">Join Channel</string>
+    <string name="join_channel_as_publisher">Join Channel As Publisher</string>
+    <string name="join_channel_as_subscriber">Join Channel As Subscriber</string>
+</resources>

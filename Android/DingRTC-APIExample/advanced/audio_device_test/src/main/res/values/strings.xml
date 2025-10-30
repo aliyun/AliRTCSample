@@ -1,0 +1,16 @@
+<resources>
+    <string name="audio_device_test">Audio Device Test</string>
+    <string name="audio_device_start_record_test">Start Audio Recording Device Test</string>
+    <string name="audio_device_stop_record_test">Stop Audio Recording Device Test</string>
+    <string name="audio_device_start_playout_test">Start Audio Playout Device Test</string>
+    <string name="audio_device_stop_playout_test">Stop Audio Playout Device Test</string>
+    <string name="audio_device_test_volume">Volume： </string>
+    <string name="audio_playout_test_file_not_exist">Audio playout test file is not exist!</string>
+    <string name="channel_id">Channel ID</string>
+    <string name="channel_id_input">Please input channel ID</string>
+    <string name="user_id">User ID</string>
+    <string name="user_id_input">Please input user ID</string>
+    <string name="user_name">User Name</string>
+    <string name="user_name_input">Please input user name</string>
+    <string name="join_channel">Join Channel</string>
+</resources>

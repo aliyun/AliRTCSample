@@ -1,0 +1,15 @@
+<resources>
+    <string name="custom_audio_render">Custom Audio Render</string>
+    <string name="custom_audio_render_local">Local</string>
+    <string name="custom_audio_render_remote">Remote</string>
+    <string name="custom_audio_render_start">Start Custom Audio Render</string>
+    <string name="custom_audio_render_stop">Stop Custom Audio Render</string>
+
+    <string name="channel_id">Channel ID</string>
+    <string name="channel_id_input">Please input channel ID</string>
+    <string name="user_id">User ID</string>
+    <string name="user_id_input">Please input user ID</string>
+    <string name="user_name">User Name</string>
+    <string name="user_name_input">Please input user name</string>
+    <string name="join_channel">Join Channel</string>
+</resources>

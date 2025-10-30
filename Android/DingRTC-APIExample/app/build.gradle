@@ -2,20 +2,22 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    buildToolsVersion "35.0.0"
 
     defaultConfig {
         applicationId "com.ding.rtc.api.example"
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
     }
-
     packagingOptions {
-        exclude 'META-INF/io.netty.versions.properties'
+        resources {
+            excludes += ['META-INF/io.netty.versions.properties']
+        }
     }
+
 
     buildTypes {
         release {
@@ -28,6 +30,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    namespace 'com.ding.rtc.api.example'
 }
 
 dependencies {
@@ -48,6 +51,17 @@ dependencies {
     implementation project(':advanced:switch_screen')
     implementation project(':advanced:video_setting')
     implementation project(':advanced:audio_setting')
+    implementation project(':advanced:audio_mixing')
+    implementation project(':advanced:multiview_render')
+    implementation project(':advanced:pic_in_pic')
+    implementation project(':advanced:audio_device_test')
+    implementation project(':advanced:video_render_setting')
+    implementation project(':advanced:token_privilege')
+    implementation project(':advanced:audio_route_setting')
+    implementation project(':advanced:audio_custom_render')
+    implementation project(':advanced:audio_custom_capture')
+    implementation project(':advanced:audio_volume_indication')
+    implementation project(':advanced:rtc_stats')
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'androidx.appcompat:appcompat:1.1.0'
 }

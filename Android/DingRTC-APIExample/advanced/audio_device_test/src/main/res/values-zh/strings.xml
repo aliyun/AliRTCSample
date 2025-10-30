@@ -1,0 +1,16 @@
+<resources>
+    <string name="audio_device_test">音频设备测试</string>
+    <string name="audio_device_start_record_test">开始音频设备录音测试</string>
+    <string name="audio_device_stop_record_test">结束音频设备录音测试</string>
+    <string name="audio_device_start_playout_test">开始音频设备播放测试</string>
+    <string name="audio_device_stop_playout_test">结束音频设备播放测试</string>
+    <string name="audio_device_test_volume">音量：</string>
+    <string name="audio_playout_test_file_not_exist">音频播放设备测试文件不存在!</string>
+    <string name="channel_id">频道ID</string>
+    <string name="channel_id_input">请输入频道ID</string>
+    <string name="user_id">用户ID</string>
+    <string name="user_id_input">请输入用户ID</string>
+    <string name="user_name">用户名</string>
+    <string name="user_name_input">请输入用户名</string>
+    <string name="join_channel">加入频道</string>
+</resources>

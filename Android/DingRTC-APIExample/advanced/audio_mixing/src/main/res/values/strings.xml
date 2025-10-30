@@ -1,0 +1,16 @@
+<resources>
+    <string name="audio_mixing">Audio Mixing</string>
+    <string name="audio_mixing_file_not_exist">file not exist!</string>
+    <string name="audio_mixing_progress">Progress: </string>
+    <string name="audio_mixing_start">Start</string>
+    <string name="audio_mixing_pause">Pause</string>
+    <string name="audio_mixing_resume">Resume</string>
+    <string name="audio_mixing_stop">Stop</string>
+    <string name="channel_id">Channel ID</string>
+    <string name="channel_id_input">Please input channel ID</string>
+    <string name="user_id">User ID</string>
+    <string name="user_id_input">Please input user ID</string>
+    <string name="user_name">User Name</string>
+    <string name="user_name_input">Please input user name</string>
+    <string name="join_channel">Join Channel</string>
+</resources>

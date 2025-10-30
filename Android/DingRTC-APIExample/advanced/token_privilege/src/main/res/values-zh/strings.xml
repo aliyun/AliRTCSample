@@ -1,0 +1,17 @@
+<resources>
+    <string name="token_privilege_setting">Token权限设置</string>
+    <string name="token_privilege_setting_local">本地</string>
+    <string name="token_privilege_setting_remote">远端</string>
+    <string name="token_privilege_setting_audio">允许推送音频</string>
+    <string name="token_privilege_setting_video">允许推送视频</string>
+    <string name="token_privilege_setting_screenshare">允许推送屏幕共享</string>
+    <string name="channel_id">频道ID</string>
+    <string name="channel_id_input">请输入频道ID</string>
+    <string name="user_id">用户ID</string>
+    <string name="user_id_input">请输入用户ID</string>
+    <string name="user_name">用户名</string>
+    <string name="user_name_input">请输入用户名</string>
+    <string name="join_channel">加入频道</string>
+    <string name="join_channel_as_publisher">作为发布者加入频道</string>
+    <string name="join_channel_as_subscriber">作为订阅者加入频道</string>
+</resources>

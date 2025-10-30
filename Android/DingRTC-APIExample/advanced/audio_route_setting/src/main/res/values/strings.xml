@@ -1,0 +1,14 @@
+<resources>
+    <string name="audio_route_setting">Audio Route Setting</string>
+    <string name="audio_route_setting_tips">Select the default routing device (receiver is the earpiece, speaker is the loudspeaker)</string>
+    <string name="audio_route_setting_device_name">Audio Device Name</string>
+    <string name="audio_route_setting_device_type">Audio Type Name</string>
+    <string name="audio_route_setting_change_device_type">The default route has been set as:</string>
+    <string name="channel_id">Channel ID</string>
+    <string name="channel_id_input">Please input channel ID</string>
+    <string name="user_id">User ID</string>
+    <string name="user_id_input">Please input user ID</string>
+    <string name="user_name">User Name</string>
+    <string name="user_name_input">Please input user name</string>
+    <string name="join_channel">Join Channel</string>
+</resources>

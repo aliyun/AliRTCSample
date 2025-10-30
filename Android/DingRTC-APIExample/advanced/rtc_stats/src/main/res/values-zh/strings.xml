@@ -1,0 +1,30 @@
+<resources>
+    <string name="rtc_stats">媒体数据统计</string>
+    <string name="rtc_stats_local">本地</string>
+    <string name="rtc_stats_remote">远端</string>
+    <string name="rtc_stats_tx_audio_bitrate">总发送音频码率: %1$d Kbps</string>
+    <string name="rtc_stats_rx_audio_bitrate">总接收音频码率: %1$d Kbps</string>
+    <string name="rtc_stats_tx_video_bitrate">总发送视频码率: %1$d Kbps</string>
+    <string name="rtc_stats_rx_video_bitrate">总接收视频码率: %1$d Kbps</string>
+    <string name="rtc_stats_tx_loss_rate">总发送丢包率: %1$d%%</string>
+    <string name="rtc_stats_rx_loss_rate">总接收丢包率: %1$d%%</string>
+    <string name="tv_local_audio_bitrate">发送音频码率: %1$d Kbps</string>
+    <string name="tv_local_video_bitrate">发送视频码率: %1$d Kbps</string>
+    <string name="tv_local_video_width">发送视频编码宽度: %1$d</string>
+    <string name="tv_local_video_height">发送视频编码高度: %1$d</string>
+    <string name="tv_local_video_capture_fps">采集视频帧率: %1$d</string>
+    <string name="tv_local_video_send_fps">发送视频帧率: %1$d</string>
+    <string name="tv_remote_audio_bitrate">接收音频码率: %1$d Kbps</string>
+    <string name="tv_remote_video_bitrate">接收视频码率: %1$d Kbps</string>
+    <string name="tv_remote_video_width">接收视频编码宽度: %1$d</string>
+    <string name="tv_remote_video_height">接收视频编码高度: %1$d</string>
+    <string name="tv_remote_video_decode_fps">接收视频解码帧率: %1$d</string>
+    <string name="tv_remote_video_render_fps">接收视频渲染帧率: %1$d</string>
+    <string name="channel_id">频道ID</string>
+    <string name="channel_id_input">请输入频道ID</string>
+    <string name="user_id">用户ID</string>
+    <string name="user_id_input">请输入用户ID</string>
+    <string name="user_name">用户名</string>
+    <string name="user_name_input">请输入用户名</string>
+    <string name="join_channel">加入频道</string>
+</resources>

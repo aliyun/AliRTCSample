@@ -5,30 +5,25 @@ import static com.ding.rtc.DingRtcEngine.DingRtcVideoTrack.DingRtcVideoTrackCame
 import static com.ding.rtc.DingRtcEngine.DingRtcVideoTrack.DingRtcVideoTrackNo;
 import static com.ding.rtc.DingRtcEngine.DingRtcVideoTrack.DingRtcVideoTrackScreen;
 
+import android.app.PictureInPictureParams;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Rational;
 import android.view.MenuItem;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CheckBox;
+import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ding.rtc.DingRtcAuthInfo;
 import com.ding.rtc.DingRtcEngine;
 import com.ding.rtc.DingRtcEngineEventListener;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class PicInPicActivity extends AppCompatActivity {
 
@@ -39,50 +34,20 @@ public class PicInPicActivity extends AppCompatActivity {
     private static final String INTENT_USER_NAME = "user_name";
     private static final String INTENT_IS_PUBLISHER = "is_publisher";
 
-    private static final String[] FILTER_ARRAY = {"", "jiaopian_res.png", "gangfeng_res.png", "hanfeng_res.png",
-            "heibai_res.png", "naixia_res.png", "qingxin_res.png", "rixi_res.png",
-            "senxi_res.png", "yuanqi_res.png", "ziran_res.png", "landiao_res.png"};
     private DingRtcEngine mRtcEngine;
-    private ExecutorService mExecutor = Executors.newSingleThreadExecutor();
     private String mChannelId;
     private String mUserId;
     private boolean isPublisher = true;
 
+    private TextView mLocalLable;
+    private TextView mRemoteLable;
     private FrameLayout mLocalViewHolder;
     private FrameLayout mRemoteViewHolder;
-    private CheckBox mWhiteCheckBox;
-    private CheckBox mSharpCheckBox;
-    private CheckBox mRosyCheckBox;
-    private CheckBox mBuffCheckBox;
-    private ViewGroup mLocalViewGroup;
-    private ViewGroup mRemoteViewGroup;
-    private ViewGroup mBeautyViewGroup;
-    private RadioGroup[] mFilterGroup = new RadioGroup[3];
+    private Button mOperationBtn;
 
     private DingRtcEngine.DingRtcVideoCanvas mLocalVideoCanvas = new DingRtcEngine.DingRtcVideoCanvas();
     private DingRtcEngine.DingRtcVideoCanvas mRemoteVideoCanvas = new DingRtcEngine.DingRtcVideoCanvas();
     private boolean hasRemoteVideo = false;
-    private DingRtcEngine.DingRtcBeautyFaceOptions mBeautyFaceOptions = new DingRtcEngine.DingRtcBeautyFaceOptions();
-    private RadioGroup.OnCheckedChangeListener mCheckedChangeListener = new RadioGroup.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(RadioGroup radioGroup, int index) {
-            String tag = (String) radioGroup.getTag();
-            int tagValue = 0;
-            try {
-                tagValue = Integer.parseInt(tag);
-            } catch (Throwable t) {
-                t.printStackTrace();
-            }
-            for (int i = 0; i < 3; i++) {
-                if (i != tagValue) {
-                    // only clearCheck will cause a loop callback of onCheckedChanged.
-                    mFilterGroup[i].setOnCheckedChangeListener(null);
-                    mFilterGroup[i].clearCheck();
-                    mFilterGroup[i].setOnCheckedChangeListener(mCheckedChangeListener);
-                }
-            }
-        }
-    };
 
     public static void launch(Context context, String appId, String channelId, String userId, String userName, String token, boolean publisher) {
         Intent intent = new Intent();
@@ -101,86 +66,31 @@ public class PicInPicActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_picinpic);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(R.string.beauty);
+            getSupportActionBar().setTitle(R.string.pic_in_pic);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
         isPublisher = getIntent().getBooleanExtra(INTENT_IS_PUBLISHER, true);
-        mLocalViewGroup = findViewById(R.id.local_view_group);
-        mRemoteViewGroup = findViewById(R.id.remote_view_group);
-        mBeautyViewGroup = findViewById(R.id.beauty_view_group);
+        mLocalLable = findViewById(R.id.local_textview);
+        mRemoteLable = findViewById(R.id.remote_textview);
         mLocalViewHolder = findViewById(R.id.preview_view);
         mRemoteViewHolder = findViewById(R.id.remote_view);
-        mWhiteCheckBox = findViewById(R.id.beautyWhitening);
-        mBuffCheckBox = findViewById(R.id.beautyBuffing);
-        mRosyCheckBox = findViewById(R.id.beautyRosy);
-        mSharpCheckBox = findViewById(R.id.beautySharpening);
-        mFilterGroup[0] = findViewById(R.id.filterGroup1);
-        mFilterGroup[1] = findViewById(R.id.filterGroup2);
-        mFilterGroup[2] = findViewById(R.id.filterGroup3);
-        for (int i = 0; i < 3; i++) {
-            mFilterGroup[i].setOnCheckedChangeListener(mCheckedChangeListener);
-        }
+        mOperationBtn = findViewById(R.id.btn_operation);
 
-        // n order to reserve a larger View for observing various functions of beauty and filters,
+        // in order to reserve a larger View for observing various functions of beauty and filters,
         // the publisher end the subscriber are split into two separate terminals.
         if (isPublisher) {
-            mRemoteViewGroup.setVisibility(View.GONE);
+            mRemoteLable.setVisibility(View.GONE);
+            mRemoteViewHolder.setVisibility(View.GONE);
         } else {
-            mLocalViewGroup.setVisibility(View.GONE);
-            mBeautyViewGroup.setVisibility(View.GONE);
+            mLocalLable.setVisibility(View.GONE);
+            mLocalViewHolder.setVisibility(View.GONE);
         }
 
         initDingEngine();
         joinChannel();
     }
 
-    public void onFilterClick(View v) {
-        String tag = (String) v.getTag();
-        int tagValue = 0;
-        try {
-            tagValue = Integer.parseInt(tag);
-        } catch (Throwable t) {
-            t.printStackTrace();
-        }
-        if (tagValue == 0 && tagValue < 12) {
-            mBeautyFaceOptions.enableFilter = false;
-        } else {
-            final int filterIndex = tagValue;
-            mExecutor.execute(new Runnable() {
-                @Override
-                public void run() {
-                    // Prepare filter resource
-                    String fileName = FILTER_ARRAY[filterIndex];
-                    File file = new File(getFilesDir().getAbsolutePath(), fileName);
-                    String filePath = file.getPath();
-                    if (!file.exists() || !file.isFile()) {
-                        copyBigDataToSD(fileName, filePath, getApplicationContext());
-                    }
-                    mBeautyFaceOptions.filterPath = filePath;
-                    mBeautyFaceOptions.enableFilter = true;
-                    mRtcEngine.enableBeautyFace(true, mBeautyFaceOptions);
-                }
-            });
-        }
-    }
-
-    public void onBeautyClick(View v) {
-        if (v.getId() == R.id.beautyWhitening) {
-            mBeautyFaceOptions.enableSkinWhitening = mWhiteCheckBox.isChecked();
-        } else if (v.getId() == R.id.beautyBuffing) {
-            mBeautyFaceOptions.enableSkinBuffing = mBuffCheckBox.isChecked();
-        } else if (v.getId() == R.id.beautyRosy) {
-            mBeautyFaceOptions.enableSkinRosy = mRosyCheckBox.isChecked();
-        } else if (v.getId() == R.id.beautySharpening) {
-            if (mSharpCheckBox.isChecked()) {
-                mBeautyFaceOptions.skinSharpenFactor = 0.8f;
-            } else {
-                mBeautyFaceOptions.skinSharpenFactor = 0.0f;
-            }
-        }
-        mRtcEngine.enableBeautyFace(true, mBeautyFaceOptions);
-    }
 
     public void initDingEngine() {
         if (mRtcEngine == null) {
@@ -275,6 +185,43 @@ public class PicInPicActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void enterPiPMode() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            PictureInPictureParams params = new PictureInPictureParams.Builder()
+                    .setAspectRatio(new Rational(1080, 1920))
+                    .build();
+            enterPictureInPictureMode(params);
+        }
+    }
+
+    @Override
+    public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode, Configuration newConfig) {
+        if (isInPictureInPictureMode) {
+            // hide UI
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().hide();
+            }
+            mOperationBtn.setVisibility(View.GONE);
+            if (isPublisher) {
+                mLocalLable.setVisibility(View.GONE);
+            } else {
+                mRemoteLable.setVisibility(View.GONE);
+            }
+
+        } else {
+            // show UI
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().show();
+            }
+            mOperationBtn.setVisibility(View.VISIBLE);
+            if (isPublisher) {
+                mLocalLable.setVisibility(View.VISIBLE);
+            } else {
+                mRemoteLable.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -285,23 +232,7 @@ public class PicInPicActivity extends AppCompatActivity {
         }
     }
 
-    private static void copyBigDataToSD(String fileName, String strOutFileName, Context context) {
-        try {
-            InputStream myInput;
-            OutputStream myOutput = new FileOutputStream(strOutFileName);
-            myInput = context.getAssets().open(fileName);
-            byte[] buffer = new byte[1024];
-            int length = myInput.read(buffer);
-            while (length > 0) {
-                myOutput.write(buffer, 0, length);
-                length = myInput.read(buffer);
-            }
-
-            myOutput.flush();
-            myInput.close();
-            myOutput.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void onPicInPicButtonClick(View view) {
+        enterPiPMode();
     }
 }

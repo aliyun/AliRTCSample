@@ -1,0 +1,30 @@
+<resources>
+    <string name="rtc_stats">RTC Media Stats</string>
+    <string name="rtc_stats_local">Local</string>
+    <string name="rtc_stats_remote">Remote</string>
+    <string name="rtc_stats_tx_audio_bitrate">Send Audio Bitrate: %1$d Kbps</string>
+    <string name="rtc_stats_rx_audio_bitrate">Receive Audio Bitrate: %1$d Kbps</string>
+    <string name="rtc_stats_tx_video_bitrate">Send Video Bitrate: %1$d Kbps</string>
+    <string name="rtc_stats_rx_video_bitrate">Receive Video Bitrate: %1$d Kbps</string>
+    <string name="rtc_stats_tx_loss_rate">Send Loss Rate: %1$d %%</string>
+    <string name="rtc_stats_rx_loss_rate">Receive Loss Rate: %1$d %%</string>
+    <string name="tv_local_audio_bitrate">Send Audio Bitrate: %1$d Kbps</string>
+    <string name="tv_local_video_bitrate">Send Video Bitrate: %1$d Kbps</string>
+    <string name="tv_local_video_width">Send video encoding width: %1$d</string>
+    <string name="tv_local_video_height">Send video encoding height: %1$d</string>
+    <string name="tv_local_video_capture_fps">Capture video frame rate: %1$d</string>
+    <string name="tv_local_video_send_fps">Send video frame rate: %1$d</string>
+    <string name="tv_remote_audio_bitrate">Receive Audio Bitrate: %1$d Kbps</string>
+    <string name="tv_remote_video_bitrate">Receive Video Bitrate: %1$d Kbps</string>
+    <string name="tv_remote_video_width">Receive video encoding width: %1$d</string>
+    <string name="tv_remote_video_height">Receive video encoding height: %1$d</string>
+    <string name="tv_remote_video_decode_fps">Decode video frame rate: %1$d</string>
+    <string name="tv_remote_video_render_fps">Render video frame rate: %1$d</string>
+    <string name="channel_id">Channel ID</string>
+    <string name="channel_id_input">Please input channel ID</string>
+    <string name="user_id">User ID</string>
+    <string name="user_id_input">Please input user ID</string>
+    <string name="user_name">User Name</string>
+    <string name="user_name_input">Please input user name</string>
+    <string name="join_channel">Join Channel</string>
+</resources>

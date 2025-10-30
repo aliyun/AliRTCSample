@@ -122,7 +122,6 @@ public class SubtitleActivity extends AppCompatActivity {
                         public void run() {
                             // Important : Add subtitle messages
                             String text = message.userId + " : " + message.subtitle;
-                            Log.d("xinye debug",text);
                             mSubtitleView.setSubtitle(new SubtitleItem(text, message.beginTime, message.endTime));
                         }
                     });

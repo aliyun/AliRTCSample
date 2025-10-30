@@ -1,0 +1,16 @@
+<resources>
+    <string name="video_render_setting">视频渲染设置</string>
+    <string name="video_render_setting_local">本地</string>
+    <string name="video_render_setting_remote">远端</string>
+    <string name="video_render_mode">渲染模式</string>
+    <string name="video_mirror_mode">镜像模式</string>
+    <string name="video_rotation_mode">旋转模式</string>
+    <string name="channel_id">频道ID</string>
+    <string name="channel_id_input">请输入频道ID</string>
+    <string name="user_id">用户ID</string>
+    <string name="user_id_input">请输入用户ID</string>
+    <string name="user_name">用户名</string>
+    <string name="user_name_input">请输入用户名</string>
+    <string name="join_channel">加入频道</string>
+    <string name="switch_camera">切换摄像头</string>
+</resources>

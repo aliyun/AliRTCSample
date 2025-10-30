@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="render_mode">
+        <item>Auto</item>
+        <item>Stretch</item>
+        <item>Fill</item>
+        <item>Crop</item>
+    </string-array>
+    <string-array name="mirror_mode">
+        <item>OnlyFront</item>
+        <item>AllEnabled</item>
+        <item>AllDisable</item>
+    </string-array>
+    <string-array name="rotation_mode">
+        <item>0</item>
+        <item>90</item>
+        <item>180</item>
+        <item>270</item>
+    </string-array>
+</resources>

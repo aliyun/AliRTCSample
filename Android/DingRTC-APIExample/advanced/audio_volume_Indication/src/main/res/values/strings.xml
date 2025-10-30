@@ -1,0 +1,15 @@
+<resources>
+    <string name="audio_volume_indication">Audio Volume Indication</string>
+    <string name="audio_volume_indication_local">Local</string>
+    <string name="audio_volume_indication_remote">Remote</string>
+    <string name="audio_volume_indication_start">Start Custom Audio Capture</string>
+    <string name="audio_volume_indication_stop">Stop Custom Audio Capture</string>
+
+    <string name="channel_id">Channel ID</string>
+    <string name="channel_id_input">Please input channel ID</string>
+    <string name="user_id">User ID</string>
+    <string name="user_id_input">Please input user ID</string>
+    <string name="user_name">User Name</string>
+    <string name="user_name_input">Please input user name</string>
+    <string name="join_channel">Join Channel</string>
+</resources>

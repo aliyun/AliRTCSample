@@ -1,0 +1,13 @@
+<resources>
+    <string name="multiview_render">多视图渲染</string>
+    <string name="multiview_render_local">本地</string>
+    <string name="multiview_render_remote">远端</string>
+    <string name="multiview_render_note">提示：点击远端视图，解除视图与流的绑定关系，远端视图可复用。</string>
+    <string name="channel_id">频道ID</string>
+    <string name="channel_id_input">请输入频道ID</string>
+    <string name="user_id">用户ID</string>
+    <string name="user_id_input">请输入用户ID</string>
+    <string name="user_name">用户名</string>
+    <string name="user_name_input">请输入用户名</string>
+    <string name="join_channel">加入频道</string>
+</resources>

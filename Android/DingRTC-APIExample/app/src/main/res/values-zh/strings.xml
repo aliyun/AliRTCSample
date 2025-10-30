@@ -19,4 +19,15 @@
     <string name="advanced_function_switch_screen">横竖屏切换</string>
     <string name="advanced_function_video_setting">视频属性设置</string>
     <string name="advanced_function_audio_setting">音频属性设置</string>
+    <string name="advanced_function_audio_mixing">音频伴奏</string>
+    <string name="advanced_function_multiview_render">多视图渲染</string>
+    <string name="advanced_function_pic_in_pic">画中画</string>
+    <string name="advanced_function_audio_device_test">音频设备测试</string>
+    <string name="advanced_function_video_render_setting">视频渲染设置</string>
+    <string name="advanced_function_token_privilege_setting">推流权限设置</string>
+    <string name="advanced_function_audio_route">音频路由设置</string>
+    <string name="advanced_function_audio_custom_render">自定义音频渲染</string>
+    <string name="advanced_function_audio_custom_capture">自定义音频采集</string>
+    <string name="advanced_function_audio_volume_indication">音量回调</string>
+    <string name="advanced_function_rtc_stats">媒体数据统计</string>
 </resources>
