@@ -1,0 +1,27 @@
+[环境]
+python 3.9 (百炼demo要求最低3.9)
+pip install -U dashscope (百炼demo)
+
+[生成DingRTC的python sdk]
+python sdk基于libDingRTC.so之上增加了一层wrapper，该wrapper使用swig自动生成。另外为了python app开发便利，还提供了
+一个可选的模块：fake_audio.py，用于虚拟麦克风，扬声器和摄像头，借助这些虚拟设备，打通python app和RTC之间的音视频
+输入输出。
+swig -python -c++ api.i
+g++ -fpic -shared api_wrap.cxx -o _dingrtc.so -I/usr/include/python3.9 -lpython3.9 -lpthread -ldl -lutil -lm libDingRTC.so
+
+[Test]
+export LD_LIBRARY_PATH=.:..
+export APPSERVER_KEY=... # 访问appserver需要的key. DingRTC提供了一个体验用的appserver，使用hello1234来访问
+unset http_proxy
+unset https_proxy
+python3.9 main.py
+
+[百炼demo]
+export LD_LIBRARY_PATH=.:..
+export APPSERVER_KEY=... # 访问appserver需要的key. DingRTC提供了一个体验用的appserver，使用hello1234来访问
+export APPID=a4zfr1hn
+export CHANNEL=room124
+export USERID=pyagent
+export USERNAME=nameofagent
+export DASHSCOPE_API_KEY="...."
+python3 run_server_vad.py
