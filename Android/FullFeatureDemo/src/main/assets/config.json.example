@@ -1,0 +1,28 @@
+{
+  "appServerConfig": {
+    "online": "your_oneline_server_here"
+  },
+  "aiAgentConfig": {
+    "defaultTemplateId": "your_template_id_here",
+    "rtcServiceName": "your_rtc_service_name_here",
+    "asrVendor": "your_asr_vendor_here",
+    "asrModel": "your_asr_model_here",
+    "llmVendor": "your_llm_vendor_here",
+    "llmModel": "your_llm_model_here",
+    "llmTemperature": 0.7,
+    "llmTopP": 0.8,
+    "llmMaxToken": 500,
+    "llmHistoryDepth": 10,
+    "llmPrompt": "your_llm_prompt_here",
+    "ttsVendor": "your_tts_vendor_here",
+    "ttsModel": "your_tts_model_here",
+    "ttsVoice": "your_tts_voice_here",
+    "apiStart": "",
+    "apiUpdate": "",
+    "apiStop": ""
+  },
+  "subtitleConfig": {
+    "apiStart": "",
+    "apiStop": ""
+  }
+}

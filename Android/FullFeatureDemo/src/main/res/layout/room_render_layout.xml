@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="1dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <FrameLayout
+            android:id="@+id/room_render_big_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+
+        <FrameLayout
+            android:id="@+id/room_render_small_view"
+            android:layout_width="90dp"
+            android:layout_height="160dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/room_render_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="1dp"
+        android:text="test 123"
+        android:textColor="@color/colorAccent" />
+
+    <LinearLayout
+        android:id="@+id/room_render_status_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/room_render_name"
+        android:layout_alignParentStart="true"
+        android:layout_margin="1dp"
+        android:orientation="horizontal"
+        android:padding="1dp">
+
+        <ImageView
+            android:id="@+id/room_render_status_audio"
+            style="@style/UserStatusView"
+            android:src="@drawable/remote_mic_on" />
+
+        <ImageView
+            android:id="@+id/room_render_status_video"
+            style="@style/UserStatusView"
+            android:src="@drawable/remote_video_on" />
+
+        <ImageView
+            android:id="@+id/room_render_status_screen"
+            style="@style/UserStatusView"
+            android:src="@drawable/remote_screen_on" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/room_render_stats_audio_view"
+        style="@style/UserStatsText"
+        android:layout_below="@id/room_render_status_view" />
+
+    <TextView
+        android:id="@+id/room_render_stats_video_view"
+        style="@style/UserStatsText"
+        android:layout_below="@id/room_render_stats_audio_view" />
+
+    <TextView
+        android:id="@+id/room_render_stats_screen_view"
+        style="@style/UserStatsText"
+        android:layout_below="@id/room_render_stats_video_view" />
+
+    <TextView
+        android:id="@+id/room_render_audio_callback_view"
+        style="@style/UserStatsText"
+        android:layout_below="@id/room_render_stats_screen_view" />
+
+    <TextView
+        android:id="@+id/room_render_video_callback_view"
+        style="@style/UserStatsText"
+        android:layout_below="@id/room_render_audio_callback_view" />
+
+    <TextView
+        android:id="@+id/room_render_network_quality"
+        style="@style/UserStatsText"
+        android:layout_below="@id/room_render_video_callback_view" />
+
+    <ImageView
+        android:id="@+id/zoom"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/zoom_in"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/flash"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@id/zoom"
+        android:padding="8dp"
+        android:src="@drawable/flash"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/annotation"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@id/flash"
+        android:src="@drawable/annotation"
+        app:tint="#FF888888" />
+
+    <ImageView
+        android:id="@+id/rotate"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/rotate" />
+
+    <ImageView
+        android:id="@+id/mirror"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@id/rotate"
+        android:src="@drawable/mirror" />
+
+    <ImageView
+        android:id="@+id/user_stat"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@id/mirror"
+        android:src="@drawable/user_stats_img" />
+
+    <ImageView
+        android:id="@+id/mute_remote_audio"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@id/user_stat"
+        android:src="@drawable/unmute_remote"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/user_sub"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@id/mute_remote_audio"
+        android:src="@drawable/remote_user_sub"
+        android:visibility="gone" />
+
+</RelativeLayout>

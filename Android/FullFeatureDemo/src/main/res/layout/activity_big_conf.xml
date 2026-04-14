@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ding.rtc.demo.RoomActivity">
+
+    <include
+        android:id="@+id/room_top_layout"
+        layout="@layout/widget_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" />
+
+    <include
+        android:id="@+id/room_bottom_layout"
+        layout="@layout/widget_bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="3dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/room_users_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/room_bottom_layout"
+        android:layout_below="@id/room_top_layout"
+        android:layout_gravity="center"
+        android:background="@color/colorF5F7FF" />
+
+    <TextView
+        android:id="@+id/room_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_above="@id/room_bottom_layout"
+        android:layout_marginStart="3dp"
+        android:layout_marginBottom="8dp"
+        android:text="当前会议人数 1"
+        android:textColor="@android:color/holo_red_light" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/next_page"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/arrow_right"
+        android:visibility="gone"
+        app:fabCustomSize="40dp"
+        tools:ignore="ContentDescription,MissingConstraints" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/pre_page"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/arrow_left"
+        android:visibility="gone"
+        app:fabCustomSize="40dp"
+        tools:ignore="ContentDescription,MissingConstraints" />
+
+</RelativeLayout>

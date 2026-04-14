@@ -1,0 +1,19 @@
+{
+  "name": "dingrtc-demo-mini",
+  "version": "1.0.0",
+  "description": "",
+  "main": "",
+  "dependencies": {
+    "@cloudbase/wx-cloud-client-sdk": "^1.2.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.28.3",
+    "@babel/core": "^7.28.5",
+    "@babel/preset-env": "^7.28.5"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

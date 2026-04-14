@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DingRtcDemo</string>
+
+    <string name="title_join_call">RTC 示例</string>
+    <string name="title_button_ok">确定</string>
+    <string name="title_button_cancel">取消</string>
+
+    <string name="title_token_id">会议号</string>
+    <string name="title_token_id_hint">请输入会议号</string>
+    <string name="title_room_name">房间名</string>
+    <string name="title_room_name_hint">请输入房间名</string>
+
+    <string name="title_user_name">用户名</string>
+    <string name="title_user_name_hint">请输入用户名</string>
+    <string name="title_user_id">用户ID</string>
+    <string name="title_user_id_hint">请输入用户ID</string>
+
+    <string name="title_join_channel">加入会议</string>
+
+    <!-- Preference Titles -->
+    <string name="title_activity_settings">设置</string>
+    <string name="title_auto_start_speaker">入会开启扬声器</string>
+    <string name="title_auto_start_camera">入会开启摄像头</string>
+    <string name="title_camera_rotation">摄像头角度</string>
+    <string name="title_auto_start_audio">入会开启麦克风</string>
+    <string name="title_subscribe_all_video">自动订阅所有视频</string>
+    <string name="title_subscribe_all_audio">自动订阅所有音频</string>
+    <string name="demo_subscribe_resolution_key">订阅分辨率</string>
+    <string name="title_finish">结束</string>
+
+    <string name="title_back">返回</string>
+    <string name="title_more">更多</string>
+    <string name="title_auto_start_camera_key">title_auto_start_camera_key</string>
+    <string name="title_camera_rotation_key">title_camera_rotation_key</string>
+    <string name="title_auto_start_audio_key">title_auto_start_audio_key</string>
+    <string name="title_auto_start_speaker_key">title_auto_start_speaker_key</string>
+    <string name="title_virtual_background_key">title_virtual_background_key</string>
+    <string name="title_face_beauty_key">title_face_beauty_key</string>
+    <string name="title_subscribe_all_video_key">title_subscribe_all_video_key</string>
+    <string name="title_subscribe_all_audio_key">title_subscribe_all_audio_key</string>
+    <string name="title_pub_video_mirror_key">title_pub_video_mirror_key</string>
+    <string name="render_grid_key">demo_render_layout_key</string>
+    <string name="demo_render_crop_mode_key">demo_render_crop_mode_key</string>
+    <string name="demo_publish_resolution_key">demo_publish_resolution_key</string>
+    <string name="demo_publish_fps_key">demo_publish_fps_key</string>
+    <string name="demo_screen_share_publish_resolution_key">demo_screen_share_publish_resolution_key</string>
+    <string name="demo_screen_share_publish_fps_key">demo_screen_share_publish_fps_key</string>
+    <string name="audio_mute_recording_signal_key">audio_mute_recording_signal_key</string>
+    <string name="audio_capture_key">audio_capture_key</string>
+    <string name="audio_play_key">audio_play_key</string>
+    <string name="audio_denoise_key">audio_denoise_key</string>
+    <string name="audio_playout_volume">audio_playout_volume</string>
+    <string name="audio_recording_volume">audio_recording_volume</string>
+    <string name="audio_voice_change_key">audio_voice_change_key</string>
+    <string name="audio_profile_key">audio_profile_key</string>
+    <string name="audio_scenario_key">audio_scenario_key</string>
+    <string name="audio_observer_key">audio_observer_key</string>
+    <string name="audio_volume_indication_key">audio_volume_indication_key</string>
+    <string name="video_focus_face_key">video_focus_face_key</string>
+    <string name="video_denoise_key">video_denoise_key</string>
+    <string name="video_enhance_key">video_enhance_key</string>
+    <string name="video_stabilization_key">video_stabilization_key</string>
+    <string name="video_max_bitrate_key">video_max_bitrate_key</string>
+    <string name="screen_max_bitrate_key">screen_max_bitrate_key</string>
+    <string name="camera_brightness_key">camera_brightness_key</string>
+    <string name="camera_switch_id_key">camera_switch_id_key</string>
+    <string name="video_dump_id_key">video_dump_id_key</string>
+    <string name="video_observer_key">video_observer_key</string>
+    <string name="video_observer_format_key">video_observer_format_key</string>
+    <string name="video_encoder_orientation_key">video_encoder_orientation_key</string>
+    <string name="video_camera_orientation_key">video_camera_orientation_key</string>
+
+    <string name="vision_start_share">开始分享</string>
+    <string name="vision_stop_share">停止分享</string>
+    <string name="vision_start_follow">开始跟踪</string>
+    <string name="vision_stop_follow">停止跟踪</string>
+
+    <string name="file_browser">选择文件</string>
+</resources>

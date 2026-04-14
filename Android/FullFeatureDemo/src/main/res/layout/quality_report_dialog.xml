@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp">
+
+    <!--Network-->
+    <TextView
+        android:id="@+id/network_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="网络信息"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:textStyle="bold"
+        android:layout_marginTop="5dp"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/network_type"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="网络类型:"
+        android:textSize="15sp"
+        android:textColor="#000"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/network_info"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:id="@+id/signal_level"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="信号强度:"
+        android:textSize="15sp"
+        android:textColor="#000"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/network_info"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <TextView
+        android:id="@+id/loss_rate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="LossRate:"
+        android:textSize="15sp"
+        android:textColor="#000"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/network_type"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:id="@+id/rtt_ms"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="RttMs:"
+        android:textSize="15sp"
+        android:textColor="#000"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/signal_level"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <TextView
+        android:id="@+id/recv_bitrate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="RecvBitrate:"
+        android:textSize="15sp"
+        android:textColor="#000"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/loss_rate"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:id="@+id/send_bitrate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="SendBitrate:"
+        android:textSize="15sp"
+        android:textColor="#000"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/rtt_ms"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <!--Audio-->
+    <TextView
+        android:id="@+id/audio_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="音频信息"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:textStyle="bold"
+        android:layout_marginTop="5dp"
+        app:layout_constraintTop_toBottomOf="@id/recv_bitrate"/>
+
+    <TextView
+        android:id="@+id/audio_recv_bitrate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="RecvBitrate:"
+        android:textSize="15sp"
+        android:textColor="#000"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/audio_info"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:id="@+id/audio_send_bitrate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="SendBitrate:"
+        android:textSize="15sp"
+        android:textColor="#000"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/audio_info"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <TextView
+        android:id="@+id/audio_recv_volume"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="RecvVolume:"
+        android:textSize="15sp"
+        android:textColor="#000"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/audio_recv_bitrate"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:id="@+id/audio_send_volume"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="SendVolume:"
+        android:textSize="15sp"
+        android:textColor="#000"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/audio_send_bitrate"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+
+    <!--Video-->
+    <TextView
+        android:id="@+id/video_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="视频信息"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:textStyle="bold"
+        android:layout_marginTop="5dp"
+        app:layout_constraintTop_toBottomOf="@id/audio_recv_volume"/>
+
+    <TextView
+        android:id="@+id/camera_recv_bitrate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="RecvBitrate:"
+        android:textSize="15sp"
+        android:textColor="#000"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/video_info"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:id="@+id/camera_send_bitrate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="SendBitrate:"
+        android:textSize="15sp"
+        android:textColor="#000"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/video_info"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <TextView
+        android:id="@+id/camera_recv_fps"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="RecvFps:"
+        android:textSize="15sp"
+        android:textColor="#000"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/camera_recv_bitrate"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:id="@+id/camera_send_fps"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="SendFps:"
+        android:textSize="15sp"
+        android:textColor="#000"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/camera_send_bitrate"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <TextView
+        android:id="@+id/camera_recv_resolution"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="接收分辨率:"
+        android:textSize="15sp"
+        android:textColor="#000"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/camera_recv_fps"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:id="@+id/camera_send_resolution"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="发送分辨率:"
+        android:textSize="15sp"
+        android:textColor="#000"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/camera_send_fps"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <TextView
+        android:id="@+id/camera_recv_hw"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="接收软硬编:"
+        android:textSize="15sp"
+        android:textColor="#000"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/camera_recv_resolution"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:id="@+id/camera_send_hw"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="发送软硬编:"
+        android:textSize="15sp"
+        android:textColor="#000"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/camera_send_resolution"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <TextView
+        android:id="@+id/camera_render_fps"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="RenderFps:"
+        android:textSize="15sp"
+        android:textColor="#000"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/camera_recv_hw"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:id="@+id/camera_capture_fps"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="CaptureFps:"
+        android:textSize="15sp"
+        android:textColor="#000"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/camera_send_hw"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <TextView
+        android:id="@+id/camera_send_drop_fps"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="SendDropFps:"
+        android:textSize="15sp"
+        android:textColor="#000"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/camera_capture_fps"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <!--ScreenShare-->
+    <TextView
+        android:id="@+id/screen_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="共享信息"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:textStyle="bold"
+        android:layout_marginTop="5dp"
+        app:layout_constraintTop_toBottomOf="@id/camera_send_drop_fps"/>
+
+    <TextView
+        android:id="@+id/screen_recv_bitrate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="RecvBitrate:"
+        android:textSize="15sp"
+        android:textColor="#000"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/screen_info"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:id="@+id/screen_send_bitrate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="SendBitrate:"
+        android:textSize="15sp"
+        android:textColor="#000"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/screen_info"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <TextView
+        android:id="@+id/screen_recv_fps"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="RecvFps:"
+        android:textSize="15sp"
+        android:textColor="#000"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/screen_recv_bitrate"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:id="@+id/screen_send_fps"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="SendFps:"
+        android:textSize="15sp"
+        android:textColor="#000"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/screen_send_bitrate"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <TextView
+        android:id="@+id/screen_recv_resolution"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="接收分辨率:"
+        android:textSize="15sp"
+        android:textColor="#000"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/screen_recv_fps"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:id="@+id/screen_send_resolution"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="发送分辨率:"
+        android:textSize="15sp"
+        android:textColor="#000"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/screen_send_fps"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <TextView
+        android:id="@+id/screen_recv_hw"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="接收软硬编:"
+        android:textSize="15sp"
+        android:textColor="#000"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/screen_recv_resolution"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:id="@+id/screen_send_hw"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="发送软硬编:"
+        android:textSize="15sp"
+        android:textColor="#000"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/screen_send_resolution"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <TextView
+        android:id="@+id/screen_render_fps"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="RenderFps:"
+        android:textSize="15sp"
+        android:textColor="#000"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/screen_recv_hw"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:id="@+id/screen_capture_fps"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="CaptureFps:"
+        android:textSize="15sp"
+        android:textColor="#000"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/screen_send_hw"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <TextView
+        android:id="@+id/screen_send_drop_fps"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="SendDropFps:"
+        android:textSize="15sp"
+        android:textColor="#000"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/screen_capture_fps"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/title_layout"
+        layout="@layout/widget_title_bar" />
+
+    <RelativeLayout
+        android:id="@+id/bottom_layout"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#333" />
+
+        <CheckBox
+            android:id="@+id/byte_cb"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_toRightOf="@id/byte_cb"
+            android:text="发送二进制数据" />
+
+        <TextView
+            android:id="@+id/send_msg_btn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/chat_msg_send"
+            android:onClick="onClickSendMsg" />
+
+
+        <EditText
+            android:id="@+id/msg_et"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@id/send_msg_btn"
+            android:hint="请输入消息内容" />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/chat_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:divider="@null"
+        app:layout_constraintBottom_toTopOf="@id/bottom_layout"
+        app:layout_constraintTop_toBottomOf="@id/title_layout" />
+</androidx.constraintlayout.widget.ConstraintLayout>

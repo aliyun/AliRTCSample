@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="@color/white"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <com.ding.rtc.demo.ui.DrawableTextView
+        android:id="@+id/bottom_pub_audio"
+        style="@style/BottomTextview"
+        android:text="停止推流"
+        app:drawableTop="@drawable/pub_audio" />
+
+    <com.ding.rtc.demo.ui.DrawableTextView
+        android:id="@+id/bottom_enable_video"
+        style="@style/BottomTextview"
+        android:text="停止采集"
+        app:drawableTop="@drawable/camera_on" />
+
+    <com.ding.rtc.demo.ui.DrawableTextView
+        android:id="@+id/bottom_pub_video"
+        style="@style/BottomTextview"
+        android:text="停止推流"
+        app:drawableTop="@drawable/pub_video" />
+
+    <com.ding.rtc.demo.ui.DrawableTextView
+        android:id="@+id/bottom_pub_screen"
+        style="@style/BottomTextview"
+        android:text="屏幕共享"
+        app:drawableTop="@drawable/unpub_screen" />
+
+    <com.ding.rtc.demo.ui.DrawableTextView
+        android:id="@+id/bottom_preview"
+        style="@style/BottomTextview"
+        android:text="关闭预览"
+        app:drawableTop="@drawable/preview_on" />
+
+    <com.ding.rtc.demo.ui.DrawableTextView
+        android:id="@+id/bottom_more"
+        style="@style/BottomTextview"
+        android:text="更多"
+        app:drawableTop="@drawable/more" />
+
+</LinearLayout>

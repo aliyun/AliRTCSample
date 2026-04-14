@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="模型设定"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/range"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="音色"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/title" />
+
+    <Spinner
+        android:id="@+id/range_spinner"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="2dp"
+        android:entries="@array/agent_voice_range_name"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/range" />
+
+    <TextView
+        android:id="@+id/prompt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="Prompt"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/range_spinner" />
+
+    <EditText
+        android:id="@+id/prompt_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="# 角色\n你叫叮当，是个热情开朗的智能助手。你的主要任务是陪用户聊天，给用户提供帮助。
+        \n## 技能\n- 精准把握用户问题，给出清晰、直截了当的答案，专注于回应所问内容，不要主动引导新话题。
+        \n## 限制\n- 回复必须口语化，简洁干脆，杜绝冗长繁杂的解释。
+        \n- 确保回复内容符合道德规范和社会礼仪，传递正向价值观。"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/prompt" />
+
+    <TextView
+        android:id="@+id/welcome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="欢迎语"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/prompt_content" />
+
+    <EditText
+        android:id="@+id/greeting_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="你好，我是智能助手叮当，我能陪你聊天，给你提供帮助，来聊聊天吧！"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/welcome" />
+
+    <Button
+        android:id="@+id/confirm_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/btn_ok_background"
+        android:text="确定"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/greeting_content" />
+
+    <Button
+        android:id="@+id/cancel_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/btn_cancel_background"
+        android:text="取消"
+        android:textColor="@color/btn_text_color"
+        android:textSize="16sp"
+        app:layout_constraintRight_toLeftOf="@id/confirm_btn"
+        app:layout_constraintTop_toBottomOf="@id/greeting_content" />
+</androidx.constraintlayout.widget.ConstraintLayout>

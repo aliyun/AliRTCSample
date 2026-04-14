@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#80000000">
+
+    <ImageView
+        android:id="@+id/pencil"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/anno_pencil"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/anno_tool_icon_tint" />
+
+    <ImageView
+        android:id="@+id/eraser"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/anno_eraser"
+        app:layout_constraintLeft_toRightOf="@id/pencil"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/anno_tool_icon_tint" />
+
+    <ImageView
+        android:id="@+id/clear"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/anno_clear"
+        app:layout_constraintLeft_toRightOf="@id/eraser"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/anno_tool_icon_tint" />
+
+    <ImageView
+        android:id="@+id/snapshot"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/anno_snapshot"
+        app:layout_constraintLeft_toRightOf="@id/clear"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/anno_tool_icon_tint" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

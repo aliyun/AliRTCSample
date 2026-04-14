@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:text="美颜参数设置"
+        android:textColor="#000"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/skin_buffing_text"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:text="磨皮(0)"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title" />
+
+    <SeekBar
+        android:id="@+id/skin_buffing_seekbar"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:max="100"
+        app:layout_constraintLeft_toRightOf="@id/skin_buffing_text"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/skin_buffing_text" />
+
+    <TextView
+        android:id="@+id/skin_sharpen_text"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:text="锐化(0)"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/skin_buffing_text" />
+
+    <SeekBar
+        android:id="@+id/skin_sharpen_seekbar"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:max="100"
+        app:layout_constraintLeft_toRightOf="@id/skin_sharpen_text"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/skin_buffing_text" />
+
+    <TextView
+        android:id="@+id/skin_whitening_text"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:text="美白(0)"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/skin_sharpen_text" />
+
+    <SeekBar
+        android:id="@+id/skin_whitening_seekbar"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:max="100"
+        app:layout_constraintLeft_toRightOf="@id/skin_whitening_text"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/skin_sharpen_text" />
+
+    <TextView
+        android:id="@+id/skin_rosy_text"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:text="红润(0)"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/skin_whitening_text" />
+
+    <SeekBar
+        android:id="@+id/skin_rosy_seekbar"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:max="100"
+        app:layout_constraintLeft_toRightOf="@id/skin_rosy_text"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/skin_whitening_text" />
+
+    <TextView
+        android:id="@+id/filter_select_btn"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center|left"
+        android:text="滤镜选择"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/skin_rosy_text" />
+
+    <GridView
+        android:id="@+id/filter_imgs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:numColumns="4"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/filter_select_btn" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

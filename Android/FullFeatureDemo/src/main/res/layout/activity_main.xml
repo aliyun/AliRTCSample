@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorF5F7FF"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/title_view"
+        layout="@layout/widget_title_bar" />
+
+    <TextView
+        android:id="@+id/version_info"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:text="SDK version : 3.0.0"
+        android:textColor="@color/black" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title_view">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="36dp">
+
+            <RelativeLayout
+                android:id="@+id/warning_info"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/warning_img"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentLeft="true"
+                    android:src="@drawable/warning_icon" />
+
+                <ImageView
+                    android:id="@+id/warning_close_img"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:onClick="onClickCloseWarning"
+                    android:src="@drawable/close_icon" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_toLeftOf="@id/warning_close_img"
+                    android:layout_toRightOf="@id/warning_img"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="本产品仅用于功能演示。注意个人信息保密，谨防诈骗。"
+                    android:textColor="@color/color666666"
+                    android:textSize="14sp" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/colorDDDDDD" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="@string/title_room_name"
+                    android:textColor="@color/color666666"
+                    android:textSize="14sp"
+                    tools:text="房间名" />
+
+                <com.ding.rtc.demo.ui.ClearableEditText
+                    android:id="@+id/channel_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="4"
+                    android:background="@null"
+                    android:ems="10"
+                    android:focusable="true"
+                    android:hint="@string/title_room_name_hint"
+                    android:minHeight="25dp"
+                    android:textColor="@color/color333333"
+                    android:textColorHint="@color/color999999"
+                    android:textCursorDrawable="@drawable/shape_edit_input_cursor_bg"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/colorDDDDDD" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="@string/title_user_id"
+                    android:textColor="@color/color666666"
+                    android:textSize="14sp"
+                    tools:text="用户ID" />
+
+                <com.ding.rtc.demo.ui.ClearableEditText
+                    android:id="@+id/user_id"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="4"
+                    android:background="@null"
+                    android:ems="10"
+                    android:focusable="true"
+                    android:hint="@string/title_user_id_hint"
+                    android:minHeight="25dp"
+                    android:paddingRight="16dp"
+                    android:textColor="@color/color333333"
+                    android:textColorHint="@color/color999999"
+                    android:textCursorDrawable="@drawable/shape_edit_input_cursor_bg"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/colorDDDDDD" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="@string/title_user_name"
+                    android:textColor="@color/color666666"
+                    android:textSize="14sp"
+                    tools:text="用户名" />
+
+                <com.ding.rtc.demo.ui.ClearableEditText
+                    android:id="@+id/user_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="4"
+                    android:background="@null"
+                    android:ems="10"
+                    android:focusable="true"
+                    android:hint="@string/title_user_name_hint"
+                    android:minHeight="25dp"
+                    android:paddingRight="16dp"
+                    android:textColor="@color/color333333"
+                    android:textColorHint="@color/color999999"
+                    android:textCursorDrawable="@drawable/shape_edit_input_cursor_bg"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/colorDDDDDD" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/button_select"
+                android:gravity="center"
+                android:onClick="onClickJoin"
+                android:text="加入房间"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/button_select"
+                android:onClick="onClickAiAgent"
+                android:text="呼叫 AI Agent"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </ScrollView>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="36dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="@string/title_token_id"
+                    android:textColor="@color/color666666"
+                    android:textSize="14sp"
+                    tools:text="会议号" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="4"
+                    android:orientation="horizontal">
+
+                    <com.ding.rtc.demo.ui.ClearableEditText
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        android:background="@null"
+                        android:ems="10"
+                        android:focusable="true"
+                        android:hint="@string/title_token_id_hint"
+                        android:minHeight="25dp"
+                        android:paddingRight="16dp"
+                        android:textColor="@color/color333333"
+                        android:textColorHint="@color/color999999"
+                        android:textCursorDrawable="@drawable/shape_edit_input_cursor_bg"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:src="@drawable/ocr_scan" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/colorDDDDDD" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="@string/title_user_id"
+                    android:textColor="@color/color666666"
+                    android:textSize="14sp"
+                    tools:text="用户ID" />
+
+                <com.ding.rtc.demo.ui.ClearableEditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="4"
+                    android:background="@null"
+                    android:ems="10"
+                    android:focusable="true"
+                    android:hint="@string/title_user_id_hint"
+                    android:minHeight="25dp"
+                    android:textColor="@color/color333333"
+                    android:textColorHint="@color/color999999"
+                    android:textCursorDrawable="@drawable/shape_edit_input_cursor_bg"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/colorDDDDDD" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="@string/title_user_name"
+                    android:textColor="@color/color666666"
+                    android:textSize="14sp"
+                    tools:text="用户名" />
+
+                <com.ding.rtc.demo.ui.ClearableEditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="4"
+                    android:background="@null"
+                    android:ems="10"
+                    android:focusable="true"
+                    android:hint="@string/title_user_name_hint"
+                    android:minHeight="25dp"
+                    android:paddingRight="16dp"
+                    android:textColor="@color/color333333"
+                    android:textColorHint="@color/color999999"
+                    android:textCursorDrawable="@drawable/shape_edit_input_cursor_bg"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/colorDDDDDD" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="100dp"
+                android:minHeight="60dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="20dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_select"
+                    android:gravity="center"
+                    android:onClick="onClickJoin"
+                    android:text="@string/title_join_channel"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</RelativeLayout>

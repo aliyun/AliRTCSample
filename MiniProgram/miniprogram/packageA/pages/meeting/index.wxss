@@ -1,0 +1,95 @@
+@import "../../../common.wxss";
+
+.container {
+  padding-top: 80px;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: linear-gradient(to bottom, #ff6a00, #f59957);
+  color: #5083AA;
+}
+
+input {
+  margin: 10px 0;
+  width: 90%;
+  border: 1px solid #eee;
+  padding: 8px;
+  box-sizing: border-box;
+  height: 40px;
+  color: white
+}
+
+button {
+  margin-bottom: 15px;
+}
+
+live-pusher,
+live-player {
+  margin: 10px 0;
+  border: 1px solid #ccc;
+}
+
+
+
+
+.toolbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  /* height: 80rpx; */
+  background: #fff;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-top: 1rpx solid #eee;
+  z-index: 999;
+}
+
+.tool-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.btn-icon {
+  width: 40rpx;
+  height: 40rpx;
+}
+
+.tool-btn text {
+  font-size: 22rpx;
+  color: #666;
+}
+
+/* grid
+*/
+.grid-container {
+  display: flex;
+  flex-wrap: wrap;
+  /* 如果内容不满两列能左对齐可加： */
+  /* align-items: flex-start; */
+}
+
+.grid-item {
+  width: 50vw;
+  /* 每项宽度一半(或用50%宽度) */
+  aspect-ratio: 1 / 1;
+  /* 保证宽高相等 */
+  box-sizing: border-box;
+  padding: 20rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  margin-bottom: 10rpx;
+}

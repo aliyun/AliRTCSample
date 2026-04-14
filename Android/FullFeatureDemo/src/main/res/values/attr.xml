@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ClearableEditText">
+        <attr name="clearIconDrawable" format="color|reference" />
+        <attr name="clearBgDrawable" format="color|reference" />
+        <attr name="clearIconDrawWhenFocused" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="DragViewContainer">
+        <attr name="dragMarginTop" format="integer" />
+        <attr name="dragMarginBottom" format="integer" />
+    </declare-styleable>
+
+    <!-- 图片文字自定义属性 -->
+    <declare-styleable name="DrawableTextView">
+        <attr name="drawableLeft" format="reference"/>
+        <attr name="drawableBottom" format="reference"/>
+        <attr name="drawableRight" format="reference"/>
+        <attr name="drawableTop" format="reference"/>
+        <attr name="drawableWidth" format="dimension"/>
+        <attr name="drawableHeight" format="dimension"/>
+    </declare-styleable>
+
+    <declare-styleable name="SeekBarPreference">
+        <attr name="min" format="integer" />
+        <attr name="max" format="integer" />
+    </declare-styleable>
+
+</resources>

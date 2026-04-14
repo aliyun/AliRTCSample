@@ -1,0 +1,831 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:id="@+id/top_buttons_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:elevation="10dp"
+        android:layout_alignParentTop="true">
+
+        <!-- 标题栏按钮 -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/btn_tool_select"
+                android:layout_width="50dp"
+                android:padding="0dp"
+                android:layout_margin="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:tag="1"
+                android:onClick="onClickSelectTool"
+                android:text="选择"/>
+            <Button
+                android:id="@+id/btn_tool_draw"
+                android:layout_width="50dp"
+                android:padding="0dp"
+                android:layout_margin="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@id/btn_tool_select"
+                android:onClick="onClickDrawPane"
+                android:text="绘画"/>
+            <Button
+                android:id="@+id/btn_tool_clear"
+                android:layout_width="50dp"
+                android:padding="0dp"
+                android:layout_margin="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@id/btn_tool_draw"
+                android:onClick="onClickClearPane"
+                android:text="擦除"/>
+            <Button
+                android:id="@+id/btn_tool_laser"
+                android:layout_width="50dp"
+                android:padding="0dp"
+                android:layout_margin="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@id/btn_tool_clear"
+                android:tag="17"
+                android:onClick="onClickSelectTool"
+                android:text="激光笔"/>
+            <Button
+                android:id="@+id/btn_undo"
+                android:layout_width="50dp"
+                android:padding="0dp"
+                android:layout_margin="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_toLeftOf="@+id/btn_redo"
+                android:onClick="onClick"
+                android:text="undo"/>
+            <Button
+                android:id="@+id/btn_redo"
+                android:layout_width="50dp"
+                android:padding="0dp"
+                android:layout_margin="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_toLeftOf="@id/btn_more"
+                android:onClick="onClick"
+                android:text="redo"/>
+            <Button
+                android:id="@+id/btn_more"
+                android:layout_width="50dp"
+                android:padding="0dp"
+                android:layout_margin="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:onClick="onClickMorePane"
+                android:text="更多"/>
+        </RelativeLayout>
+
+        <!-- 第一排按钮 -->
+        <LinearLayout
+            android:id="@+id/pane_more"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:elevation="10dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_tool_doc"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@id/btn_tool_laser"
+                    android:onClick="onClickDocPane"
+                    android:text="文档"/>
+                <Button
+                    android:id="@+id/btn_tool_image"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@id/btn_tool_laser"
+                    android:onClick="onClickImagePane"
+                    android:text="图片"/>
+                <Button
+                    android:id="@+id/btn_tool_text"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@id/btn_tool_image"
+                    android:tag="9"
+                    android:onClick="onClickTextPane"
+                    android:text="文本"/>
+                <Button
+                    android:id="@+id/btn_tool_vision"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@id/btn_tool_text"
+                    android:onClick="onClickVisionPane"
+                    android:text="视图"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="20dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:text="角色："
+                    android:textAlignment="center"
+                    />
+                <Spinner
+                    android:id="@+id/spinner_role_set"
+                    android:layout_width="50dp"
+                    android:layout_weight="2"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:layout_height="match_parent"
+                    android:text=""
+                    android:textAlignment="center"/>
+
+                <TextView
+                    android:layout_width="20dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:text="模式："
+                    android:textAlignment="center"
+                    />
+                <Spinner
+                    android:id="@+id/spinner_snapshot_mode"
+                    android:layout_width="50dp"
+                    android:layout_weight="2"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:layout_height="match_parent"
+                    android:text=""
+                    android:textAlignment="center"/>
+                <Button
+                    android:id="@+id/btn_sanpshot"
+                    android:layout_width="20dp"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:layout_height="match_parent"
+                    android:onClick="onClickSnapshot"
+                    android:text="截图"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- 第二排按钮 -->
+        <LinearLayout
+            android:id="@+id/pane_draw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:elevation="10dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_tool_path"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:tag="4"
+                    android:onClick="onClickSelectTool"
+                    android:text="画笔" />
+                <Button
+                    android:id="@+id/btn_tool_line"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:tag="5"
+                    android:onClick="onClickSelectTool"
+                    android:text="直线" />
+                <Button
+                    android:id="@+id/btn_tool_arrow"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:tag="12"
+                    android:onClick="onClickSelectTool"
+                    android:text="箭头" />
+                <Button
+                    android:id="@+id/btn_tool_rect"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:tag="6"
+                    android:onClick="onClickSelectTool"
+                    android:text="矩形" />
+
+                <Button
+                    android:id="@+id/btn_tool_ellipse"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:tag="7"
+                    android:onClick="onClickSelectTool"
+                    android:text="椭圆" />
+
+                <Button
+                    android:id="@+id/btn_tool_stamp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:tag="18"
+                    android:onClick="onClickSelectTool"
+                    android:text="图章" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:text="线条粗细"
+                    android:textAlignment="center"/>
+                <Spinner
+                    android:id="@+id/spinner_tool_line_width"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:textAlignment="center"
+                    />
+                <Button
+                    android:id="@+id/btn_tool_select_color"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:onClick="onClickSelectColor"
+                    android:text="线条颜色" />
+                <Button
+                    android:id="@+id/btn_tool_select_fill_color"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:onClick="onClickSelectFillColor"
+                    android:text="填充颜色" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 第三排按钮 -->
+        <LinearLayout
+            android:id="@+id/pane_clear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:elevation="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_clear_erase"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:onClick="onClickSelectTool"
+                    android:tag="21"
+                    android:text="橡皮擦"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/btn_clear_brush"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:onClick="onClickSelectTool"
+                    android:tag="11"
+                    android:text="橡皮刷"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/btn_clear_all"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:onClick="onClick"
+                    android:background="@color/whiteboard_color_puzzle"
+                    android:text="清理全部"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/btn_clear_other"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:onClick="onClick"
+                    android:text="清理他人"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/btn_clear_myself"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:onClick="onClick"
+                    android:text="清理自己"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 第四排按钮 -->
+        <LinearLayout
+            android:id="@+id/pane_vision"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:elevation="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_vision_share"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:onClick="onClickVisionTool"
+                    android:text="开始共享"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/btn_vision_follow"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:enabled="false"
+                    android:onClick="onClickVisionTool"
+                    android:text="开始跟踪"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/btn_vision_sync"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:onClick="onClickVisionTool"
+                    android:text="同步视图"
+                    android:enabled="false"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/btn_vision_reset"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:onClick="onClickVisionTool"
+                    android:enabled="false"
+                    android:text="重制视图"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 第五排按钮 -->
+        <LinearLayout
+            android:id="@+id/pane_doc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:elevation="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_doc_load_pdf"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:onClick="onClickDocTool"
+                    android:text="加载pdf"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/btn_doc_load_word"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:onClick="onClickDocTool"
+                    android:text="加载word"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/btn_doc_load_html"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:onClick="onClickDocTool"
+                    android:enabled="false"
+                    android:text="加载html"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:text="文档列表"
+                    android:textAlignment="center"
+                    />
+                <Spinner
+                    android:id="@+id/spinner_doc_list"
+                    android:layout_width="40dp"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:textAlignment="center"
+                    android:layout_height="wrap_content"
+                    />
+
+                <Button
+                    android:id="@+id/btn_doc_delete"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:layout_weight="1"
+                    android:onClick="onClickDocTool"
+                    android:padding="0dp"
+                    android:text="删除文档"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/btn_doc_save"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:layout_weight="1"
+                    android:onClick="onClickDocTool"
+                    android:padding="0dp"
+                    android:text="保存文档"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 第六排按钮 -->
+        <LinearLayout
+            android:id="@+id/pane_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:elevation="10dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/btn_image_select"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:onClick="onClickImageButton"
+                    android:text="选择图片"
+                    android:textColor="@color/white" />
+                <TextView
+                    android:id="@+id/tv_image_path"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:text="111111"
+                    android:textSize="12dp"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_image_set"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:onClick="onClickImageButton"
+                    android:text="设置图片"
+                    android:textColor="@color/white" />
+                <CheckBox
+                    android:id="@+id/chk_image_background"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:text="Background"
+                    android:checked="true"
+                    android:textColor="@color/white" />
+                <TextView
+                    android:id="@+id/tv_image_status"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:textAlignment="center"
+                    android:text=""
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_image_fit"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:onClick="onClickScalingMode"
+                    android:tag="0"
+                    android:text="Fit"
+                    android:textColor="@color/white" />
+                <Button
+                    android:id="@+id/btn_image_crop_fill"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:onClick="onClickScalingMode"
+                    android:tag="1"
+                    android:text="CropFill"
+                    android:textColor="@color/white" />
+                <Button
+                    android:id="@+id/btn_image_center_crop"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:onClick="onClickScalingMode"
+                    android:tag="2"
+                    android:text="CenterCrop"
+                    android:textColor="@color/white" />
+                <Button
+                    android:id="@+id/btn_image_stretch_fill"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:onClick="onClickScalingMode"
+                    android:tag="3"
+                    android:text="StretchFill"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 第七排按钮 -->
+        <LinearLayout
+            android:id="@+id/pane_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:elevation="10dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:text="文字大小"
+                    android:textAlignment="center"
+                    />
+                <Spinner
+                    android:id="@+id/spinner_text_size"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:textAlignment="center"
+                    android:layout_margin="0dp"
+                    />
+                <Button
+                    android:id="@+id/tv_text_bold"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:text="B"
+                    android:textStyle="bold"
+                    android:onClick="onClickSetFontStyle"
+                    android:background="@drawable/button_selector"
+                    android:tag="1"
+                    android:textColor="@color/white" />
+                <Button
+                    android:id="@+id/tv_text_italic"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:text="I"
+                    android:textStyle="italic"
+                    android:onClick="onClickSetFontStyle"
+                    android:background="@drawable/button_selector"
+                    android:tag="2"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 中间的ImageView -->
+    <com.ding.rtc.DingRtcWhiteboardView
+        android:id="@+id/whiteboard_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="0dp"
+        android:layout_margin="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/btn_pageview"
+        android:elevation="4dp"
+        android:scaleType="centerCrop"/>
+
+    <!-- 底部的单个按钮 -->
+    <LinearLayout
+        android:id="@+id/btn_pageview"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/btn_page_first"
+            android:layout_width="25dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:padding="0dp"
+            android:layout_margin="0dp"
+            android:onClick="onClickPage"
+            android:text="|&lt;" />
+        <Button
+            android:id="@+id/btn_page_pre"
+            android:layout_width="25dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:padding="0dp"
+            android:layout_margin="0dp"
+            android:onClick="onClickPage"
+            android:text="&lt;" />
+        <TextView
+            android:id="@+id/tv_page_current"
+            android:layout_width="10dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:padding="0dp"
+            android:layout_margin="0dp"
+            android:gravity="center"
+            android:text="0" />
+        <TextView
+            android:layout_width="10dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:padding="0dp"
+            android:layout_margin="0dp"
+            android:gravity="center"
+            android:text="of" />
+        <TextView
+            android:id="@+id/tv_page_total"
+            android:layout_width="10dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:padding="0dp"
+            android:layout_margin="0dp"
+            android:gravity="center"
+            android:text="0" />
+        <Button
+            android:id="@+id/btn_page_next"
+            android:layout_width="25dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:padding="0dp"
+            android:layout_margin="0dp"
+            android:onClick="onClickPage"
+            android:text="&gt;" />
+        <Button
+            android:id="@+id/btn_page_last"
+            android:layout_width="25dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:padding="0dp"
+            android:layout_margin="0dp"
+            android:onClick="onClickPage"
+            android:text="&gt;|" />
+        <Button
+            android:id="@+id/btn_page_create"
+            android:layout_width="25dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:padding="0dp"
+            android:layout_margin="0dp"
+            android:onClick="onClickPage"
+            android:text="+" />
+        <Button
+            android:id="@+id/btn_page_delete"
+            android:layout_width="25dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:padding="0dp"
+            android:layout_margin="0dp"
+            android:onClick="onClickPage"
+            android:text="-" />
+    </LinearLayout>
+</RelativeLayout>

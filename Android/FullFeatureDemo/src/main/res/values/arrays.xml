@@ -1,0 +1,320 @@
+<resources>
+
+    <string-array name="demo_publish_resolution">
+        <item>VD_120x120</item>
+        <item>VD_160x120</item>
+        <item>VD_180x180</item>
+        <item>VD_240x180</item>
+        <item>VD_320x180</item>
+        <item>VD_240x240</item>
+        <item>VD_320x240</item>
+        <item>VD_424x240</item>
+        <item>VD_360x360</item>
+        <item>VD_480x360</item>
+        <item>VD_640x360</item>
+        <item>VD_480x480</item>
+        <item>VD_640x480</item>
+        <item>VD_840x480</item>
+        <item>VD_960x540</item>
+        <item>VD_960x720</item>
+        <item>VD_1280x720</item>
+        <item>VD_1920x1080</item>
+        <!--<item>VD_2560x1440</item>
+        <item>VD_3840x2160</item>-->
+    </string-array>
+
+    <string-array name="demo_publish_resolution_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <!--<item>18</item>
+        <item>19</item>-->
+    </string-array>
+
+    <string-array name="demo_publish_fps">
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+        <item>30</item>
+    </string-array>
+
+    <string-array name="demo_publish_fps_values">
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+        <item>30</item>
+    </string-array>
+
+    <string-array name="demo_camera_rotation">
+        <item>0</item>
+        <item>90</item>
+        <item>180</item>
+        <item>270</item>
+    </string-array>
+
+    <string-array name="demo_camera_rotation_values">
+        <item>0</item>
+        <item>90</item>
+        <item>180</item>
+        <item>270</item>
+    </string-array>
+
+    <string-array name="render_grid_count">
+        <item>4宫格</item>
+        <item>9宫格（大方会模式）</item>
+        <item>16宫格（大方会模式）</item>
+        <item>25宫格（大方会模式）</item>
+    </string-array>
+
+    <string-array name="render_grid_count_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="demo_render_crop_mode">
+        <item>自动模式</item>
+        <item>拉伸平铺模式</item>
+        <item>填充黑边模式</item>
+        <item>裁剪模式</item>
+    </string-array>
+
+    <string-array name="demo_render_crop_mode_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="appserver_appid">
+        <item>one_rtc_daily_dev</item>
+        <item>one_rtc_daily_rel</item>
+    </string-array>
+
+
+    <string-array name="demo_subscribe_resolution">
+        <item>FHD(1080P)</item>
+        <item>HD(720P)</item>
+        <item>SD(480P)</item>
+        <item>LD</item>
+    </string-array>
+
+    <string-array name="demo_subscribe_resolution_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
+    <string-array name="audio_profile_des">
+        <item>Basic</item>
+        <item>High</item>
+        <item>SuperHigh</item>
+        <item>StereoHigh</item>
+        <item>StereoSuperHigh</item>
+    </string-array>
+
+    <string-array name="audio_profile_value">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
+    <string-array name="audio_scenario_des">
+        <item>Default</item>
+        <item>Music</item>
+    </string-array>
+
+    <string-array name="audio_scenario_value">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string-array name="audio_observer_des">
+        <item>None</item>
+        <item>SourceCaptured</item>
+        <item>SourceProcessCaptured(3A)</item>
+        <item>SourcePub</item>
+        <item>SourceRemoteUser</item>
+    </string-array>
+
+    <string-array name="audio_observer_value">
+        <item>-1</item>
+        <item>1</item>
+        <item>2</item>
+        <item>4</item>
+        <item>16</item>
+    </string-array>
+
+    <string-array name="audio_denoise_des">
+        <item>关</item>
+        <item>传统降噪</item>
+        <item>智能降噪</item>
+    </string-array>
+
+    <string-array name="audio_denoise_value">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="video_observer_des">
+        <item>None</item>
+        <item>Capture</item>
+        <item>PreRender</item>
+        <item>PreEncoder</item>
+    </string-array>
+
+    <string-array name="video_observer_value">
+        <item>-1</item>
+        <item>1</item>
+        <item>2</item>
+        <item>4</item>
+    </string-array>
+
+    <string-array name="video_observer_format_des">
+        <item>I420</item>
+    </string-array>
+
+    <string-array name="video_encoder_orientation_value">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="video_encoder_orientation_des">
+        <item>自适应</item>
+        <item>固定横屏</item>
+        <item>固定竖屏</item>
+    </string-array>
+
+    <string-array name="video_camera_orientation_value">
+        <item>0</item>
+        <item>90</item>
+        <item>180</item>
+        <item>270</item>
+        <item>4</item>
+    </string-array>
+
+    <string-array name="video_camera_orientation_des">
+        <item>竖屏</item>
+        <item>左横屏</item>
+        <item>竖屏翻转</item>
+        <item>右横屏</item>
+        <item>自动</item>
+    </string-array>
+
+    <string-array name="video_observer_format_value">
+        <item>0</item>
+    </string-array>
+
+
+    <string-array name="facebeauty_type_des">
+        <item>无</item>
+        <item>自带美颜</item>
+    </string-array>
+
+    <string-array name="facebeauty_type_value">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string-array name="virtual_background_des">
+        <item>关闭</item>
+        <item>背景虚化</item>
+    </string-array>
+
+    <string-array name="virtual_background_value">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string-array name="screen_share_mode">
+        <item>不共享音视频</item>
+        <item>只共享视频</item>
+        <item>只共享音频</item>
+        <item>共享音视频</item>
+    </string-array>
+
+    <string-array name="external_video_stream_type">
+        <item>Camera</item>
+        <item>ScreenShare</item>
+        <item>Both</item>
+    </string-array>
+
+    <string-array name="audio_mute_mode">
+        <item>静音麦克风</item>
+        <item>静音音频流</item>
+    </string-array>
+    <string-array name="audio_unmute_mode">
+        <item>取消静音麦克风</item>
+        <item>取消静音音频流</item>
+    </string-array>
+
+    <string-array name="ai_agent_model_name">
+        <item>Qwen-Plus</item>
+        <item>DeepSeek-R1</item>
+    </string-array>
+
+    <string-array name="ai_agent_model_value">
+        <item>qwen-plus</item>
+        <item>deepseek-r1</item>
+    </string-array>
+
+    <string-array name="agent_self_video_mode_array">
+        <item>摄像头</item>
+        <item>共享</item>
+    </string-array>
+
+    <string-array name="agent_voice_range_name">
+        <item>龙婉</item>
+        <item>龙橙</item>
+        <item>龙华</item>
+        <item>龙小淳</item>
+        <item>龙小夏</item>
+        <item>龙小诚</item>
+        <item>龙老铁</item>
+        <item>龙杰力豆</item>
+        <item>Stella</item>
+        <item>Bella</item>
+    </string-array>
+
+    <string-array name="agent_voice_range_value">
+        <item>longwan</item>
+        <item>longcheng</item>
+        <item>longhua</item>
+        <item>longxiaochun</item>
+        <item>longxiaoxia</item>
+        <item>longxiaocheng</item>
+        <item>longlaotie</item>
+        <item>longjielidou</item>
+        <item>loongstella</item>
+        <item>loongbella</item>
+    </string-array>
+
+    <string-array name="subtitle_service_type_des">
+        <item>字幕</item>
+        <item>会议纪要</item>
+        <item>字幕&amp;会议纪要</item>
+    </string-array>
+</resources>

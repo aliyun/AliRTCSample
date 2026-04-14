@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="30dp"
+    android:background="@color/white"
+    android:gravity="center_vertical"
+    android:minHeight="260dp"
+    android:orientation="vertical"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.ding.rtc.demo.ui.DrawableTextView
+            android:id="@+id/more_privacy_audio"
+            style="@style/BottomTextview"
+            android:text="Mute音频"
+            app:drawableTop="@drawable/privacy" />
+
+        <com.ding.rtc.demo.ui.DrawableTextView
+            android:id="@+id/more_privacy_video"
+            style="@style/BottomTextview"
+            android:text="Mute视频"
+            app:drawableTop="@drawable/privacy" />
+
+        <com.ding.rtc.demo.ui.DrawableTextView
+            android:id="@+id/more_privacy_screen"
+            style="@style/BottomTextview"
+            android:text="Mute共享"
+            app:drawableTop="@drawable/privacy" />
+
+        <com.ding.rtc.demo.ui.DrawableTextView
+            android:id="@+id/more_mute_all"
+            style="@style/BottomTextview"
+            android:text="全员静音"
+            app:drawableTop="@drawable/privacy" />
+
+        <com.ding.rtc.demo.ui.DrawableTextView
+            android:id="@+id/more_device_test"
+            style="@style/BottomTextview"
+            android:text="关闭统计"
+            app:drawableTop="@drawable/device_test" />
+
+        <com.ding.rtc.demo.ui.DrawableTextView
+            android:id="@+id/send_media_ex_msg"
+            style="@style/BottomTextview"
+            android:text="发送媒体扩展信息"
+            app:drawableTop="@drawable/send_media_ex_msg" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.ding.rtc.demo.ui.DrawableTextView
+            android:id="@+id/subtitle"
+            style="@style/BottomTextview"
+            android:text="实时字幕"
+            app:drawableTop="@drawable/subtitle" />
+
+        <com.ding.rtc.demo.ui.DrawableTextView
+            android:id="@+id/more_snapshot"
+            style="@style/BottomTextview"
+            android:text="截图"
+            app:drawableTop="@drawable/switch_camera" />
+
+        <com.ding.rtc.demo.ui.DrawableTextView
+            android:id="@+id/white_board"
+            style="@style/BottomTextview"
+            android:text="白板"
+            app:drawableTop="@drawable/whiteboard" />
+
+        <com.ding.rtc.demo.ui.DrawableTextView
+            android:id="@+id/audio_dump"
+            style="@style/BottomTextview"
+            android:text="Start Audio Dump"
+            app:drawableTop="@drawable/audio_dump" />
+
+        <com.ding.rtc.demo.ui.DrawableTextView
+            android:id="@+id/quality_report"
+            style="@style/BottomTextview"
+            android:text="质量报告"
+            app:drawableTop="@drawable/quality_report" />
+
+        <com.ding.rtc.demo.ui.DrawableTextView
+            android:id="@+id/more_setting"
+            style="@style/BottomTextview"
+            android:text="设置"
+            app:drawableTop="@drawable/settings" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/more_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@drawable/button_select"
+        android:gravity="center"
+        android:minHeight="50dp"
+        android:text="@string/title_button_cancel"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+</LinearLayout>

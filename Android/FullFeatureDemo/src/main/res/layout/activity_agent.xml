@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="2dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/user_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.35"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/agent_layout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/rounded_white_background"
+            android:padding="5dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.5">
+
+            <TextView
+                android:id="@+id/agent_des"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="智能体"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/agent_model_des"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="模型:"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/agent_des" />
+
+            <Spinner
+                android:id="@+id/agent_model"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:entries="@array/ai_agent_model_name"
+                app:layout_constraintLeft_toRightOf="@id/agent_model_des"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/agent_des" />
+
+            <TextView
+                android:id="@+id/agent_settings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/btn_gradient_purple_blue"
+                android:gravity="center"
+                android:onClick="onClickAgentSettings"
+                android:text="修改AI设定"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:layout_constraintTop_toBottomOf="@id/agent_model" />
+
+            <FrameLayout
+                android:id="@+id/agent_animation"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/agent_voice_bg"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/agent_settings" />
+
+            <TextView
+                android:id="@+id/agent_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="20dp"
+                android:textStyle="italic"
+                app:layout_constraintBottom_toBottomOf="@id/agent_animation"
+                app:layout_constraintLeft_toLeftOf="@id/agent_animation"
+                app:layout_constraintRight_toRightOf="@id/agent_animation"
+                app:layout_constraintTop_toTopOf="@id/agent_animation" />
+
+            <ImageButton
+                android:id="@+id/agent_mute"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/speaker_on"
+                app:layout_constraintBottom_toBottomOf="@id/agent_animation"
+                app:layout_constraintLeft_toLeftOf="@id/agent_animation" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/rounded_white_background"
+            android:padding="5dp"
+            app:layout_constraintLeft_toRightOf="@id/agent_layout"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/self_des"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="我"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/self_video_mode_des"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="画面:"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/self_des" />
+
+            <Spinner
+                android:id="@+id/self_video_mode"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:entries="@array/agent_self_video_mode_array"
+                app:layout_constraintLeft_toRightOf="@id/self_video_mode_des"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/self_des" />
+
+            <FrameLayout
+                android:id="@+id/self_render"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/self_video_mode_des" />
+
+            <ImageView
+                android:id="@+id/self_avatar"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:padding="30dp"
+                android:src="@drawable/default_avatar"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/self_video_mode_des" />
+
+            <ImageButton
+                android:id="@+id/self_audio"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/mic_on"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent" />
+
+            <ImageButton
+                android:id="@+id/self_video"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/video_on"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/self_audio" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/speak_to_talk_layout"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent="0.5">
+
+        <Button
+            android:id="@+id/speak_to_talk_btn"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/btn_green_background"
+            android:text="长按说话"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.8" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/start_agent_btn"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:background="@drawable/btn_ok_background"
+        android:onClick="onClickStartAgent"
+        android:text="开始会话"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/speak_to_talk_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.4" />
+
+    <ListView
+        android:id="@+id/msg_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/rounded_white_background"
+        android:transcriptMode="alwaysScroll"
+        app:layout_constraintBottom_toTopOf="@id/start_agent_btn"
+        app:layout_constraintTop_toBottomOf="@id/user_layout" />
+
+    <ImageButton
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/svg_icon_setting"
+        android:onClick="onClickChatSettings"
+        app:layout_constraintBottom_toBottomOf="@id/msg_list"
+        app:layout_constraintRight_toRightOf="@id/msg_list" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

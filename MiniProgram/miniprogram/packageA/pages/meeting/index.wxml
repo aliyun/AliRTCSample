@@ -1,0 +1,97 @@
+<!--index.wxml-->
+<view class="container">
+  <view style="display: flex;flex-direction: column; gap: 2rpx; color: white">
+    <text>sdkVer: {{miniSdkVer}} </text>
+    <text>appId: {{joinInfo.appId}} | env: {{joinInfo.env}}</text>
+    <text>uid: {{joinInfo.userId}} | chnId: {{joinInfo.channelId}} </text>
+    <text>min-cache: {{joinInfo.minCache}} | max-cache: {{joinInfo.maxCache}} </text>
+  </view>
+  <view style="display: flex; gap: 2rpx; justify-content: center;align-items: center;">
+    <view>
+      <button bindtap="onPubClick" disabled="{{pubState==='published'}}"
+        loading="{{pubState==='publishing'}}">pub</button>
+      <button bindtap="onUnpubClick" disabled="{{pubState!=='published'}}">unpub</button>
+      <button bindtap="onSwitchCam" disabled="{{pubState!=='published'}}">switch cam</button>
+
+      <button bindtap="onTestRepushBtnClick" disabled="{{pubState!=='published'}}">test repush</button>
+      <!-- <button bindtap="onTestResoLevelBtnClick" disabled="{{pubState!=='published'}}">resolution</button> -->
+    </view>
+    <view>
+      <!-- <button bindtap="onPausePush" disabled="{{pubState!=='published'}}">pause push</button>
+    <button bindtap="onResumePush" disabled="{{pubState!=='published'}}">resume push</button> -->
+      <button bindtap="onSubAudioClick" disabled="{{!!audioRtmpPlayUrl}}">sub audio</button>
+      <button bindtap="onUnsubAudioClick" disabled="{{!audioRtmpPlayUrl}}">unsub audio</button>
+      <button bindtap="onLeaveClick" type="warn">leave</button>
+    </view>
+  </view>
+
+
+
+  <!-- 推流地址输入框和设置按钮 -->
+  <!-- <text>push url</text> -->
+  <!-- <input placeholder="rtmp push url" value="{{pusherUrl}}" maxlength="-1" /> -->
+  <!-- <button bindtap="setPusherUrl">设置推流URL</button> -->
+  <text>本端摄像头</text>
+
+  <live-pusher key="1-{{pusherUrl}}" id="pusher" video-width="{{videoWidth}}" video-height="{{videoHeight}}"
+    max-bitrate="500" min-bitrate="200" url="{{pusherUrl}}" mode="RTC" autopush="{{pusherUrl ? true : false}}"
+    enable-mic="{{enableMic}}" enable-camera="{{enableCamera}}" style="width:100%px;height:200px;"
+    device-position="front" bindstatechange="onPusherStateChangeEvent" bindnetstatus="onPusherNetStatusEvent"
+    binderror="onPushStateChange" bindbgmstart="onPushStateChange" bindbgmprogress="onPushStateChange"
+    bindbgmcomplete="onPushStateChange" />
+
+
+  <!-- <text>audio pull url</text>
+  <input placeholder="audio pull rtmp url" value="{{audioRtmpPlayUrl}}" maxlength="-1" /> -->
+  <live-player src="{{audioRtmpPlayUrl}}" autoplay="{true}" mode="RTC"
+    style="position: absolute; top:-1rpx; left:-1rpx; width: 1rpx; height: 1rpx;" data-user-id="{{'mcu'}}"
+    min-cache="{{joinInfo.minCache || 0.2}}" max-cache="{{joinInfo.maxCache || 0.8}}"
+    bindstatechange="onMcuAudioPlayerStateChange" bindnetstatus="onMcuAudioPlayerNetStatus" binderror="onPlayerError" />
+
+  <view style="display: flex;">
+    <text>其他用户总数：{{userList.length}}, 最多显示{{max_count_of_user_has_video_in_view}}个</text>
+  </view>
+  <view class="grid-container">
+    <block wx:for="{{partialUserListToView}}" wx:key="userId">
+      <view class="grid-item" style="border: 1px solid black; color: black;">
+        <view style="display: flex; flex-direction: column;">
+          <text>{{item.userId}}</text>
+          <text>videoMuted={{item.videoMuted}}</text>
+        </view>
+        <view style="display: flex; flex-flow: wrap">
+          <button size="mini" bindtap="onSubVideoClick" data-index="{{index}}"
+            disabled="{{!!item.rtmpPullUrl}}">{{'sub'}}</button>
+          <button size="mini" bindtap="onUnsubVideoClick" data-index="{{index}}"
+            disabled="{{!item.rtmpPullUrl}}">{{'unsub'}}</button>
+          <button size="mini" bindtap="onReconnectSub" data-index="{{index}}" data-user-id="{{item.userId}}"
+            disabled="{{!item.rtmpPullUrl}}">reconn</button>
+          <button size="mini" bindtap="onSetSubFhd" data-index="{{index}}" data-user-id="{{item.userId}}"
+            disabled="{{!item.rtmpPullUrl}}">fhd</button>
+          <button size="mini" bindtap="onSetSubLd" data-index="{{index}}" data-user-id="{{item.userId}}"
+            disabled="{{!item.rtmpPullUrl}}">ld</button>
+        </view>
+        <live-player id="{{item.userId}}" wx:key="{{item.userId}}" wx:if="{{item.hasVideo && item.rtmpPullUrl}}"
+          src="{{item.rtmpPullUrl}}" autoplay="true" muted="false" object-fit="cover"
+          style="width:100%;height:100%; transform: rotate({{item.rotation||0}}deg)" data-user-id="{{item.userId}}"
+          min-cache="{{joinInfo.minCache || 0.2}}" max-cache="{{joinInfo.maxCache || 0.8}}"
+          bindstatechange="onVideoPlayerStateChange" bindnetstatus="onVideoPlayerNetStatus" binderror="onPlayerError" />
+      </view>
+    </block>
+  </view>
+
+  <!-- 底部工具栏 fixed 固定 -->
+  <view class="toolbar">
+    <button bindtap="onChangeMicEnable" disabled="{{pubState!=='published'}}" size="mini" style="margin-bottom: 0;">
+      <image src="{{enableMic ? '/assets/mic_on.png' : '/assets/mic_off.png'}}" class="btn-icon" />
+      <text>麦克风= {{enableMic?'on':'off'}}</text>
+    </button>
+    <button bindtap="onChangeCamEnable" disabled="{{pubState!=='published'}}" size="mini" style="margin-bottom: 0;">
+      <image src="{{enableCamera ? '/assets/cam_on.png' : '/assets/cam_off.png'}}" class="btn-icon" />
+      <text>摄像头= {{enableCamera?'on':'off'}}</text>
+    </button>
+    <!-- <button class="tool-btn" bindtap="openMore">
+      <image src="/assets/more.png" class="btn-icon" />
+      <text>更多</text>
+    </button> -->
+  </view>
+</view>

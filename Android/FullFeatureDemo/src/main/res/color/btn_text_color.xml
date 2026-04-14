@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 按下状态 -->
+    <item android:state_pressed="true" android:color="@color/colorPrimary" /> <!-- 蓝色 -->
+
+    <!-- 默认状态 -->
+    <item android:color="#000000" /> <!-- 黑色 -->
+</selector>

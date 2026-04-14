@@ -1,0 +1,59 @@
+<!--index.wxml-->
+<view class="join-wrap">
+  <view style="position: absolute;top:100rpx;">sdkVer: {{sdkVer}}
+  </view>
+  <view style="width: 100%; display: flex; flex-direction: row; align-items: center;">
+    <view>Min-cache:</view>
+    <input placeholder="player min cache" bindinput="onMinCacheChange" value="{{minCache}}" maxlength="-1" style="color: black;" />
+  </view>
+  <view style="width: 100%; display: flex; flex-direction: row; align-items: center;">
+    <view>Max-cache:</view>
+    <input placeholder="player max cache" bindinput="onMaxCacheChange" value="{{maxCache}}" maxlength="-1" style="color: black;" />
+  </view>
+  <radio-group bindchange="onEnvRadioChange" style="width: 100%; display: flex;align-items: center; justify-content: space-around;">
+    <view style="display: flex;">
+      <radio id="radio_pre" value="onertcPre" checked="{{env==='onertcPre'}}" />
+      <label class="weui-cell__bd" for="radio_pre">onertcPre</label>
+    </view>
+    <view style="display: flex;">
+      <radio id="radio_online" value="onertcOnline" checked="{{env==='onertcOnline'}}" />
+      <label class="weui-cell__bd" for="radio_online">onertcOnline</label>
+    </view>
+  </radio-group>
+
+  <view style="width: 100%; display: flex; flex-direction: row; align-items: center;">
+    <view>AppId(prefer):</view>
+    <input placeholder="AppId" bindinput="onAppIdChange" value="{{appId}}" maxlength="-1" style="color: black;" />
+  </view>
+  <view wx:if="{{env==='onertcPre'}}" style="width: 100%; display: flex; flex-direction: row; align-items: center;">
+    <view>AppId:</view>
+    <picker class="select" bindchange="onPreAppIdPickerChange" value="{{selectedPreEnvAppId}}" range="{{preEnvAppIdArr}}">
+      <view class="picker">
+        {{preEnvAppIdArr[selectedPreEnvAppId]}}
+      </view>
+    </picker>
+  </view>
+  <view wx:else style="width: 100%; display: flex; flex-direction: row; align-items: center;">
+    <view>AppId:</view>
+    <picker class="select" bindchange="onProdAppIdPickerChange" value="{{selectedProdEnvAppId}}" range="{{prodEnvAppIdArr}}">
+      <view class="picker">
+        {{prodEnvAppIdArr[selectedProdEnvAppId]}}
+      </view>
+    </picker>
+  </view>
+  <view style="width: 100%; display: flex; flex-direction: row; align-items: center;">
+    <view>ChannelId:</view>
+    <input placeholder="ChannelId" bindinput="onChannelIdChange" value="{{channelId}}" maxlength="-1" style="color: black;" />
+  </view>
+  <view style="width: 100%; display: flex; flex-direction: row; align-items: center;">
+    <view>UserId:</view>
+    <input placeholder="UserId" bindinput="onUserIdChange" value="{{userId}}" maxlength="-1" style="color: black;" />
+  </view>
+  <view style="width: 100%; display: flex; flex-direction: row; align-items: center;">
+    <view>UserName:</view>
+    <input placeholder="UserName" bindinput="onUserNameChange" value="{{userName}}" maxlength="-1" style="color: black;" />
+  </view>
+  <button bindtap="onJoinClick" type="primary" loading="{{joining}}">join</button>
+
+  <!-- <web-view src=" https://uat-h5.fxnotary.com/scan?scene=50af9b48e8a8953e174b7e5706f82661 "></web-view> -->
+</view>

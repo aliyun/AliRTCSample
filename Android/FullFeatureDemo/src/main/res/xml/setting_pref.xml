@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory android:title="通话设置">
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="@string/title_auto_start_camera_key"
+            android:summary="@string/title_auto_start_camera"
+            android:title="@string/title_auto_start_camera"/>
+
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/demo_camera_rotation"
+            android:entryValues="@array/demo_camera_rotation_values"
+            android:key="@string/title_camera_rotation_key"
+            android:title="@string/title_camera_rotation" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="@string/title_auto_start_audio_key"
+            android:summary="@string/title_auto_start_audio"
+            android:title="@string/title_auto_start_audio"/>
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="@string/title_auto_start_speaker_key"
+            android:summary="@string/title_auto_start_speaker"
+            android:title="@string/title_auto_start_speaker"/>
+
+        <ListPreference
+            android:defaultValue="16"
+            android:entries="@array/demo_publish_resolution"
+            android:entryValues="@array/demo_publish_resolution_values"
+            android:key="@string/demo_publish_resolution_key"
+            android:title="发送分辨率" />
+
+        <ListPreference
+            android:defaultValue="30"
+            android:entries="@array/demo_publish_fps"
+            android:entryValues="@array/demo_publish_fps_values"
+            android:key="@string/demo_publish_fps_key"
+            android:title="发送帧率" />
+
+        <ListPreference
+            android:defaultValue="16"
+            android:entries="@array/demo_publish_resolution"
+            android:entryValues="@array/demo_publish_resolution_values"
+            android:key="@string/demo_screen_share_publish_resolution_key"
+            android:title="屏幕共享分辨率" />
+
+        <ListPreference
+            android:defaultValue="15"
+            android:entries="@array/demo_publish_fps"
+            android:entryValues="@array/demo_publish_fps_values"
+            android:key="@string/demo_screen_share_publish_fps_key"
+            android:title="屏幕共享帧率" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="@string/title_pub_video_mirror_key"
+            android:summary="发送镜像视频"
+            android:title="发送镜像视频"/>
+
+        <ListPreference
+            android:defaultValue="10"
+            android:entries="@array/virtual_background_des"
+            android:entryValues="@array/virtual_background_value"
+            android:key="@string/title_virtual_background_key"
+            android:title="虚拟背景" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/facebeauty_type_des"
+            android:entryValues="@array/facebeauty_type_value"
+            android:key="@string/title_face_beauty_key"
+            android:title="美颜类型" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="@string/title_subscribe_all_audio_key"
+            android:summary="@string/title_subscribe_all_audio"
+            android:title="@string/title_subscribe_all_audio"/>
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="@string/title_subscribe_all_video_key"
+            android:summary="@string/title_subscribe_all_video"
+            android:title="@string/title_subscribe_all_video"/>
+
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/demo_subscribe_resolution"
+            android:entryValues="@array/demo_subscribe_resolution_values"
+            android:key="@string/demo_subscribe_resolution_key"
+            android:title="订阅分辨率" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="音频设置">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="@string/audio_mute_recording_signal_key"
+            android:title="静音音频采集音量（支持会前打开）"/>
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="@string/audio_capture_key"
+            android:title="音频采集（支持会前打开）"/>
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="@string/audio_play_key"
+            android:title="音频播放（支持会前打开）"/>
+
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/audio_denoise_des"
+            android:entryValues="@array/audio_denoise_value"
+            android:key="@string/audio_denoise_key"
+            android:title="音频降噪" />
+
+        <EditTextPreference
+            android:defaultValue="100"
+            android:inputType="number"
+            android:key="@string/audio_playout_volume"
+            android:summary="100"
+            android:title="音频播放音量[0, 100]" />
+
+        <EditTextPreference
+            android:defaultValue="100"
+            android:inputType="number"
+            android:key="@string/audio_recording_volume"
+            android:summary="100"
+            android:title="音频采集音量[0, 100]" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="@string/audio_voice_change_key"
+            android:title="变声"/>
+
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/audio_profile_des"
+            android:entryValues="@array/audio_profile_value"
+            android:key="@string/audio_profile_key"
+            android:title="音质" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/audio_scenario_des"
+            android:entryValues="@array/audio_scenario_value"
+            android:key="@string/audio_scenario_key"
+            android:title="场景" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="@string/audio_volume_indication_key"
+            android:summary="音量提示"
+            android:title="音量提示"/>
+
+        <ListPreference
+            android:defaultValue="-1"
+            android:entries="@array/audio_observer_des"
+            android:entryValues="@array/audio_observer_value"
+            android:key="@string/audio_observer_key"
+            android:title="AudioObserver类型" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="视频设置">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="@string/video_focus_face_key"
+            android:summary="需要摄像头支持"
+            android:title="人脸聚焦"/>
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="@string/video_denoise_key"
+            android:summary="降噪"
+            android:title="降噪"/>
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="@string/video_enhance_key"
+            android:summary="暗光增强"
+            android:title="暗光增强" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="@string/video_stabilization_key"
+            android:summary="防抖"
+            android:title="防抖" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="@string/camera_switch_id_key"
+            android:summary="摄像头列表切换"
+            android:title="摄像头列表切换"
+            />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="@string/video_dump_id_key"
+            android:summary="视频dump"
+            android:title="视频dump"
+            />
+
+        <EditTextPreference
+            android:inputType="number"
+            android:key="@string/video_max_bitrate_key"
+            android:summary="需会前设置"
+            android:title="摄像头最大推流码率(会前设置)" />
+
+        <EditTextPreference
+            android:inputType="number"
+            android:key="@string/screen_max_bitrate_key"
+            android:summary="需会前设置"
+            android:title="共享最大推流码率(会前设置)" />
+
+        <com.ding.rtc.demo.ui.SeekBarPreference
+            android:key="@string/camera_brightness_key"
+            android:title="摄像头曝光补偿"
+            app:min="-100"
+            app:max="100"/>
+
+        <ListPreference
+            android:defaultValue="-1"
+            android:entries="@array/video_observer_des"
+            android:entryValues="@array/video_observer_value"
+            android:key="@string/video_observer_key"
+            android:title="VideoObserver类型" />
+
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/video_observer_format_des"
+            android:entryValues="@array/video_observer_format_value"
+            android:key="@string/video_observer_format_key"
+            android:title="VideoObserver Format类型" />
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/video_encoder_orientation_des"
+            android:entryValues="@array/video_encoder_orientation_value"
+            android:key="@string/video_encoder_orientation_key"
+            android:title="视频输出方向" />
+        <ListPreference
+            android:defaultValue="4"
+            android:entries="@array/video_camera_orientation_des"
+            android:entryValues="@array/video_camera_orientation_value"
+            android:key="@string/video_camera_orientation_key"
+            android:title="视频采集方向" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="UI设置">
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/render_grid_count"
+            android:entryValues="@array/render_grid_count_values"
+            android:key="@string/render_grid_key"
+            android:title="宫格数（仅在会前设置生效，大方会模式下功能从简）" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/demo_render_crop_mode"
+            android:entryValues="@array/demo_render_crop_mode_values"
+            android:key="@string/demo_render_crop_mode_key"
+            android:title="画布填充视图" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

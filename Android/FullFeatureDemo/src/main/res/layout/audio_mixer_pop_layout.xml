@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:background="#fff">
+
+    <CheckBox
+        android:id="@+id/pub_mix"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
+        android:text="是否推流"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.4" />
+
+    <CheckBox
+        android:id="@+id/local_play"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
+        android:text="本地播放"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.4" />
+
+    <LinearLayout
+        android:id="@+id/local_play_volume_layout"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/local_play">
+
+        <TextView
+            android:id="@+id/local_play_volume_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:text="本地播放音量" />
+
+        <SeekBar
+            android:id="@+id/local_play_volume_seekbar"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="false"
+            android:focusable="false"
+            android:max="100" />
+
+        <TextView
+            android:id="@+id/local_play_volume"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="50"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/pub_volume_layout"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/local_play_volume_layout">
+
+        <TextView
+            android:id="@+id/pub_volume_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:text="推流音量" />
+
+        <SeekBar
+            android:id="@+id/pub_volume_seekbar"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="false"
+            android:focusable="false"
+            android:max="100" />
+
+        <TextView
+            android:id="@+id/pub_volume"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="50"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/progress_layout"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/pub_volume_layout">
+
+        <TextView
+            android:id="@+id/progress_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:text="播放进度" />
+
+        <SeekBar
+            android:id="@+id/progress_seekbar"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="false"
+            android:focusable="false"
+            android:max="100" />
+
+        <TextView
+            android:id="@+id/progress_total"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="0"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/play_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="播放"
+        android:layout_marginTop="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/progress_layout"
+        app:layout_constraintWidth_percent="0.25"/>
+
+    <Button
+        android:id="@+id/pause_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="暂停"
+        android:layout_marginTop="10dp"
+        app:layout_constraintLeft_toRightOf="@id/play_btn"
+        app:layout_constraintTop_toBottomOf="@id/progress_layout"
+        app:layout_constraintWidth_percent="0.25"/>
+
+    <Button
+        android:id="@+id/resume_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="恢复"
+        android:layout_marginTop="10dp"
+        app:layout_constraintLeft_toRightOf="@id/pause_btn"
+        app:layout_constraintTop_toBottomOf="@id/progress_layout"
+        app:layout_constraintWidth_percent="0.25"/>
+
+    <Button
+        android:id="@+id/stop_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="停止"
+        android:layout_marginTop="10dp"
+        app:layout_constraintLeft_toRightOf="@id/resume_btn"
+        app:layout_constraintTop_toBottomOf="@id/progress_layout"
+        app:layout_constraintWidth_percent="0.25"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

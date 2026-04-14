@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 设置填充颜色为白色 -->
+    <solid android:color="#EEEEEE" />
+
+    <!-- 设置四个角的圆角半径 -->
+    <corners android:radius="16dp" />
+
+    <!-- 可选：设置边框（如果需要） -->
+    <!--
+    <stroke
+        android:width="1dp"
+        android:color="#CCCCCC" />
+    -->
+</shape>

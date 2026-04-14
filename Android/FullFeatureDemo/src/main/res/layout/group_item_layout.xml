@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="40dp">
+
+    <ImageView
+        android:id="@+id/arrow_img"
+        android:layout_width="20dp"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:src="@drawable/arrow_up"
+        app:layout_constraintLeft_toLeftOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/group_des"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="ID: 123456"
+        android:textColor="#000"
+        android:textSize="12sp"
+        app:layout_constraintLeft_toRightOf="@id/arrow_img" />
+
+    <ImageView
+        android:id="@+id/leave"
+        android:layout_width="30dp"
+        android:layout_height="match_parent"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:src="@drawable/leave_group"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/dismiss"
+        android:layout_width="30dp"
+        android:layout_height="match_parent"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:src="@drawable/dismiss_group"
+        app:layout_constraintRight_toLeftOf="@id/leave"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/join"
+        android:layout_width="30dp"
+        android:layout_height="match_parent"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:src="@drawable/join_group"
+        app:layout_constraintRight_toLeftOf="@id/dismiss"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/subscribe"
+        android:layout_width="30dp"
+        android:layout_height="match_parent"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:src="@drawable/subscribe_group"
+        app:layout_constraintRight_toLeftOf="@id/join"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/mix"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:src="@drawable/mix_group"
+        app:layout_constraintRight_toLeftOf="@id/subscribe"
+        tools:ignore="MissingConstraints" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
