@@ -24,10 +24,8 @@ declare module 'vue' {
     ImageTool: typeof import('./src/components/Whiteboard/ImageTool.vue')['default']
     Pagination: typeof import('./src/components/Whiteboard/Pagination.vue')['default']
     Resumer: typeof import('./src/components/PlayResumer/Resumer.vue')['default']
-    RoomInfo: typeof import('./src/components/Whiteboard/RoomInfo.vue')['default']
     Settings: typeof import('./src/components/Whiteboard/Settings.vue')['default']
     Stamps: typeof import('./src/components/Whiteboard/Stamps.vue')['default']
-    Toolbar: typeof import('./src/components/Whiteboard/Toolbar.vue')['default']
     VisionShare: typeof import('./src/components/Whiteboard/VisionShare.vue')['default']
     WBToolbar: typeof import('./src/components/Whiteboard/WBToolbar.vue')['default']
   }

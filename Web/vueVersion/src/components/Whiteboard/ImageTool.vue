@@ -10,21 +10,11 @@
 
         <a-divider />
 
-        <a-button
-          type="primary"
-          class="action-btn"
-          @click="uploadImage"
-          :loading="!!uploadImgProgress"
-        >
+        <a-button type="primary" class="action-btn" @click="uploadImage" :loading="!!uploadImgProgress">
           {{ uploadImgProgress || '上传图片图形' }}
         </a-button>
 
-        <a-button
-          type="primary"
-          class="action-btn"
-          @click="uploadBgImage"
-          :loading="!!uploadBgProgress"
-        >
+        <a-button type="primary" class="action-btn" @click="uploadBgImage" :loading="!!uploadBgProgress">
           {{ uploadBgProgress || '上传为背景图' }}
         </a-button>
       </div>
@@ -37,6 +27,7 @@
 import { message } from 'ant-design-vue';
 import { ref } from 'vue';
 import { RtcWhiteboard } from '@dingrtc/whiteboard';
+import { logger } from '~/utils/tools';
 
 interface IProps {
   whiteboard: RtcWhiteboard
@@ -71,7 +62,7 @@ const uploadImage = () => {
         (state!.loaded / state!.total) *
         100
       ).toFixed(2)}%`;
-      console.log(`已上传${(state!.loaded / state!.total) * 100}%`);
+      logger.info(`已上传${(state!.loaded / state!.total) * 100}%`);
     } else {
       uploadImgProgress.value = '';
       message.success('上传成功');
@@ -87,7 +78,7 @@ const uploadBgImage = () => {
         (state!.loaded / state!.total) *
         100
       ).toFixed(2)}%`;
-      console.log(`已上传${(state!.loaded / state!.total) * 100}%`);
+      logger.info(`已上传${(state!.loaded / state!.total) * 100}%`);
     } else {
       uploadBgProgress.value = '';
       message.success('上传成功');
@@ -105,7 +96,8 @@ const uploadBgImage = () => {
   input {
     margin-bottom: 10px;
   }
-  .action-btn ~ .action-btn {
+
+  .action-btn~.action-btn {
     margin-left: 10px;
   }
 }

@@ -78,7 +78,6 @@ export const getAppToken = async (
   };
   const result = (await request('GET', `${APP_SERVER_DOMAIN}/login`, loginParam)) as {
     token: string;
-    gslb?: string[] 
   };
   return result;
 };

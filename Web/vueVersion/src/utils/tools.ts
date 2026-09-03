@@ -66,7 +66,11 @@ export const print = async (...args: any) => {
 const _log = (...args: any) => {
   const now = new Date();
   const timeStr = `${now.toLocaleString()}:${now.getMilliseconds()}`;
-  console.log(`[demo] ${timeStr} :`, ...args);
+  // 预发环境或url指定开启console log
+  const showLog = parseSearch('consoleLog');
+  if (showLog || /pre-|localhost/i.test(location.origin)) {
+    console.log('%c[demo app]:', 'background: rgba(255,255,0,0.3);', `${timeStr} :`, ...args);
+  }
 };
 export const logger = {
   debug: (...args: any) => {

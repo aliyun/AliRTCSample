@@ -1,24 +1,50 @@
-import { useDeviceInfo, useChannelInfo } from '~/store';
+import { useDeviceInfo, useChannelInfo, useCurrentUserInfo } from '~/store';
 import DingRTC, {
   CameraVideoTrack,
   DeviceInfo,
+  LocalAudioTrack,
   LocalVideoTrack,
   MicrophoneAudioTrack,
 } from 'dingrtc';
 import { logger, parseSearch } from '~/utils/tools';
-import { ref } from 'vue';
+import { ref, toRaw } from 'vue';
 import { useChannel } from './channel';
-import { isMobile } from '~/utils/tools';
+import { isIOS, isMobile } from '~/utils/tools';
 // @ts-ignore
 window.DingRTC = DingRTC;
 
 type DeviceType = 'camera' | 'playback-device' | 'microphone';
 
+const MIC_REBUILD_BACKOFFS = [0, 300, 1000];
+
+// 模块级：useDevice 每次调用都会新建实例，重入保护必须跨组件共享
+const micRecovering = ref(false);
+
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/**
+ * SDK 的 LocalAudioTrack.getAudioTrack() 在 getUserMedia 失败时会静默降级成
+ * createOscillator + createMediaStreamDestination 合成的无声轨道，且不抛错。
+ * 合成轨并非真实采集设备，其 deviceId 不会出现在 enumerateDevices 的 audioinput
+ * 列表中（Chrome 下形如 WebAudio-xxx），据此与真实麦克风轨区分。
+ */
+const isSilentFallbackTrack = async (track?: LocalAudioTrack) => {
+  const deviceId = track?.getMediaStreamTrack()?.getSettings?.().deviceId;
+  if (!deviceId) return false;
+  const inputs = (await navigator.mediaDevices.enumerateDevices()).filter(
+    (item) => item.kind === 'audioinput' && item.deviceId,
+  );
+  // 设备列表不可用时放弃判断，避免误判导致每次开麦都重建
+  if (!inputs.length) return false;
+  return !inputs.some((item) => item.deviceId === deviceId);
+};
+
 export const useDevice = (scene?: 'pre' | 'in') => {
   const loading = ref(false);
   const channelInfo = useChannelInfo();
   const deviceInfo = useDeviceInfo();
-  const { publish } = useChannel();
+  const currentUserInfo = useCurrentUserInfo();
+  const { publish, unpublish } = useChannel();
   const updateDeviceList = (deviceType: DeviceType, info: DeviceInfo) => {
     deviceInfo.$patch((prev) => {
       const { cameraList, micList, speakerList } = prev;
@@ -210,17 +236,64 @@ export const useDevice = (scene?: 'pre' | 'in') => {
     return track;
   };
 
-  const openScreen = () => {
+  const openScreen = async () => {
     if (loading.value) return Promise.reject();
-    return DingRTC.createScreenVideoTrack({
+    const tracks = await DingRTC.createScreenVideoAndAudioTrack({
       dimension: deviceInfo.screenDimension,
       frameRate: 17, //deviceInfo.screenFrameRate,
       optimizationMode: 'detail',
-    }).then((track) => {
-      loading.value = false;
-      logger.info('got screen track');
-      return track[0] as LocalVideoTrack;
     });
+    loading.value = false;
+    logger.info('got screen track', tracks);
+    return tracks as LocalVideoTrack[];
+  };
+
+  /**
+   * 完全重建麦克风轨道。必须走 openMic（createMicrophoneAudioTrack）而非
+   * setEnabled(true) / setDevice()，后两者内部的 updateNewTrack 会在采集失败时
+   * 静默返回无声合成轨；同时新建 LocalTrack 会产生新的 RTCRtpSender，
+   * 可规避 iOS 上 replaceTrack 后 sender 仍持续发静音的问题。
+   */
+  const rebuildMicTrack = async (shouldPublish: boolean) => {
+    if (micRecovering.value) return;
+    micRecovering.value = true;
+    logger.info(`start rebuilding micTrack, shouldPublish=${shouldPublish}`);
+    try {
+      const staleTrack = channelInfo.micTrack;
+      if (staleTrack) {
+        if (shouldPublish) {
+          // 取消发布失败不应阻断重新采集；成功时 unpublish 内部会移除发布记账
+          await unpublish([staleTrack]).catch((e) => {
+            logger.error('unpublish stale micTrack failed, continue anyway', e);
+          });
+        }
+        toRaw(staleTrack).close();
+        channelInfo.$patch({ micTrack: null });
+      }
+
+      for (let attempt = 0; attempt < MIC_REBUILD_BACKOFFS.length; attempt++) {
+        if (attempt > 0) {
+          await delay(MIC_REBUILD_BACKOFFS[attempt]);
+          // 后台恢复后原 deviceId 可能已失效，清空让浏览器回落到默认设备
+          deviceInfo.$patch({ micId: '' });
+        }
+        try {
+          const freshTrack = await openMic();
+          if (shouldPublish) await publish([freshTrack]);
+          channelInfo.updateTrackStats(currentUserInfo.userId);
+          logger.info(`micTrack rebuilt at attempt ${attempt + 1}`);
+          return;
+        } catch (e) {
+          logger.error(`rebuild micTrack attempt ${attempt + 1} failed`, e);
+        }
+      }
+
+      logger.error('rebuild micTrack gave up, falling back to mic-off state');
+      channelInfo.$patch({ micTrack: null });
+      channelInfo.updateTrackStats(currentUserInfo.userId);
+    } finally {
+      micRecovering.value = false;
+    }
   };
 
   const operateCamera = () => {
@@ -243,31 +316,49 @@ export const useDevice = (scene?: 'pre' | 'in') => {
   };
 
   const operateMic = () => {
+    if (micRecovering.value) return Promise.resolve();
     if (!channelInfo.micTrack) {
       return openMic().then((track) => {
         const inPre = scene === 'pre';
         if (!inPre) publish([track]);
       });
-    } else {
-      return channelInfo.micTrack.setEnabled(!channelInfo.micTrack.enabled).then(() => {
-        logger.info(`micTrack change to ${!channelInfo.micTrack.enabled ? 'disbaled' : 'enabled'}`);
-      });
     }
+    const nextEnabled = !channelInfo.micTrack.enabled;
+    const wasPublished = channelInfo.publishedTracks.has(channelInfo.micTrack.getTrackId());
+    return channelInfo.micTrack.setEnabled(nextEnabled).then(async () => {
+      logger.info(`micTrack change to ${nextEnabled ? 'enabled' : 'disbaled'}`);
+      // setEnabled(true) 内部走 updateNewTrack，采集失败时会静默拿到无声合成轨
+      if (nextEnabled && isIOS() && (await isSilentFallbackTrack(channelInfo.micTrack))) {
+        logger.error('got silent fallback track on unmute, rebuilding micTrack');
+        await rebuildMicTrack(wasPublished);
+      }
+    });
   };
 
-  const operateScreen = () => {
-    if (!channelInfo.screenTrack) {
-      openScreen().then((track) => {
-        channelInfo.$patch({ screenTrack: track });
-        publish([track]).catch(() => {
-          track.close();
-          channelInfo.$patch({ screenTrack: null });
-        });
+  const operateScreen = async () => {
+    if (!channelInfo.screenVideoTrack) {
+      const tracks = await openScreen();
+      channelInfo.$patch({ screenVideoTrack: tracks[0] });
+      // tracks[0].on('track-ended', () => {
+      //   channelInfo.$patch({ screenVideoTrack: null });
+      // });
+      if (tracks[1]) {
+        channelInfo.$patch({ screenAudioTrack: tracks[1] });
+        // tracks[1].on('track-ended', () => {
+        //   channelInfo.$patch({ screenAudioTrack: null });
+        // });
+      }
+      publish(tracks).catch(() => {
+        tracks[0]?.close();
+        tracks[1]?.close();
+        channelInfo.$patch({ screenVideoTrack: null, screenAudioTrack: null });
       });
     } else {
-      channelInfo.screenTrack?.close();
+      channelInfo.screenVideoTrack?.close();
+      channelInfo.screenAudioTrack?.close();
       logger.info(`stop share screen`);
-      channelInfo.$patch({ screenTrack: null });
+      channelInfo.$patch({ screenVideoTrack: null });
+      channelInfo.$patch({ screenAudioTrack: null });
     }
   };
 
@@ -280,5 +371,6 @@ export const useDevice = (scene?: 'pre' | 'in') => {
     getDeviceList,
     updateDeviceList,
     openMicAndCameraSameTime,
+    rebuildMicTrack,
   };
 };

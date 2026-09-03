@@ -33,7 +33,7 @@ const needResume = computed(() => {
 <template>
   <Row v-if="needResume" class="needResume" @click="resumePlay">
     <Col>
-      <Icon type="icon-XDS_VideoFill" />
+    <Icon type="icon-XDS_VideoFill" />
     </Col>
     <Col> iOS微信内需要点击播放 </Col>
   </Row>

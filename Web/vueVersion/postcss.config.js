@@ -1,5 +1,13 @@
 module.exports = {
   plugins: [
-    require('postcss-preset-env')
-  ]
-}
+    require('cssnano')({
+      preset: [
+        'default',
+        {
+          discardComments: { removeAll: true },
+        },
+      ],
+    }),
+    require('postcss-preset-env'),
+  ],
+};

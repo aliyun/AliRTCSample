@@ -38,7 +38,7 @@ import { useRTMInfoHooks } from '~/hooks/channel';
 
 const disableTransportCC = parseSearch('disableTransportCC') === 'true'
 
-DingRTC.setClientConfig({ disableTransportCC, simulcast: true, highStartBitrate: false })
+DingRTC.setClientConfig({ disableTransportCC, simulcast: true, highStartBitrate: false, audioSFU: false })
 
 const joining = ref(false);
 
@@ -132,8 +132,16 @@ const onJoin = async () => {
         }
       }
       const tasks = [];
-      const subTask = client.batchSubscribe(subParams).then((batchSubscribeResult) => {
-        for (const { error, track, uid: usrId, auxiliary } of batchSubscribeResult) {
+      const subTask = Promise.all(
+        subParams.map((param) =>
+          client
+            .subscribe(param.uid, param.mediaType, param.auxiliary)
+            .then((track) => ({ uid: param.uid, auxiliary: param.auxiliary, track }))
+            .catch((error) => ({ uid: param.uid, auxiliary: param.auxiliary, error })),
+        ),
+      ).then((subscribeResults) => {
+      // const subTask = client.batchSubscribe(subParams).then((subscribeResults) => {
+        for (const { error, track, uid: usrId, auxiliary } of subscribeResults) {
           if (error) {
             message.info(
               `subscribe user ${usrId} ${auxiliary ? 'screenShare' : 'camera'} failed: ${JSON.stringify(error)}`,
@@ -212,10 +220,10 @@ const onJoin = async () => {
         globalFlag.$patch({ joined: true });
       });
     } catch (e: any) {
-      logger.info(e)
       joining.value = false;
       globalFlag.$patch({ joined: false });
       message.error(`加入房间失败${e?.reason || e?.message || JSON.stringify(e)}`);
+      logger.error(`加入房间失败${e?.reason || e?.message || JSON.stringify(e)}`, e);
     }
   } catch (error) {
     globalFlag.$patch({ joined: false });

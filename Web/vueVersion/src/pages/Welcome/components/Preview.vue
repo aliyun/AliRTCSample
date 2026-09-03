@@ -21,6 +21,7 @@ import { Mic, Camera } from '~/components/Device';
 import { Row, Col, Divider, Avatar } from 'ant-design-vue';
 import { useDevice } from '~/hooks/device';
 import { useChannelInfo, useCurrentUserInfo, useDeviceInfo, useGlobalFlag } from '~/store';
+import { getLocalStorageMgr } from '~/utils/LocalStorageMgr';
 
 const refContainer = ref(null);
 
@@ -36,30 +37,39 @@ const channelInfo = useChannelInfo();
 const { operateCamera, operateMic, openCamera, openMic } =
   useDevice('pre');
 onMounted(async () => {
-  if (globalFlag.isMobile) {
-    return
-  };
-  const track = await openCamera();
-  cameraTrack.value = track;
-  if (!globalFlag.joined) {
-    track?.play(refContainer.value.$el, { fit: 'cover', mirror: true });
+  // if (globalFlag.isMobile) {
+  //   return
+  // };
+  const previewCamOnOff = getLocalStorageMgr().getLocalStoredData().previewCamOnOff
+  if (previewCamOnOff === 'on') {
+    const track = await openCamera();
+    cameraTrack.value = track;
+    if (!globalFlag.joined) {
+      track?.play(refContainer.value.$el, { fit: 'cover', mirror: true });
+    }
   }
 });
 
-const onClickCamera = () => {
-  if (globalFlag.isMobile && !channelInfo.cameraTrack) {
-    openCamera().then((track) => {
+const onClickCamera = async () => {
+  if (!channelInfo.cameraTrack) {
+    getLocalStorageMgr().updateLocalStoredData({ previewCamOnOff: 'on' });
+    const track = await openCamera()
+    cameraTrack.value = track;
+    if (!globalFlag.joined) {
       track?.play(refContainer.value.$el, { fit: 'cover', mirror: true });
-    });
+    }
   } else {
+    getLocalStorageMgr().updateLocalStoredData({ previewCamOnOff: 'off' });
     operateCamera();
   }
 };
 
 const onClickMic = () => {
-  if (globalFlag.isMobile && !channelInfo.micTrack) {
+  if (!channelInfo.micTrack) {
+    getLocalStorageMgr().updateLocalStoredData({ previewMicOnOff: 'on' });
     openMic();
   } else {
+    getLocalStorageMgr().updateLocalStoredData({ previewMicOnOff: 'off' });
     operateMic();
   }
 };

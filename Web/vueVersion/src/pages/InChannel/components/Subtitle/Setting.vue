@@ -2,7 +2,8 @@
   <Row>
     <Form :model="formData" style="width: 100%" :label-col="{ span: 6 }" label-align="left">
       <Form.Item label="功能选项" name="functionNumber">
-        <RadioGroup v-model:value="formData.functionNumber" :options="ASROptions" :disabled="!!asrInfo.asrTaskId" @change="onAsrFunctionChange" />
+        <RadioGroup v-model:value="formData.functionNumber" :options="ASROptions" :disabled="!!asrInfo.asrTaskId"
+          @change="onAsrFunctionChange" />
       </Form.Item>
       <Form.Item label="启用字幕" name="enable" help="字幕仅自己可见">
         <Checkbox v-model:checked="formData.enable" @change="onAsrEnableChange" />
@@ -11,13 +12,13 @@
         <Text>翻译设置</Text>
       </Divider>
       <Form.Item label="你说的语言" name="originLang">
-        <Select v-model:value="formData.originLang" :options="speakLanguages" @change="onSpeakLangChange"/>
+        <Select v-model:value="formData.originLang" :options="speakLanguages" @change="onSpeakLangChange" />
       </Form.Item>
       <Form.Item label="你看的语言" name="transLang">
-        <Select v-model:value="formData.transLang" :options="translateLanguages" @change="onTransLangChange"/>
+        <Select v-model:value="formData.transLang" :options="translateLanguages" @change="onTransLangChange" />
       </Form.Item>
       <Form.Item label="显示双语" name="dualLang">
-        <Select v-model:value="formData.dualLang" :options="dualLangConfigs" @change="onDualLangChange"/>
+        <Select v-model:value="formData.dualLang" :options="dualLangConfigs" @change="onDualLangChange" />
       </Form.Item>
     </Form>
   </Row>
@@ -28,6 +29,7 @@ import { reactive, computed } from 'vue';
 import { useAsrHooks } from '~/hooks/channel';
 import { useAsrInfo, useCurrentUserInfo } from '~/store';
 import { startASR, stopASR } from '~/utils/request';
+import { logger } from '~/utils/tools';
 
 const ASROptions = [
   {
@@ -88,13 +90,13 @@ const onAsrEnableChange = (e) => {
   asrInfo.enabled = value;
   if (!asrInfo.asrTaskId && value) {
     startASR(currentUserInfo.appId, currentUserInfo.channel, asrInfo.functionNumber).then(({ taskId }) => {
-    asrInfo.asrTaskId = taskId;
-  }).catch(console.log);
+      asrInfo.asrTaskId = taskId;
+    }).catch(logger.info);
   }
   if (!value && asrInfo.asrTaskId) {
     stopASR(currentUserInfo.appId, currentUserInfo.channel, asrInfo.asrTaskId).then(() => {
       asrInfo.asrTaskId = '';
-    }).catch(console.log);
+    }).catch(logger.info);
   }
 };
 

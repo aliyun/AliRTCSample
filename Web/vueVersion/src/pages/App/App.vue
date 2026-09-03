@@ -60,7 +60,7 @@ onMounted(() => {
   })
 
   rtmInfo.rtm.on('message', (data) => {
-    console.log('rtm message received===', data);
+    logger.info('rtm message received===', data);
     const session = rtmInfo.sessions.find(item => item.sessionId === data.sessionId)
     session.messages.push({
       ...data,

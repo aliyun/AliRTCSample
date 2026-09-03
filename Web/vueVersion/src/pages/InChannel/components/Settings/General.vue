@@ -2,48 +2,27 @@
   <Row>
     <Form :model="formData" style="width: 100%" :label-col="{ span: 6 }" label-align="left">
       <Form.Item label="发布摄像头流" name="videoPublish" help="开启则发布摄像头流，关闭则取消发布">
-        <Checkbox
-          v-model:checked="formData.videoPublish"
-          :disabled="loading.camera"
-          @change="onVideoPublishChange"
-        />
+        <Checkbox v-model:checked="formData.videoPublish" :disabled="loading.camera" @change="onVideoPublishChange" />
       </Form.Item>
       <Form.Item label="发布麦克风流" name="audioPublish" help="开启则发布麦克风流，关闭则取消发布">
-        <Checkbox
-          v-model:checked="formData.audioPublish"
-          :disabled="loading.mic"
-          @change="onAudioPublishChange"
-        />
+        <Checkbox v-model:checked="formData.audioPublish" :disabled="loading.mic" @change="onAudioPublishChange" />
       </Form.Item>
-      <Form.Item
-        label="订阅远端视频"
-        name="videoSubscribe"
-        help="开启则订阅全部视频，关闭则取消订阅"
-      >
-        <Checkbox
-          v-model:checked="formData.videoSubscribe"
-          :disabled="loading.remoteVideo"
-          @change="onVideoSubscribeChange"
-        />
+      <Form.Item label="订阅远端视频" name="videoSubscribe" help="开启则订阅全部视频，关闭则取消订阅">
+        <Checkbox v-model:checked="formData.videoSubscribe" :disabled="loading.remoteVideo"
+          @change="onVideoSubscribeChange" />
       </Form.Item>
       <Form.Item label="默认订阅档位" name="defaultRemoteStreamType" help="设置后对下次订阅生效">
-        <Select
-          v-model:value="formData.defaultRemoteStreamType"
-          :options="RemoteStreamTypeOptions"
-          @change="onDefaultRemoteStreamType"
-        />
+        <Select v-model:value="formData.defaultRemoteStreamType" :options="RemoteStreamTypeOptions"
+          @change="onDefaultRemoteStreamType" />
       </Form.Item>
-      <Form.Item
-        label="订阅远端音频"
-        name="audioSubscribe"
-        help="开启则订阅全部音频，关闭则取消订阅"
-      >
-        <Checkbox
-          v-model:checked="formData.audioSubscribe"
-          :disabled="loading.remoteAudio"
-          @change="onAudioSubscribeChange"
-        />
+      <Form.Item label="订阅远端音频" name="audioSubscribe" help="开启则订阅全部音频，关闭则取消订阅">
+        <Checkbox v-model:checked="formData.audioSubscribe" :disabled="loading.remoteAudio"
+          @change="onAudioSubscribeChange" />
       </Form.Item>
+      <!-- <Form.Item label="直播" name="livePushUrl" help="配置直播推流地址">
+        <Input v-model:value="formData.livePushUrl" placeholder="推流地址" />
+      </Form.Item> -->
+      <!-- <Button @click="startLivePush">开始旁路推流</Button> -->
     </Form>
   </Row>
 </template>
@@ -128,6 +107,7 @@ const formData = reactive({
   videoSubscribe: channelInfo.subscribeAllVideo,
   defaultRemoteStreamType: channelInfo.defaultRemoteStreamType,
   audioSubscribe: !!channelInfo.mcuAudioTrack,
+  livePushUrl: '',
 });
 
 

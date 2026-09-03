@@ -3,11 +3,9 @@
     <audio ref="audioRef" crossOrigin="anonymous" loop :src="testAudio" />
     <Form style="width: 100%" :label-col="{ span: 4 }" label-align="left" :model="formData">
       <Form.Item label="麦克风" name="micId">
-        <Select
-          v-model:value="formData.micId"
+        <Select v-model:value="formData.micId"
           :options="deviceInfo.micList.map((item) => ({ label: item.label, value: item.deviceId }))"
-          @change="onMicIdChange"
-        />
+          @change="onMicIdChange" />
       </Form.Item>
       <Form.Item label="音频能量">
         <VolumeLevelBar :track="channelInfo.micTrack" />
@@ -15,11 +13,9 @@
       <Divider />
       <Form.Item label="扬声器" class="testDevice">
         <Form.Item no-style name="speakerId">
-          <Select
-            v-model:value="formData.speakerId"
+          <Select v-model:value="formData.speakerId"
             :options="deviceInfo.speakerList.map((item) => ({ label: item.label, value: item.deviceId }))"
-            @change="onSpearkerIdChange"
-          />
+            @change="onSpearkerIdChange" />
         </Form.Item>
         <Button type="link" @click="testDevice">
           测试
@@ -29,13 +25,7 @@
         <VolumeLevelBar :track="testTrack" />
       </Form.Item>
       <Form.Item label="播放音量" name="playVolume">
-        <Slider
-          v-model:value="formData.playVolume"
-          :max="1"
-          :step="0.01"
-          :min="0"
-          @change="onPlayVolumeChange"
-        />
+        <Slider v-model:value="formData.playVolume" :max="1" :step="0.01" :min="0" @change="onPlayVolumeChange" />
       </Form.Item>
     </Form>
   </Row>

@@ -3,26 +3,15 @@
     <template #content>
       <div class="toolbox-panel">
         <a-input-group compact>
-          <a-input v-model:="docUrl" placeholder="pdf文档链接地址" />
+          <a-input v-model:value="docUrl" placeholder="pdf文档链接地址" />
           <a-button type="primary" @click="loadPdf">加载 pdf</a-button>
         </a-input-group>
 
         <a-divider />
 
-        <a-button
-          type="primary"
-          class="action-btn"
-          @click="transcodePdf"
-          :loading="!!transcodePdfProgress"
-        >
-          {{ transcodePdfProgress || '上传文件转码为pdf' }}</a-button
-        >
-        <a-button
-          type="primary"
-          class="action-btn"
-          @click="transcodeDoc"
-          :loading="!!transcodeDocProgress"
-        >
+        <a-button type="primary" class="action-btn" @click="transcodePdf" :loading="!!transcodePdfProgress">
+          {{ transcodePdfProgress || '上传文件转码为pdf' }}</a-button>
+        <a-button type="primary" class="action-btn" @click="transcodeDoc" :loading="!!transcodeDocProgress">
           {{ transcodeDocProgress || '上传文件转码为图片文档' }}
         </a-button>
       </div>
@@ -35,6 +24,7 @@
 import { message } from 'ant-design-vue';
 import { ref } from 'vue';
 import { RtcWhiteboard } from '@dingrtc/whiteboard';
+import { logger } from '~/utils/tools';
 
 interface IProps {
   whiteboard: RtcWhiteboard
@@ -46,6 +36,7 @@ const transcodePdfProgress = ref('');
 const transcodeDocProgress = ref('');
 
 const loadPdf = () => {
+  logger.info('loadPdf', docUrl.value);
   if (docUrl.value) {
     props.whiteboard.addPdfDoc(docUrl.value, '示例pdf 文档');
   }
@@ -62,7 +53,7 @@ const transcodePdf = () => {
             (state!.loaded / state!.total) *
             100
           ).toFixed(2)}%`;
-          console.log(`已上传${(state!.loaded / state!.total) * 100}%`);
+          logger.info(`已上传${(state!.loaded / state!.total) * 100}%`);
         } else {
           transcodePdfProgress.value = '上传成功';
           message.success('上传成功');
@@ -97,7 +88,7 @@ const transcodeDoc = () => {
             (state!.loaded / state!.total) *
             100
           ).toFixed(2)}%`;
-          console.log(`已上传${(state!.loaded / state!.total) * 100}%`);
+          logger.info(`已上传${(state!.loaded / state!.total) * 100}%`);
         } else {
           transcodeDocProgress.value = '上传成功';
           message.success('上传成功');
@@ -132,7 +123,7 @@ const transcodeDoc = () => {
     width: 300px;
   }
 
-  .action-btn ~ .action-btn {
+  .action-btn~.action-btn {
     margin-left: 10px;
   }
 }

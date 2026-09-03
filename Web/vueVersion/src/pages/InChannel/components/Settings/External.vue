@@ -9,40 +9,27 @@
         <VolumeLevelBar :track="channelInfo.customAudioTrack" />
       </Form.Item>
       <Form.Item label="替换音视频">
-        <Upload
-          :max-count="1"
-          :file-list="avFileList"
-          accept="video/*"
-          :before-upload="beforeUpload"
-          @change="(changeParam) => onFileChange(changeParam, 'av')"
-        >
+        <Upload :max-count="1" :file-list="avFileList" accept="video/*" :before-upload="beforeUpload"
+          @change="(changeParam) => onFileChange(changeParam, 'av')">
           <Button>
             <UploadOutlined />选择视频文件
           </Button>
         </Upload>
       </Form.Item>
       <Form.Item label="替换视频">
-        <Upload
-          :max-count="1"
-          :file-list="videoFileList"
-          accept="video/*"
-          :before-upload="beforeUpload"
-          @change="(changeParam) => onFileChange(changeParam, 'video')"
-        >
+        <Upload :max-count="1" :file-list="videoFileList" accept="video/*" :before-upload="beforeUpload"
+          @change="(changeParam) => onFileChange(changeParam, 'video')">
           <Button>
             <UploadOutlined />选择视频文件
           </Button>
         </Upload>
       </Form.Item>
       <Form.Item label="替换音频">
-        <Upload
-          :max-count="1"
-          :file-list="audioFileList"
-          accept="audio/mpeg, audio/wav"
-          :before-upload="beforeUpload"
-          @change="(changeParam) => onFileChange(changeParam, 'audio')"
-        >
-          <Button><UploadOutlined />选择音频文件</Button>
+        <Upload :max-count="1" :file-list="audioFileList" accept="audio/mpeg, audio/wav" :before-upload="beforeUpload"
+          @change="(changeParam) => onFileChange(changeParam, 'audio')">
+          <Button>
+            <UploadOutlined />选择音频文件
+          </Button>
         </Upload>
       </Form.Item>
     </Form>

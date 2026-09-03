@@ -1,12 +1,13 @@
 <template>
   <Row class="chatEditor">
     <Col :span="24" class="chatEditorInput">
-      <Textarea  ref="textareaRef" placeholder="请输入消息" focused  @press-enter="sendMessage" v-model:value="inputText" :max-length="100" />
+    <Textarea ref="textareaRef" placeholder="请输入消息" focused @press-enter="sendMessage" v-model:value="inputText"
+      :max-length="100" />
     </Col>
     <Col :span="24" class="chatEditorButton">
-      <span v-if="globalFlag.isMac">↵ 发送 / ⌘↵ 换行</span>
-      <span v-else>↵ 发送 / CTRL+↵ 换行</span>
-      <Button :disabled="!inputText" type="primary"  @click="sendMessage">发送</Button>
+    <span v-if="globalFlag.isMac">↵ 发送 / ⌘↵ 换行</span>
+    <span v-else>↵ 发送 / CTRL+↵ 换行</span>
+    <Button :disabled="!inputText" type="primary" @click="sendMessage">发送</Button>
     </Col>
   </Row>
 </template>
@@ -14,6 +15,7 @@
 import { Row, Button, Textarea, Col } from 'ant-design-vue';
 import { ref } from 'vue';
 import { useRTMInfo, useCurrentUserInfo, useGlobalFlag } from '~/store';
+import { logger } from '~/utils/tools';
 
 const rtmInfo = useRTMInfo();
 // @ts-ignore
@@ -34,7 +36,7 @@ const sendMessage = (e?: KeyboardEvent | MouseEvent) => {
   const data = encoder.encode(inputText.value)
   rtmInfo.rtm.publish(rtmInfo.activeSessionId, data);
   const activeSession = rtmInfo.sessions.find(item => item.sessionId === rtmInfo.activeSessionId);
-  console.log('activeSession===', activeSession);
+  logger.info('activeSession===', activeSession);
   activeSession.messages.push({
     message: data,
     broadcast: true,

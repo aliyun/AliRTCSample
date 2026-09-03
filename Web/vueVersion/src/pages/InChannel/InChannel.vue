@@ -7,12 +7,14 @@ import ToolBar from './components/ToolBar.vue';
 import { NetworkDetector } from './components/NetworkBar';
 import Icon from '~/components/Icon';
 import { useChannel, useNetworkStats } from '~/hooks/channel';
+import { useMicBackgroundRecovery } from '~/hooks/micRecovery';
 import { parseTime, logger } from '~/utils/tools';
 import { Divider, Col, message, Radio, RadioGroup, Row, Space, Tooltip } from 'ant-design-vue';
 import {
   Group,
   GroupPropertyUpdateTypes,
   GroupUser,
+  LocalAudioTrack,
   LocalVideoTrack,
   NetworkQuality,
 } from 'dingrtc';
@@ -33,6 +35,7 @@ const deviceInfo = useDeviceInfo();
 const currentUserInfo = useCurrentUserInfo();
 const { subscribe, checkMainview } = useChannel();
 const { getRtcStats, getRemoteUserNetworkStats } = useNetworkStats();
+useMicBackgroundRecovery();
 const timeLeft = ref(channelInfo.timeLeft - 1);
 const gridHeight = ref(0);
 
@@ -60,10 +63,15 @@ const onExitFullScreen = () => {
   if (!document.fullscreenElement) fullscreen.value = false;
 };
 
-const clearTrack = () => {
-  channelInfo.screenTrack.stop();
-  client.unpublish([channelInfo.screenTrack as LocalVideoTrack]);
-  channelInfo.$patch({ screenTrack: null });
+const clearScreenVideoTrack = () => {
+  channelInfo.screenVideoTrack?.stop();
+  client.unpublish([channelInfo.screenVideoTrack as LocalVideoTrack]);
+  channelInfo.$patch({ screenVideoTrack: null });
+};
+const clearScreenAudioTrack = () => {
+  channelInfo.screenAudioTrack?.stop();
+  client.unpublish([channelInfo.screenAudioTrack as LocalAudioTrack]);
+  channelInfo.$patch({ screenAudioTrack: null });
 };
 
 const clearRoom = () => {
@@ -76,8 +84,11 @@ const clearRoom = () => {
   if (channelInfo.micTrack) {
     channelInfo.micTrack.close();
   }
-  if (channelInfo.screenTrack) {
-    channelInfo.screenTrack.close();
+  if (channelInfo.screenVideoTrack) {
+    channelInfo.screenVideoTrack.close();
+  }
+  if (channelInfo.screenAudioTrack) {
+    channelInfo.screenAudioTrack.close();
   }
   if (channelInfo.mcuAudioTrack) {
     channelInfo.mcuAudioTrack.stop();
@@ -153,6 +164,10 @@ onMounted(() => {
       clearRoom();
     }
   });
+  client.on('media-reconnect-end', (uidListStr) => {
+    logger.info(`media-reconnect-end`, uidListStr);
+  });
+
   client.on('network-quality', (uplink, downlink) => {
     channelInfo.$patch({ networkQuality: Math.max(uplink, downlink) as NetworkQuality });
   });
@@ -203,7 +218,8 @@ onMounted(() => {
 });
 
 watch(
-  () => channelInfo.screenTrack,
+  () => channelInfo.screenVideoTrack,
+  // () => [channelInfo.screenVideoTrack, channelInfo.screenAudioTrack],
   () => {
     channelInfo.updateTrackStats(currentUserInfo.userId);
   },
@@ -213,11 +229,19 @@ watch(
 );
 
 watchEffect((cleanUp) => {
-  if (!channelInfo.screenTrack) return;
-  channelInfo.screenTrack?.on('track-ended', clearTrack);
-  cleanUp(() => {
-    channelInfo.screenTrack?.off('track-ended', clearTrack);
-  });
+  if (channelInfo.screenVideoTrack) {
+    channelInfo.screenVideoTrack?.on('track-ended', clearScreenVideoTrack);
+    cleanUp(() => {
+      channelInfo.screenVideoTrack?.off('track-ended', clearScreenVideoTrack);
+    });
+  }
+
+  if (channelInfo.screenAudioTrack) {
+    channelInfo.screenAudioTrack?.on('track-ended', clearScreenAudioTrack);
+    cleanUp(() => {
+      channelInfo.screenAudioTrack?.off('track-ended', clearScreenAudioTrack);
+    });
+  }
 });
 
 onUnmounted(() => {

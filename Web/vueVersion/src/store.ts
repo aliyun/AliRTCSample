@@ -20,6 +20,7 @@ import { RtcWhiteboard, WhiteboardManager } from '@dingrtc/whiteboard';
 import ASR from 'dingrtc-asr';
 import RTM, { RTMMessage, SessionUser } from '@dingrtc/rtm';
 import { markRaw } from 'vue';
+import { DeviceChecker } from 'dingrtc-device-checker';
 
 const enable2K = parseSearch('2k') === 'true';
 
@@ -101,7 +102,8 @@ export interface IChannelInfo {
   subscribeAudio: string;
   cameraTrack: CameraVideoTrack;
   micTrack?: MicrophoneAudioTrack;
-  screenTrack?: LocalVideoTrack;
+  screenVideoTrack?: LocalVideoTrack;
+  screenAudioTrack?: LocalAudioTrack;
   customVideoTrack?: LocalVideoTrack;
   customAudioTrack?: LocalAudioTrack;
   publishedTracks?: Set<string>;
@@ -160,7 +162,7 @@ interface IRTMInfo {
   activeSessionId: string;
 }
 
-const client = DingRTC.createClient();
+const client = DingRTC.createClient([DeviceChecker]);
 // @ts-ignore
 window.client = client;
 
@@ -189,7 +191,7 @@ export const useCurrentUserInfo = defineStore('ICurrentUserInfo', {
       parseSearch('channelId') || configJson.channelId || `${Math.ceil(Math.random() * 10000)}`,
     duration: '',
     delay: '',
-    token: configJson.token || '',
+    token: parseSearch('token') || configJson.token || '',
   }),
 });
 
@@ -234,7 +236,8 @@ export const useDeviceInfo = defineStore('IDeviceInfo', {
 export const useChannelInfo = defineStore('IChannelInfo', {
   state: (): IChannelInfo => ({
     cameraTrack: null,
-    screenTrack: null,
+    screenVideoTrack: null,
+    screenAudioTrack: null,
     customVideoTrack: null,
     customAudioTrack: null,
     micTrack: null,
@@ -276,9 +279,9 @@ export const useChannelInfo = defineStore('IChannelInfo', {
           audioTrack: this.micTrack,
           hasVideo: !!this.cameraTrack,
           videoMuted: !this.cameraTrack?.enabled,
-          auxiliaryMuted: !this.screenTrack?.enabled,
-          hasAuxiliary: !!this.screenTrack,
-          auxiliaryTrack: this.screenTrack,
+          auxiliaryMuted: !this.screenVideoTrack?.enabled,
+          hasAuxiliary: !!this.screenVideoTrack,
+          auxiliaryTrack: this.screenVideoTrack,
         },
         ...this.remoteUsers,
       ];

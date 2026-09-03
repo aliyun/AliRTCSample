@@ -1,4 +1,10 @@
-import DingRTC, { CameraVideoTrack, DingRTCClient, NetworkQuality, RemoteUser, TrackMediaType } from 'dingrtc';
+import DingRTC, {
+  CameraVideoTrack,
+  DingRTCClient,
+  NetworkQuality,
+  RemoteUser,
+  TrackMediaType,
+} from 'dingrtc';
 import { getAppToken } from './request';
 import configJson from '~/config.json';
 import { message } from 'ant-design-vue';

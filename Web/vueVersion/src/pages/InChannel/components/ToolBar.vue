@@ -21,11 +21,11 @@
       </Row>
       <Row
         v-if="!globalFlag.isMobile"
-        :class="['toolBtn', { stopShare: channelInfo.screenTrack }]"
+        :class="['toolBtn', { stopShare: channelInfo.screenVideoTrack }]"
         @click="operateScreen"
       >
         <Screen />
-        <span>{{ channelInfo.screenTrack ? '结束共享' : '共享' }}</span>
+        <span>{{ channelInfo.screenVideoTrack ? '结束共享' : '共享' }}</span>
       </Row>
       <Row
         v-if="!globalFlag.isMobile"

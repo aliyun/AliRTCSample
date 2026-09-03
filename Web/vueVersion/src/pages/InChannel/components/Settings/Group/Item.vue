@@ -2,25 +2,26 @@
   <Row class="group">
     <Row>
       <Col class="groupBrief">
-        <Text>
-          <Tooltip :title="`id:${ id }`">
-            id:{{ id }}
-          </Tooltip>
-          <Text type="secondary">
-          ({{ data.users.length }}人)
-          </Text>
-        </Text>
-        <Tooltip :title="`分组名:${ data.name }`">
-          <Text>
-            分组名:{{ data.name }}
-          </Text>
+      <Text>
+        <Tooltip :title="`id:${id}`">
+          id:{{ id }}
         </Tooltip>
+        <Text type="secondary">
+          ({{ data.users.length }}人)
+        </Text>
+      </Text>
+      <Tooltip :title="`分组名:${data.name}`">
+        <Text>
+          分组名:{{ data.name }}
+        </Text>
+      </Tooltip>
       </Col>
       <Divider type="vertical" />
-      <Tooltip :title="data.users.map((item) => `uid:${item.userId}${ item.userData ? `,用户数据:${item.userData}` : ''};`)">
+      <Tooltip :title="data.users.map((item) => `uid:${item.userId}${item.userData ? `,用户数据:${item.userData}` : ''};`)">
         <Text class="uidList">
           成员列表:
-          <Text v-for="item in data.users">{{ `uid:${item.userId}${ item.userData ? `,用户数据:${item.userData}` : ''};` }}</Text>
+          <Text v-for="item in data.users">{{ `uid:${item.userId}${item.userData ? `,用户数据:${item.userData}` : ''};`
+          }}</Text>
         </Text>
       </Tooltip>
     </Row>
@@ -28,16 +29,11 @@
       <Tag v-for="item in tags" :key="item.text" :color="item.color" size="small">
         {{ item.text }}
       </Tag>
-      <Tooltip :arrow="false" :overlay-inner-style="{ backgroundColor: 'rgba(245, 247, 250, 0.9)'}">
+      <Tooltip :arrow="false" :overlay-inner-style="{ backgroundColor: 'rgba(245, 247, 250, 0.9)' }">
         <template #title>
           <List>
-            <List.Item
-              v-for="item in actions"
-              :key="item.text"
-              class="actionsItem"
-              style="cursor: pointer"
-              @click="item.onClick"
-            >
+            <List.Item v-for="item in actions" :key="item.text" class="actionsItem" style="cursor: pointer"
+              @click="item.onClick">
               {{ item.text }}
             </List.Item>
           </List>
